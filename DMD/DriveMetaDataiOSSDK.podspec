@@ -13,7 +13,7 @@ Pod::Spec.new do |spec|
   spec.version      = "0.0.1"
   spec.summary      = "DriveMetaDataiOSSDK is a analytics tools"
   spec.license      = "MIT (example)"
-  spec.author             = { "Ranjeet Ranjan" => "ranjeet@adsizzler.com" }
+  spec.author             = { "Ranjeet Ranjan" => "ranjeet@drivemetadata.com" }
   spec.homepage     = "https://www.drivemetadata.com"
   spec.license      = { :type => 'MIT', :file => 'LICENSE' }
   spec.platform     = :ios,"12"
