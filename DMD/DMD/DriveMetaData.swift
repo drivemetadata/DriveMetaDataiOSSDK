@@ -19,6 +19,10 @@ public class DriveMetaData {
         print("clientId\(clientId)")
         print("clientToken\(clientToken)")
         print("clientAppId\(clientAppId)")
+        let deviceInfo = Utils.getDeviceNameAndOSVersion()
+        print(deviceInfo.deviceName)
+        print(deviceInfo.osVersion)
+
 
     }
     
@@ -29,4 +33,5 @@ public class DriveMetaData {
     public static func initialise(clientId: Int, token: String, appId: Int) -> DriveMetaData {
         return DriveMetaData(clientId: clientId, clientToken: token, clientAppId: appId)
     }
+    
 }
