@@ -7,12 +7,26 @@
 
 import Foundation
 
-public class DriveMetaData
-{
-    private init(){}
+public class DriveMetaData {
+    private var clientId: Int
+    private var clientToken: String
+    private var clientAppId: Int
     
-    public static func doSomething()->String
-    {
-        return "First Progect"
+    private init(clientId: Int, clientToken: String, clientAppId: Int) {
+        self.clientId = clientId
+        self.clientToken = clientToken
+        self.clientAppId = clientAppId
+        print("clientId\(clientId)")
+        print("clientToken\(clientToken)")
+        print("clientAppId\(clientAppId)")
+
+    }
+    
+    public static func doSomething() -> String {
+        return "First Project"
+    }
+    
+    public static func initialise(clientId: Int, token: String, appId: Int) -> DriveMetaData {
+        return DriveMetaData(clientId: clientId, clientToken: token, clientAppId: appId)
     }
 }

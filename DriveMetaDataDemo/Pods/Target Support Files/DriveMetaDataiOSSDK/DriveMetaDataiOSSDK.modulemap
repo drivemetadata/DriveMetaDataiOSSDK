@@ -1,0 +1,6 @@
+module DriveMetaDataiOSSDK {
+  umbrella header "DriveMetaDataiOSSDK-umbrella.h"
+
+  export *
+  module * { export * }
+}

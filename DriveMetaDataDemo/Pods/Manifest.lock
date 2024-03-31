@@ -1,0 +1,16 @@
+PODS:
+  - DriveMetaDataiOSSDK (0.0.1)
+
+DEPENDENCIES:
+  - DriveMetaDataiOSSDK (from `../DMD/`)
+
+EXTERNAL SOURCES:
+  DriveMetaDataiOSSDK:
+    :path: "../DMD/"
+
+SPEC CHECKSUMS:
+  DriveMetaDataiOSSDK: 41b1ac7de9634cd6da2afb71923a10d33091a010
+
+PODFILE CHECKSUM: fdf6f2f7e03a53bf2be4b1b7fd7c3d9abab62284
+
+COCOAPODS: 1.15.2

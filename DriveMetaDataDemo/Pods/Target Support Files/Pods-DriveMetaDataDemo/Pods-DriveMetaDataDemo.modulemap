@@ -1,0 +1,6 @@
+module Pods_DriveMetaDataDemo {
+  umbrella header "Pods-DriveMetaDataDemo-umbrella.h"
+
+  export *
+  module * { export * }
+}
