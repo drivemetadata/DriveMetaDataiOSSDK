@@ -12,8 +12,8 @@
 		77692AB13C514F4B0D1B32EA49069556 /* DMD.h in Headers */ = {isa = PBXBuildFile; fileRef = 720967A84196CFA9773F41C2EF9491D3 /* DMD.h */; settings = {ATTRIBUTES = (Project, ); }; };
 		86D3CD39DDB4687C7156B27F92862A10 /* DriveMetaData.swift in Sources */ = {isa = PBXBuildFile; fileRef = E945A01F4956439CAFE353FD6CF69AC4 /* DriveMetaData.swift */; };
 		8D35BD8ABC660B93DCA7AEB2CBDC21B6 /* Pods-DriveMetaDataDemo-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 5D5298F2C44A5689D2E5BE515FBDE2A4 /* Pods-DriveMetaDataDemo-dummy.m */; };
-		A388D0E42BB9AF56009DF5C5 /* DMDConstant.swift in Sources */ = {isa = PBXBuildFile; fileRef = A388D0E32BB9AF56009DF5C5 /* DMDConstant.swift */; };
-		A388D0E62BB9AF67009DF5C5 /* DMDRestAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = A388D0E52BB9AF67009DF5C5 /* DMDRestAPI.swift */; };
+		A36DBCD22C269C24007EE31F /* RestApiManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A36DBCD12C269C24007EE31F /* RestApiManager.swift */; };
+		A36DBCD52C26A5FA007EE31F /* StogrageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A36DBCD42C26A5FA007EE31F /* StogrageManager.swift */; };
 		A388D0E82BB9AF7A009DF5C5 /* DMDValidation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A388D0E72BB9AF7A009DF5C5 /* DMDValidation.swift */; };
 		A388D0EA2BB9AF89009DF5C5 /* DMDUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = A388D0E92BB9AF89009DF5C5 /* DMDUtils.swift */; };
 		CB5C76021413BBCB1B6E99136FE976DC /* DriveMetaDataiOSSDK-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = ED3F85648A70B4E224349771B04B6D06 /* DriveMetaDataiOSSDK-dummy.m */; };
@@ -40,8 +40,8 @@
 		6A4EB111E47BDEC550113F0A9D2F136C /* Pods-DriveMetaDataDemo */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; name = "Pods-DriveMetaDataDemo"; path = "libPods-DriveMetaDataDemo.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		720967A84196CFA9773F41C2EF9491D3 /* DMD.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = DMD.h; path = DMD/DMD.h; sourceTree = "<group>"; };
 		9D940727FF8FB9C785EB98E56350EF41 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
-		A388D0E32BB9AF56009DF5C5 /* DMDConstant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DMDConstant.swift; sourceTree = "<group>"; };
-		A388D0E52BB9AF67009DF5C5 /* DMDRestAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DMDRestAPI.swift; sourceTree = "<group>"; };
+		A36DBCD12C269C24007EE31F /* RestApiManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestApiManager.swift; sourceTree = "<group>"; };
+		A36DBCD42C26A5FA007EE31F /* StogrageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StogrageManager.swift; sourceTree = "<group>"; };
 		A388D0E72BB9AF7A009DF5C5 /* DMDValidation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DMDValidation.swift; sourceTree = "<group>"; };
 		A388D0E92BB9AF89009DF5C5 /* DMDUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DMDUtils.swift; sourceTree = "<group>"; };
 		A8A4957D7FD6320CFC73B77972F33BA7 /* DriveMetaDataiOSSDK.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = DriveMetaDataiOSSDK.release.xcconfig; sourceTree = "<group>"; };
@@ -103,6 +103,29 @@
 			path = "../DriveMetaDataDemo/Pods/Target Support Files/DriveMetaDataiOSSDK";
 			sourceTree = "<group>";
 		};
+		A36DBCD02C269C08007EE31F /* handleAPI */ = {
+			isa = PBXGroup;
+			children = (
+				A36DBCD12C269C24007EE31F /* RestApiManager.swift */,
+			);
+			path = handleAPI;
+			sourceTree = "<group>";
+		};
+		A36DBCD32C26A5E9007EE31F /* storage */ = {
+			isa = PBXGroup;
+			children = (
+				A36DBCD42C26A5FA007EE31F /* StogrageManager.swift */,
+			);
+			path = storage;
+			sourceTree = "<group>";
+		};
+		A3D4F20C2BF30D91000BDFA1 /* attribution */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = attribution;
+			sourceTree = "<group>";
+		};
 		C95EDC81BBB75A0CC6C4A05AC5473172 /* Pods-DriveMetaDataDemo */ = {
 			isa = PBXGroup;
 			children = (
@@ -147,10 +170,11 @@
 		EFCA91D9419AADBDFB4249F833E0DD28 /* DriveMetaDataiOSSDK */ = {
 			isa = PBXGroup;
 			children = (
+				A36DBCD32C26A5E9007EE31F /* storage */,
+				A36DBCD02C269C08007EE31F /* handleAPI */,
+				A3D4F20C2BF30D91000BDFA1 /* attribution */,
 				720967A84196CFA9773F41C2EF9491D3 /* DMD.h */,
-				A388D0E32BB9AF56009DF5C5 /* DMDConstant.swift */,
 				A388D0E72BB9AF7A009DF5C5 /* DMDValidation.swift */,
-				A388D0E52BB9AF67009DF5C5 /* DMDRestAPI.swift */,
 				E945A01F4956439CAFE353FD6CF69AC4 /* DriveMetaData.swift */,
 				A388D0E92BB9AF89009DF5C5 /* DMDUtils.swift */,
 				6A2CDF66F27A81B98EBF62645E325741 /* Pod */,
@@ -288,9 +312,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A388D0E62BB9AF67009DF5C5 /* DMDRestAPI.swift in Sources */,
+				A36DBCD52C26A5FA007EE31F /* StogrageManager.swift in Sources */,
 				A388D0EA2BB9AF89009DF5C5 /* DMDUtils.swift in Sources */,
-				A388D0E42BB9AF56009DF5C5 /* DMDConstant.swift in Sources */,
+				A36DBCD22C269C24007EE31F /* RestApiManager.swift in Sources */,
 				A388D0E82BB9AF7A009DF5C5 /* DMDValidation.swift in Sources */,
 				86D3CD39DDB4687C7156B27F92862A10 /* DriveMetaData.swift in Sources */,
 				CB5C76021413BBCB1B6E99136FE976DC /* DriveMetaDataiOSSDK-dummy.m in Sources */,
