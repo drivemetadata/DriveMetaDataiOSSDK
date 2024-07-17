@@ -17,6 +17,7 @@ class ViewController: UIViewController {
         
         print("clicked")
         
+        DriveMetaData.updateConversionValue(for: "in_app_purchase")
 
        // DriveMetaData.sendTags(firstName: "Ranjeet Ranjan ", lastName: "Ranjan", eventType: "update")
         

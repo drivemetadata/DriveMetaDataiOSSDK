@@ -119,6 +119,65 @@
 			path = storage;
 			sourceTree = "<group>";
 		};
+		A3CA14AC2C2D056D00323A2D /* foundation */ = {
+			isa = PBXGroup;
+			children = (
+				A3CA14B12C2D05AE00323A2D /* utils */,
+				A36DBCD32C26A5E9007EE31F /* storage */,
+				A3CA14AF2C2D058C00323A2D /* logger */,
+				A3CA14AE2C2D058200323A2D /* devicedata */,
+				A3CA14AD2C2D057700323A2D /* appdata */,
+			);
+			path = foundation;
+			sourceTree = "<group>";
+		};
+		A3CA14AD2C2D057700323A2D /* appdata */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = appdata;
+			sourceTree = "<group>";
+		};
+		A3CA14AE2C2D058200323A2D /* devicedata */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = devicedata;
+			sourceTree = "<group>";
+		};
+		A3CA14AF2C2D058C00323A2D /* logger */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = logger;
+			sourceTree = "<group>";
+		};
+		A3CA14B12C2D05AE00323A2D /* utils */ = {
+			isa = PBXGroup;
+			children = (
+				A388D0E72BB9AF7A009DF5C5 /* DMDValidation.swift */,
+				A388D0E92BB9AF89009DF5C5 /* DMDUtils.swift */,
+			);
+			path = utils;
+			sourceTree = "<group>";
+		};
+		A3CA14B22C2D05C100323A2D /* dispatcher */ = {
+			isa = PBXGroup;
+			children = (
+				A3CA14B32C2D05D200323A2D /* dmdcollector */,
+				A36DBCD02C269C08007EE31F /* handleAPI */,
+			);
+			path = dispatcher;
+			sourceTree = "<group>";
+		};
+		A3CA14B32C2D05D200323A2D /* dmdcollector */ = {
+			isa = PBXGroup;
+			children = (
+				A3D4F20C2BF30D91000BDFA1 /* attribution */,
+			);
+			path = dmdcollector;
+			sourceTree = "<group>";
+		};
 		A3D4F20C2BF30D91000BDFA1 /* attribution */ = {
 			isa = PBXGroup;
 			children = (
@@ -170,13 +229,10 @@
 		EFCA91D9419AADBDFB4249F833E0DD28 /* DriveMetaDataiOSSDK */ = {
 			isa = PBXGroup;
 			children = (
-				A36DBCD32C26A5E9007EE31F /* storage */,
-				A36DBCD02C269C08007EE31F /* handleAPI */,
-				A3D4F20C2BF30D91000BDFA1 /* attribution */,
+				A3CA14B22C2D05C100323A2D /* dispatcher */,
+				A3CA14AC2C2D056D00323A2D /* foundation */,
 				720967A84196CFA9773F41C2EF9491D3 /* DMD.h */,
-				A388D0E72BB9AF7A009DF5C5 /* DMDValidation.swift */,
 				E945A01F4956439CAFE353FD6CF69AC4 /* DriveMetaData.swift */,
-				A388D0E92BB9AF89009DF5C5 /* DMDUtils.swift */,
 				6A2CDF66F27A81B98EBF62645E325741 /* Pod */,
 				9100D88784703AE901D5C614D0CDB490 /* Support Files */,
 			);
