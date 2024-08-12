@@ -12,12 +12,16 @@ class RestApiManager
 {
     static let shared = RestApiManager()
     private init() {}
-    public static func sendRequest(jsonData: RequestData) {
-            guard let url = URL(string: "https://sdk.drivemetadata.com/data-collector") else { return }
+    public static func sendRequest(jsonData: RequestData,endPoint: String) {
+           
+            guard let url = URL(string: "https://sdk-dev.drivemetadata.com/data-collector"+endPoint) else { return }
             
+        
+          print(url)
             var request = URLRequest(url: url)
             request.httpMethod = "POST"
             request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        
             
             do {
                 let data = try JSONEncoder().encode(jsonData)

@@ -125,8 +125,6 @@ class StorageManager {
            let name = UIDevice.current.name
            let deviceType = UIDevice.current.userInterfaceIdiom == .pad ? "Tablet" : "Mobile"
            let isMobile = UIDevice.current.userInterfaceIdiom == .phone
-           let isTablet = UIDevice.current.userInterfaceIdiom == .pad
-           let cpuArchitecture = "arm64"
            let screen = getScreenDetails()
            
            return RequestData.MetaData.Device(
@@ -140,10 +138,7 @@ class StorageManager {
             name: name,
             device_type: deviceType,
             is_mobile: isMobile,
-            is_tablet: isTablet,
-            android_uuid: deviceInternalId,
-            cpu_architecture: cpuArchitecture,
-               screen: screen
+            screen: screen
            )
        }
     private func getScreenDetails() -> RequestData.MetaData.Device.Screen {

@@ -34,9 +34,7 @@ public class DriveMetaData {
     {
         if #available(iOS 14.3, *) {
             if let token = try? AAAttribution.attributionToken() {
-                // Send the token to your server
                 sendAttributionTokenToServer(token)
-                print("token",token)
             }
         } else {
             print("Attribution token generation is not available on this device.")
@@ -44,63 +42,47 @@ public class DriveMetaData {
     }
     
     func sendAttributionTokenToServer(_ token: String) {
-        let url = URL(string: "https://yourserver.com/attribution")!
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        let retrievedData = StorageManager.shared.getClientData()
+        let appDetails = RequestData.MetaData.AppDetails(
+            app_id: retrievedData.clientAppId ?? 0,
+            bundle: retrievedData.bundleIdentifier ?? "N/A",
+            name: retrievedData.appName ?? "N/A",
+            version: retrievedData.appVersion ?? "N/A",
+            build: retrievedData.appBuild ?? "N/A"
+        )
 
-        let body: [String: String] = ["token": token]
-        request.httpBody = try? JSONSerialization.data(withJSONObject: body, options: .fragmentsAllowed)
+        let jsonData = RequestData(
+            metaData: RequestData.MetaData(
+                appDetails: appDetails,
+                attributionData: nil,
+                utmParameter: nil,
+                device: StorageManager.shared.getDeviceDetails(),
+                ip: Utils.getIPAddress(),
+                library: StorageManager.shared.getLibraryDetails(),
+                locale: "en-US",
+                network: StorageManager.shared.getNetworkDetails(),
+                adData: RequestData.MetaData.adData(token: "\(token)"),
+                ua: "",
+                requestId: StorageManager.shared.getCurrentDate(),
+                requestReceivedAt: StorageManager.shared.getCurrentDate(),
+                requestSentAt: StorageManager.shared.getCurrentDate(),
+                timestamp: StorageManager.shared.getTimeStamp() ?? "N/A",
+                eventType: "ios-ad-token",
+                requestFrom: "1",
+                token: retrievedData.clientToken ?? "N/A",
+                clientId: retrievedData.clientId ?? 0,
+                userDetails: nil
+            )
+        )
+        
 
-        let task = URLSession.shared.dataTask(with: request) { data, response, error in
-            if let error = error {
-                print("Failed to send token: \(error)")
-                return
-            }
-            print("Token sent successfully")
-        }
+        RestApiManager.sendRequest(jsonData: jsonData,endPoint : "/ios/token")
+        
 
-        task.resume()
     }
-    func getCampaignData(attributionToken: String, completion: @escaping (Result<[String: Any], Error>) -> Void) {
-        let url = URL(string: "https://api-adservices.apple.com/api/v1/")!
-        
-        var request = URLRequest(url: url)
-        request.httpMethod = "GET"
-        request.setValue("Bearer \(attributionToken)", forHTTPHeaderField: "Authorization")
-        
-        let task = URLSession.shared.dataTask(with: request) { data, response, error in
-            if let error = error {
-                completion(.failure(error))
-                return
-            }
-            
-            guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
-                let statusError = NSError(domain: "HTTPError", code: (response as? HTTPURLResponse)?.statusCode ?? -1, userInfo: nil)
-                completion(.failure(statusError))
-                return
-            }
-            
-            guard let data = data else {
-                let dataError = NSError(domain: "DataError", code: -1, userInfo: nil)
-                completion(.failure(dataError))
-                return
-            }
-            
-            do {
-                if let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
-                    completion(.success(json))
-                } else {
-                    let parsingError = NSError(domain: "ParsingError", code: -1, userInfo: nil)
-                    completion(.failure(parsingError))
-                }
-            } catch let jsonError {
-                completion(.failure(jsonError))
-            }
-        }
-        
-        task.resume()
-    }
+    
+
     public static func initialise(clientId: Int, token: String, appId: Int) -> DriveMetaData {
         return DriveMetaData(clientId: clientId, clientToken: token, clientAppId: appId)
     }
@@ -120,15 +102,14 @@ public class DriveMetaData {
             metaData: RequestData.MetaData(
                 appDetails: appDetails,
                 attributionData: RequestData.MetaData.AttributionData(
-                click_id: "1719032827",
-                install_referrer: "12345678",
+                click_id: "",
+                install_referrer: "",
                 sdk_version: retrievedData.sdkVersion ?? "0.00.00",
-                referrer_click_timestamp_seconds: 123456789,
-                install_begin_timestamp_seconds: 123456789,
-                referrer_click_timestamp_server_seconds: 123456789,
-                install_begin_timestamp_server_seconds: 123456789,
-                install_version: "1.0",
-                google_play_instant: ""
+                referrer_click_timestamp_seconds: 0,
+                install_begin_timestamp_seconds: 0,
+                referrer_click_timestamp_server_seconds: 0,
+                install_begin_timestamp_server_seconds: 0,
+                install_version: ""
                 ),
                 utmParameter: RequestData.MetaData.UTMParameter(
                     utm_campaign: "",
@@ -138,10 +119,11 @@ public class DriveMetaData {
                     utm_content: ""
                 ),
                 device: StorageManager.shared.getDeviceDetails(),
-                ip: "1234566",
+                ip: Utils.getIPAddress(),
                 library: StorageManager.shared.getLibraryDetails(),
                 locale: "en-US",
-                network: StorageManager.shared.getNetworkDetails(),
+                network: StorageManager.shared.getNetworkDetails(), 
+                adData: nil,
                 ua: "",
                 requestId: StorageManager.shared.getCurrentDate(),
                 requestReceivedAt: StorageManager.shared.getCurrentDate(),
@@ -155,7 +137,7 @@ public class DriveMetaData {
             )
         )
 
-        RestApiManager.sendRequest(jsonData: jsonData)
+        RestApiManager.sendRequest(jsonData: jsonData, endPoint: "")
 
 
       
@@ -173,10 +155,10 @@ public class DriveMetaData {
                 attributionData: nil,
                 utmParameter:nil,
                 device: nil,
-                ip: "122.177.97.49",
+                ip: Utils.getIPAddress(),
                 library: nil,
                 locale: "en-US",
-                network: nil,
+                network: nil, adData: nil,
                 ua: StorageManager.shared.getCurrentDate(),
                 requestId: StorageManager.shared.getCurrentDate(),
                 requestReceivedAt: StorageManager.shared.getCurrentDate(),
@@ -190,48 +172,11 @@ public class DriveMetaData {
             )
         )
 
-        RestApiManager.sendRequest(jsonData: jsonData)
+            RestApiManager.sendRequest(jsonData: jsonData, endPoint: "")
 
     }
     
-    // Method to update conversion value
-   public static func updateConversionValue(for event: String) {
-        let conversionValue = determineConversionValue(for: event)
-        guard conversionValue >= 0 && conversionValue <= 63 else {
-            print("Invalid conversion value: \(conversionValue)")
-            return
-        }
-        
-        if #available(iOS 14.0, *) {
-            if #available(iOS 15.4, *) {
-                SKAdNetwork.updatePostbackConversionValue(conversionValue) { error in
-                    if let error = error {
-                        print("Failed to update conversion value: \(error.localizedDescription)")
-                    } else {
-                        print("Successfully updated conversion value to \(conversionValue)")
-                    }
-                }
-            } else {
-                // Fallback on earlier versions
-            }
-        } else {
-            print("SKAdNetwork is not available on this device.")
-        }
-    }
-
-    // Algorithm to determine conversion value
-   static func determineConversionValue(for event: String) -> Int {
-        switch event {
-        case "in_app_purchase":
-            return 10
-        case "level_completed":
-            return 20
-        case "high_score":
-            return 30
-        default:
-            return 0
-        }
-    }
+   
    
   
 }

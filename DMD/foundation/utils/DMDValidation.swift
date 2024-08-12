@@ -24,7 +24,6 @@ struct RequestData: Codable {
             let referrer_click_timestamp_server_seconds: Int
             let install_begin_timestamp_server_seconds: Int
             let install_version: String
-            let google_play_instant: String
         }
         
         struct UTMParameter: Codable {
@@ -52,9 +51,6 @@ struct RequestData: Codable {
             let name: String
             let device_type: String
             let is_mobile: Bool
-            let is_tablet: Bool
-            let android_uuid: String
-            let cpu_architecture: String
             let screen: Screen
         }
         
@@ -70,6 +66,10 @@ struct RequestData: Codable {
             let cellular: Bool
             let wifi: Bool
         }
+        struct adData: Codable
+        {
+            let token : String
+        }
         
         let appDetails: AppDetails?
         let attributionData: AttributionData?
@@ -79,6 +79,7 @@ struct RequestData: Codable {
         let library: Library?
         let locale: String?
         let network: Network?
+        let adData : adData?
         let ua: String // mandatory
         let requestId: String  // mandatory
         let requestReceivedAt: String  // mandatory
