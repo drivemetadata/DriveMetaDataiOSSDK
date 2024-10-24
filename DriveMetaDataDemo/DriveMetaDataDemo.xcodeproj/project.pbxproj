@@ -27,6 +27,7 @@
 		A388D0D82BB9A7BB009DF5C5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A388D0DB2BB9A7BB009DF5C5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		A388D0DD2BB9A7BB009DF5C5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A3AB50CE2C71EE5000ED4AB2 /* DriveMetaDataDemo.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = DriveMetaDataDemo.entitlements; sourceTree = "<group>"; };
 		C92F65B9D1B6A6827C19F6F0 /* Pods-DriveMetaDataDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DriveMetaDataDemo.debug.xcconfig"; path = "Target Support Files/Pods-DriveMetaDataDemo/Pods-DriveMetaDataDemo.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -63,6 +64,7 @@
 		A388D0CE2BB9A7BA009DF5C5 /* DriveMetaDataDemo */ = {
 			isa = PBXGroup;
 			children = (
+				A3AB50CE2C71EE5000ED4AB2 /* DriveMetaDataDemo.entitlements */,
 				A388D0CF2BB9A7BA009DF5C5 /* AppDelegate.swift */,
 				A388D0D12BB9A7BA009DF5C5 /* SceneDelegate.swift */,
 				A388D0D32BB9A7BA009DF5C5 /* ViewController.swift */,
@@ -80,7 +82,6 @@
 				C92F65B9D1B6A6827C19F6F0 /* Pods-DriveMetaDataDemo.debug.xcconfig */,
 				3F7EE85BFDEBD6B1B3C58959 /* Pods-DriveMetaDataDemo.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -342,6 +343,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = DriveMetaDataDemo/DriveMetaDataDemo.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = BM6H8G3275;
@@ -371,6 +373,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = DriveMetaDataDemo/DriveMetaDataDemo.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = BM6H8G3275;

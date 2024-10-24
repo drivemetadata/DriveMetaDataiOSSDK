@@ -17,7 +17,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
-        DriveMetaData.initialise(clientId: 1635, token: "4d17d90c78154c9a5569c073b67d8a5a22b2fabfc5c9415b6e7f709d68762054", appId: 3020)
+        DriveMetaData.initialise(clientId: 1635, token: "4d17d90c78154c9a5569c073b67d8a5a22b2fabfc5c9415b6e7f709d68762054", appId: 2659)
         
               SKAdNetwork.registerAppForAdNetworkAttribution()
               SKAdNetwork.updateConversionValue(1) // Set initial conversion value
@@ -38,6 +38,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             // Handle attribution data here
             print("Received attribution data: \(attribution)")
         }
+    
+    func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
+        // Parse the URL and navigate to the correct screen
+        if url.scheme == "myapp" {
+            // Handle custom URL scheme
+        } else if url.scheme == "https" {
+            // Handle Universal Link
+        }
+        return true
+    }
 
     // MARK: UISceneSession Lifecycle
 
@@ -46,6 +56,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Use this method to select a configuration to create the new scene with.
         return UISceneConfiguration(name: "Default Configuration", sessionRole: connectingSceneSession.role)
     }
+    
 
     func application(_ application: UIApplication, didDiscardSceneSessions sceneSessions: Set<UISceneSession>) {
         // Called when the user discards a scene session.
