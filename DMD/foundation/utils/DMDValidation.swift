@@ -42,7 +42,7 @@ struct RequestData: Codable {
             }
             
             let device_internal_id: String
-            let google_advertising_id: String
+            let idfa: String
             let ad_tracking_enabled: Bool
             let make: String
             let model: String

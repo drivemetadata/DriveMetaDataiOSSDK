@@ -129,7 +129,7 @@ class StorageManager {
            
            return RequestData.MetaData.Device(
             device_internal_id: deviceInternalId,
-            google_advertising_id: "00.00.00.00.00", 
+            idfa: "00.00.00.00.00",
             ad_tracking_enabled: adTrackingEnabled,
             make: make,
             model: model,

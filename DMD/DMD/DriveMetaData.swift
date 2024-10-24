@@ -77,7 +77,7 @@ public class DriveMetaData {
         )
         
 
-        RestApiManager.sendRequest(jsonData: jsonData,endPoint : "/ios/token")
+       // RestApiManager.sendRequest(jsonData: jsonData,endPoint : "/ios/token")
         
 
     }
