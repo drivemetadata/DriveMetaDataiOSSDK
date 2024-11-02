@@ -46,6 +46,34 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // Use this method to save data, release shared resources, and store enough scene-specific state information
         // to restore the scene back to its current state.
     }
+    
+    func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
+        guard let url = URLContexts.first?.url else { return }
+        
+        if let scheme = url.scheme,
+           scheme.localizedCaseInsensitiveCompare("com.drivemetadata.DriveMetaDataDemo") == .orderedSame,
+           let host = url.host {
+            
+            var parameters: [String: String] = [:]
+            
+            // Extract query parameters from the URL
+            if let components = URLComponents(url: url, resolvingAgainstBaseURL: false),
+               let queryItems = components.queryItems {
+                for item in queryItems {
+                    parameters[item.name] = item.value
+                }
+            }
+            
+            // Now, `parameters` contains all query items as key-value pairs.
+            // Use `scheme`, `host`, and `parameters` as needed in your logic.
+            print("Scheme: \(scheme)")
+            print("Host: \(host)")
+            print("Parameters: \(parameters)")
+        }
+    }
+    
+    
+    
 
 
 }

@@ -12,7 +12,8 @@ import StoreKit
 import AdServices
 
 
-
+// Define your callback type
+public typealias DeepLinkCallback = (Result<String, Error>) -> Void
 public class DriveMetaData {
     private var clientId: Int
     private var clientToken: String
@@ -142,7 +143,75 @@ public class DriveMetaData {
 
       
     }
-    
+    public static func handleDeepLink(url : URL)
+    {
+        print("DeepLink uRL",url)
+    }
+    // Function to fetch background data
+   public static  func getBackgroundData(uri: URL?, callback: @escaping DeepLinkCallback) {
+        let clientId = UserDefaults.standard.integer(forKey: "KEY_CLIENT_ID")
+        let token = UserDefaults.standard.string(forKey: "KEY_CLIENT_TOKEN") ?? ""
+
+        guard let uri = uri else {
+            print("URI variable is empty")
+            return
+        }
+
+        do {
+            if let path = uri.path.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed), !path.isEmpty {
+                let pathVariable = path.replacingOccurrences(of: "/", with: "").trimmingCharacters(in: .whitespaces)
+                if let identifier = uri.absoluteString.components(separatedBy: "=").last{
+                    
+                    if !identifier.isEmpty {
+                        
+                        fetchDeepLinkData(pathVariable: identifier, clientId: clientId, token: token, callback: callback)
+                    } else {
+                        print("DMD: path variable is empty")
+                    }
+                }
+            }
+        } catch {
+            print("DMD: path variable is empty: \(error)")
+        }
+    }
+
+    // Function to fetch deep link data
+    static func fetchDeepLinkData( pathVariable: String, clientId: Int, token: String, callback: @escaping DeepLinkCallback) {
+        
+        DispatchQueue.global().async {
+            let urlData = "https://p-api.drivemetadata.com/deeplink-tracker=" + pathVariable
+            guard let url = URL(string: urlData) else {
+                callback(.failure(NSError(domain: "Invalid URL", code: 0, userInfo: nil)))
+                return
+            }
+
+            var request = URLRequest(url: url)
+            request.httpMethod = "GET"
+            request.setValue("application/json", forHTTPHeaderField: "Accept")
+
+           // if clientId != 0 {
+                request.setValue(String(1635), forHTTPHeaderField: "client-id")
+           // }
+            request.setValue("4d17d90c78154c9a5569c073b67d8a5a22b2fabfc5c9415b6e7f709d68762054", forHTTPHeaderField: "token")
+
+            let task = URLSession.shared.dataTask(with: request) { data, response, error in
+                if let error = error {
+                    callback(.failure(error))
+                    return
+                }
+
+                guard let data = data, let responseString = String(data: data, encoding: .utf8) else {
+                    callback(.failure(NSError(domain: "No data received", code: 0, userInfo: nil)))
+                    return
+                }
+
+              //  storeDeepLinkData(context: context, pathVariable: pathVariable, data: responseString)
+                callback(.success(responseString))
+            }
+
+            task.resume()
+        }
+    }
     public static func sendTags(firstName : String , lastName : String , eventType : String)
     {
        

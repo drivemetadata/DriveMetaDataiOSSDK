@@ -19,7 +19,22 @@ class ViewController: UIViewController {
         
       //  DriveMetaData.updateConversionValue(for: "in_app_purchase")
 
-        DriveMetaData.sendTags(firstName: "Ranjeet Ranjan ", lastName: "Ranjan", eventType: "update")
+       // DriveMetaData.sendTags(firstName: "Ranjeet Ranjan ", lastName: "Ranjan", eventType: "update")
+        let customURL = URL(string: "https://p-api.drivemetadata.com/deeplink-tracker=phz7m")!
+
+        
+        // Call getBackgroundData
+        DriveMetaData.getBackgroundData(uri: customURL) { result in
+            switch result {
+            case .success(let data):
+                print("Data received: \(data)")
+                // Handle the received data here (e.g., navigate to a specific view controller)
+
+            case .failure(let error):
+                print("Error: \(error.localizedDescription)")
+                // Handle the error here (e.g., show an error message)
+            }
+        }
         
     }
     func skAdNetworkDidReceiveAttribution(_ attribution: [String : Any]) {
