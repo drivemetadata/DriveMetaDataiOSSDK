@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import DriveMetaDataiOSSDK
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
@@ -46,9 +47,32 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // Use this method to save data, release shared resources, and store enough scene-specific state information
         // to restore the scene back to its current state.
     }
-    
+    func scene(_ scene: UIScene, continue userActivity: NSUserActivity) {
+        guard userActivity.activityType == NSUserActivityTypeBrowsingWeb,
+              let url = userActivity.webpageURL else {
+            return
+        }
+        // Call getBackgroundData
+        DriveMetaData.shared.getBackgroundData(uri: url) { result in
+            switch result {
+            case .success(let data):
+                print("Data received: \(data)")
+                // Handle the received data here (e.g., navigate to a specific view controller)
+
+            case .failure(let error):
+                print("Error: \(error.localizedDescription)")
+                // Handle the error here (e.g., show an error message)
+            }
+        }
+        // Confirm the received URL is correct
+        print("Received Universal Link: \(url.absoluteString)")
+        // Add your URL handling logic here
+    }
+
     func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
         guard let url = URLContexts.first?.url else { return }
+        
+        
         
         if let scheme = url.scheme,
            scheme.localizedCaseInsensitiveCompare("com.drivemetadata.DriveMetaDataDemo") == .orderedSame,

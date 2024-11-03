@@ -18,18 +18,37 @@ public class DriveMetaData {
     private var clientId: Int
     private var clientToken: String
     private var clientAppId: Int
-    
+
+    // Singleton instance
+    public static let shared = DriveMetaData(clientId: 0, clientToken: "", clientAppId: 0)
+
+    // Private initializer to restrict instantiation
     private init(clientId: Int, clientToken: String, clientAppId: Int) {
         self.clientId = clientId
         self.clientToken = clientToken
         self.clientAppId = clientAppId
+        
+        // Save client data in storage
         StorageManager.shared.saveClientData(clientId: clientId, clientToken: clientToken, clientAppId: clientAppId)
-        if(!StorageManager.shared.getInstallFirstTime()){
+        
+        // Check and handle first-time installation
+        if !StorageManager.shared.getInstallFirstTime() {
             firstInstall()
         }
+        
+        // Generate token
         generateToken()
+    }
 
+  
 
+    // Public method to set or configure the singleton instance's properties
+    public func configure(clientId: Int, clientToken: String, clientAppId: Int) {
+        self.clientId = clientId
+        self.clientToken = clientToken
+        self.clientAppId = clientAppId
+        
+        StorageManager.shared.saveClientData(clientId: clientId, clientToken: clientToken, clientAppId: clientAppId)
     }
     public  func generateToken()
     {
@@ -84,9 +103,7 @@ public class DriveMetaData {
     }
     
 
-    public static func initialise(clientId: Int, token: String, appId: Int) -> DriveMetaData {
-        return DriveMetaData(clientId: clientId, clientToken: token, clientAppId: appId)
-    }
+    
     func firstInstall()
     {
        
@@ -143,12 +160,12 @@ public class DriveMetaData {
 
       
     }
-    public static func handleDeepLink(url : URL)
+    public func handleDeepLink(url : URL)
     {
         print("DeepLink uRL",url)
     }
     // Function to fetch background data
-   public static  func getBackgroundData(uri: URL?, callback: @escaping DeepLinkCallback) {
+   public func getBackgroundData(uri: URL?, callback: @escaping DeepLinkCallback) {
         let clientId = UserDefaults.standard.integer(forKey: "KEY_CLIENT_ID")
         let token = UserDefaults.standard.string(forKey: "KEY_CLIENT_TOKEN") ?? ""
 
@@ -176,10 +193,10 @@ public class DriveMetaData {
     }
 
     // Function to fetch deep link data
-    static func fetchDeepLinkData( pathVariable: String, clientId: Int, token: String, callback: @escaping DeepLinkCallback) {
+     func fetchDeepLinkData( pathVariable: String, clientId: Int, token: String, callback: @escaping DeepLinkCallback) {
         
         DispatchQueue.global().async {
-            let urlData = "https://p-api.drivemetadata.com/deeplink-tracker=" + pathVariable
+            let urlData = "https://p-api.drivemetadata.com/deeplink-tracker=bympy"
             guard let url = URL(string: urlData) else {
                 callback(.failure(NSError(domain: "Invalid URL", code: 0, userInfo: nil)))
                 return
@@ -212,7 +229,7 @@ public class DriveMetaData {
             task.resume()
         }
     }
-    public static func sendTags(firstName : String , lastName : String , eventType : String)
+    public func sendTags(firstName : String , lastName : String , eventType : String)
     {
        
         let retrievedData = StorageManager.shared.getClientData()

@@ -14,8 +14,8 @@
             filePath = "DriveMetaDataDemo/SceneDelegate.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "53"
-            endingLineNumber = "53"
+            startingLineNumber = "77"
+            endingLineNumber = "77"
             landmarkName = "scene(_:openURLContexts:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -30,8 +30,8 @@
             filePath = "DriveMetaDataDemo/SceneDelegate.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "58"
-            endingLineNumber = "58"
+            startingLineNumber = "82"
+            endingLineNumber = "82"
             landmarkName = "scene(_:openURLContexts:)"
             landmarkType = "7">
          </BreakpointContent>
