@@ -34,7 +34,7 @@ class StorageManager {
         UserDefaults.standard.set(clientId, forKey: clientIdKey)
         UserDefaults.standard.set(clientToken, forKey: clientTokenKey)
         UserDefaults.standard.set(clientAppId, forKey: clientAppIdKey)
-        UserDefaults.standard.set("1.0.0",forKey: sdkVersion)
+        UserDefaults.standard.set("1.0.1",forKey: sdkVersion)
     
         
         if let bundleIdentifier = Bundle.main.bundleIdentifier {
@@ -117,7 +117,8 @@ class StorageManager {
        }
     func getDeviceDetails() -> RequestData.MetaData.Device {
            let deviceInternalId = UIDevice.current.identifierForVendor?.uuidString ?? "N/A"
-           let adTrackingEnabled = false
+        let adTrackingEnabled = UserDefaults.standard.object(forKey: "adstatus") as? Bool ?? false
+
            let make = "Apple"
            let model = UIDevice.current.model
            let platform = UIDevice.current.systemName
@@ -129,7 +130,7 @@ class StorageManager {
            
            return RequestData.MetaData.Device(
             device_internal_id: deviceInternalId,
-            google_advertising_id: "00.00.00.00.00", 
+            google_advertising_id: UserDefaults.standard.object(forKey: "idfa") as? String ?? "",
             ad_tracking_enabled: adTrackingEnabled,
             make: make,
             model: model,
