@@ -22,6 +22,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
               SKAdNetwork.registerAppForAdNetworkAttribution()
               SKAdNetwork.updateConversionValue(1) // Set initial conversion value
+            
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+            DriveMetaData.shared.requestrequestIDFA()
+           }
+        
               
 //              SKAdNetwork.registerAppForAdNetworkAttribution {
 //                  (appID, attribution) in
