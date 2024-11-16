@@ -12,7 +12,7 @@ import AppTrackingTransparency
 import CoreLocation
 
 
-class StorageManager {
+public class StorageManager {
     static let shared = StorageManager()
     
     private init() {}

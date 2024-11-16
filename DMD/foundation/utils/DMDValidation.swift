@@ -1,6 +1,6 @@
 import Foundation
 
-struct RequestData: Codable {
+public struct RequestData: Codable {
     struct MetaData: Codable {
         struct AppDetails: Codable {
             let app_id: Int
