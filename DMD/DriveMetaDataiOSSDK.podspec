@@ -10,16 +10,16 @@ Pod::Spec.new do |spec|
 
  
   spec.name         = "DriveMetaDataiOSSDK"
-  spec.version      = "0.0.2"
+  spec.version      = "0.0.4"
   spec.summary      = "DriveMetaDataiOSSDK is a analytics tools"
-  spec.license      = "MIT (example)"
+  spec.license      = "MIT"
   spec.author             = { "Ranjeet Ranjan" => "ranjeet@drivemetadata.com" }
   spec.homepage     = "https://www.drivemetadata.com"
   spec.license      = { :type => 'MIT', :file => 'LICENSE' }
   spec.platform     = :ios,"12"
   spec.swift_version = '4.0'
-  spec.source       = { :git =>"https://github.com/drivemetadata/DriveMetaDataiOSSDK.git", :tag => "0.0.2" }
-  spec.source_files  = 'DMD/**/*.{h,swift}'
+  spec.source       = { :git =>"https://github.com/drivemetadata/DriveMetaDataiOSSDK.git", :tag => "0.0.4" }
+  spec.source_files  = 'DMD/**/*.{swift,h,m}'
   spec.exclude_files = 'DMD/**/*.plist'
   spec.pod_target_xcconfig = { 'APPLICATION_EXTENSION_API_ONLY' => 'No' }
   spec.requires_arc  = true

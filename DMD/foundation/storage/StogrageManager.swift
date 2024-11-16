@@ -34,7 +34,7 @@ class StorageManager {
         UserDefaults.standard.set(clientId, forKey: clientIdKey)
         UserDefaults.standard.set(clientToken, forKey: clientTokenKey)
         UserDefaults.standard.set(clientAppId, forKey: clientAppIdKey)
-        UserDefaults.standard.set("1.0.0",forKey: sdkVersion)
+        UserDefaults.standard.set("1.0.1",forKey: sdkVersion)
     
         
         if let bundleIdentifier = Bundle.main.bundleIdentifier {
@@ -70,6 +70,12 @@ class StorageManager {
            
            return (clientId == 0 ? nil : clientId, clientToken, clientAppId == 0 ? nil : clientAppId, bundleIdentifier, appName, appVersion, appBuild,sdkVersion, deviceInternalId)
        }
+    func getDeviceInternalID() -> String
+    {
+        guard let deviceInternalId =  UserDefaults.standard.string(forKey: deviceInternalIdKey) else { return "device ID is not found" }
+        return deviceInternalId
+        
+    }
     func getNetworkDetails() -> RequestData.MetaData.Network {
            let bluetoothEnabled = false // Bluetooth is not accessible in iOS without user interaction
            let carrier = getCarrierName()
@@ -117,7 +123,8 @@ class StorageManager {
        }
     func getDeviceDetails() -> RequestData.MetaData.Device {
            let deviceInternalId = UIDevice.current.identifierForVendor?.uuidString ?? "N/A"
-           let adTrackingEnabled = false
+        let adTrackingEnabled = UserDefaults.standard.object(forKey: "adstatus") as? Bool ?? false
+
            let make = "Apple"
            let model = UIDevice.current.model
            let platform = UIDevice.current.systemName
@@ -129,7 +136,7 @@ class StorageManager {
            
            return RequestData.MetaData.Device(
             device_internal_id: deviceInternalId,
-            google_advertising_id: "00.00.00.00.00", 
+            google_advertising_id: UserDefaults.standard.object(forKey: "idfa") as? String ?? "",
             ad_tracking_enabled: adTrackingEnabled,
             make: make,
             model: model,
@@ -156,7 +163,7 @@ class StorageManager {
     func getLibraryDetails() -> RequestData.MetaData.Library
     {
         let sdkName = "DriveMetaDataiOSSDK"
-        let sdkVersion = "1.0.0"
+        let sdkVersion = "1.0.1"
         return RequestData.MetaData.Library(
         name: sdkName,
         version: sdkVersion

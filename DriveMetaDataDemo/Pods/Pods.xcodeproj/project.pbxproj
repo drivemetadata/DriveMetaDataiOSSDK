@@ -34,10 +34,10 @@
 		1E3D3956C5AB1891118814F9D72B0E6F /* Pods-DriveMetaDataDemo-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-DriveMetaDataDemo-acknowledgements.markdown"; sourceTree = "<group>"; };
 		2AB0118CE89686269D667782D541D341 /* DriveMetaDataiOSSDK.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; path = DriveMetaDataiOSSDK.podspec; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		2C13BA2CF1D74E191996254AF25A1A08 /* Pods-DriveMetaDataDemo-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-DriveMetaDataDemo-acknowledgements.plist"; sourceTree = "<group>"; };
-		314A82E77D0156551A5999FD7B31A544 /* DriveMetaDataiOSSDK */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; name = DriveMetaDataiOSSDK; path = libDriveMetaDataiOSSDK.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		314A82E77D0156551A5999FD7B31A544 /* libDriveMetaDataiOSSDK.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libDriveMetaDataiOSSDK.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		54096AC7E206B760581FD63A7EAEBC8D /* Pods-DriveMetaDataDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-DriveMetaDataDemo.debug.xcconfig"; sourceTree = "<group>"; };
 		5D5298F2C44A5689D2E5BE515FBDE2A4 /* Pods-DriveMetaDataDemo-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-DriveMetaDataDemo-dummy.m"; sourceTree = "<group>"; };
-		6A4EB111E47BDEC550113F0A9D2F136C /* Pods-DriveMetaDataDemo */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; name = "Pods-DriveMetaDataDemo"; path = "libPods-DriveMetaDataDemo.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		6A4EB111E47BDEC550113F0A9D2F136C /* libPods-DriveMetaDataDemo.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-DriveMetaDataDemo.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		720967A84196CFA9773F41C2EF9491D3 /* DMD.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = DMD.h; path = DMD/DMD.h; sourceTree = "<group>"; };
 		9D940727FF8FB9C785EB98E56350EF41 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		A36DBCD12C269C24007EE31F /* RestApiManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestApiManager.swift; sourceTree = "<group>"; };
@@ -116,14 +116,14 @@
 			children = (
 				A36DBCD42C26A5FA007EE31F /* StogrageManager.swift */,
 			);
-			path = storage;
+			name = storage;
+			path = foundation/storage;
 			sourceTree = "<group>";
 		};
 		A3CA14AC2C2D056D00323A2D /* foundation */ = {
 			isa = PBXGroup;
 			children = (
 				A3CA14B12C2D05AE00323A2D /* utils */,
-				A36DBCD32C26A5E9007EE31F /* storage */,
 				A3CA14AF2C2D058C00323A2D /* logger */,
 				A3CA14AE2C2D058200323A2D /* devicedata */,
 				A3CA14AD2C2D057700323A2D /* appdata */,
@@ -229,6 +229,7 @@
 		EFCA91D9419AADBDFB4249F833E0DD28 /* DriveMetaDataiOSSDK */ = {
 			isa = PBXGroup;
 			children = (
+				A36DBCD32C26A5E9007EE31F /* storage */,
 				A3CA14B22C2D05C100323A2D /* dispatcher */,
 				A3CA14AC2C2D056D00323A2D /* foundation */,
 				720967A84196CFA9773F41C2EF9491D3 /* DMD.h */,
@@ -243,8 +244,8 @@
 		F9288704AFF01535F412697102342900 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				314A82E77D0156551A5999FD7B31A544 /* DriveMetaDataiOSSDK */,
-				6A4EB111E47BDEC550113F0A9D2F136C /* Pods-DriveMetaDataDemo */,
+				314A82E77D0156551A5999FD7B31A544 /* libDriveMetaDataiOSSDK.a */,
+				6A4EB111E47BDEC550113F0A9D2F136C /* libPods-DriveMetaDataDemo.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -287,7 +288,7 @@
 			);
 			name = "Pods-DriveMetaDataDemo";
 			productName = "Pods-DriveMetaDataDemo";
-			productReference = 6A4EB111E47BDEC550113F0A9D2F136C /* Pods-DriveMetaDataDemo */;
+			productReference = 6A4EB111E47BDEC550113F0A9D2F136C /* libPods-DriveMetaDataDemo.a */;
 			productType = "com.apple.product-type.library.static";
 		};
 		E8D88ADF61C2385BA19C6F03A0F91E3C /* DriveMetaDataiOSSDK */ = {
@@ -305,7 +306,7 @@
 			);
 			name = DriveMetaDataiOSSDK;
 			productName = DriveMetaDataiOSSDK;
-			productReference = 314A82E77D0156551A5999FD7B31A544 /* DriveMetaDataiOSSDK */;
+			productReference = 314A82E77D0156551A5999FD7B31A544 /* libDriveMetaDataiOSSDK.a */;
 			productType = "com.apple.product-type.library.static";
 		};
 /* End PBXNativeTarget section */

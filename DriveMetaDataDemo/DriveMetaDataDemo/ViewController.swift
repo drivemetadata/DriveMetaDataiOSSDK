@@ -15,11 +15,18 @@ class ViewController: UIViewController {
 
     @IBAction func shareDetails(_ sender: Any) {
         
-        print("clicked")
         
       //  DriveMetaData.updateConversionValue(for: "in_app_purchase")
 
-        DriveMetaData.sendTags(firstName: "Ranjeet Ranjan ", lastName: "Ranjan", eventType: "update")
+        let data: [String: Any] = [
+            "firstName": "John",
+            "lastName": "Doe",
+            "eventType": "userLogin"
+        ]
+
+        DriveMetaData.shared.sendTags(data: data)
+       
+        
         
     }
     func skAdNetworkDidReceiveAttribution(_ attribution: [String : Any]) {
