@@ -7,7 +7,7 @@
 
 import Foundation
 
-public class Utils
+ class Utils
 {
     public static func getDeviceNameAndOSVersion() -> (deviceName: String, osVersion: String) {
         let device = UIDevice.current

@@ -7,7 +7,7 @@
 
 import Foundation
 
-public class RestApiManager
+ class RestApiManager
 
 {
     static let shared = RestApiManager()
