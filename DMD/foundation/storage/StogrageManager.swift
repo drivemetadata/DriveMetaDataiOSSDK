@@ -34,7 +34,7 @@ import CoreLocation
         UserDefaults.standard.set(clientId, forKey: clientIdKey)
         UserDefaults.standard.set(clientToken, forKey: clientTokenKey)
         UserDefaults.standard.set(clientAppId, forKey: clientAppIdKey)
-        UserDefaults.standard.set("1.0.1",forKey: sdkVersion)
+        UserDefaults.standard.set("0.0.6",forKey: sdkVersion)
     
         
         if let bundleIdentifier = Bundle.main.bundleIdentifier {

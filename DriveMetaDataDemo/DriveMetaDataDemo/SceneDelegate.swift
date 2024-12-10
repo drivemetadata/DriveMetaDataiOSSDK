@@ -53,17 +53,17 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             return
         }
         // Call getBackgroundData
-        DriveMetaData.shared.getBackgroundData(uri: url) { result in
-            switch result {
-            case .success(let data):
-                print("Data received: \(data)")
-                // Handle the received data here (e.g., navigate to a specific view controller)
-
-            case .failure(let error):
-                print("Error: \(error.localizedDescription)")
-                // Handle the error here (e.g., show an error message)
-            }
-        }
+//        DriveMetaData.shared?.getBackgroundData(uri: url) { result,<#arg#>  in
+//            switch result {
+//            case .success(let data):
+//                print("Data received: \(data)")
+//                // Handle the received data here (e.g., navigate to a specific view controller)
+//
+//            case .failure(let error):
+//                print("Error: \(error.localizedDescription)")
+//                // Handle the error here (e.g., show an error message)
+//            }
+//        }
         // Confirm the received URL is correct
         print("Received Universal Link: \(url.absoluteString)")
         // Add your URL handling logic here

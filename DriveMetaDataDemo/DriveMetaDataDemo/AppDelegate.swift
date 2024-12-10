@@ -18,13 +18,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
        
-        DriveMetaData.shared.configure(clientId: 1635, clientToken: "4d17d90c78154c9a5569c073b67d8a5a22b2fabfc5c9415b6e7f709d68762054", clientAppId: 2659)
+      
+        DriveMetaData.initializeShared(clientId: 1635, clientToken: "4d17d90c78154c9a5569c073b67d8a5a22b2fabfc5c9415b6e7f709d68762054", clientAppId: 2659)
+
         
               SKAdNetwork.registerAppForAdNetworkAttribution()
               SKAdNetwork.updateConversionValue(1) // Set initial conversion value
             
         DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
-            DriveMetaData.shared.requestrequestIDFA()
+            DriveMetaData.shared?.requestrequestIDFA()
            }
         
               
@@ -49,7 +51,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     // handle deeplink Data
     func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
         print("DeepLinkURL:", url)
-       
+       // DriveMetaData.shared.getBackgroundData(uri: url, callback: )
         
         return true
     }

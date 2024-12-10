@@ -24,7 +24,8 @@ class ViewController: UIViewController {
             "eventType": "userLogin"
         ]
 
-        DriveMetaData.shared.sendTags(data: data)
+        DriveMetaData.shared?.sendTags(data: data)
+        print("ABC")
        
         
         

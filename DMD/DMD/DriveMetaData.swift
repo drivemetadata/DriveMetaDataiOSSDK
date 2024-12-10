@@ -12,50 +12,62 @@ import StoreKit
 import AdServices
 import AppTrackingTransparency
 
+public typealias DeepLinkCallback = (_ success: String?, _ error: NSError?) -> Void
+
 
 // Define your callback type
-public typealias DeepLinkCallback = (Result<String, Error>) -> Void
-public class DriveMetaData {
+@objc public class DriveMetaData: NSObject {
     private var clientId: Int
     private var clientToken: String
     private var clientAppId: Int
 
     // Singleton instance
-    public static let shared = DriveMetaData(clientId: 0, clientToken: "", clientAppId: 0)
+    @objc public static var shared: DriveMetaData?
 
     // Private initializer to restrict instantiation
     private init(clientId: Int, clientToken: String, clientAppId: Int) {
+        // Call the superclass initializer first
+
+        // Now it's safe to access self
         self.clientId = clientId
         self.clientToken = clientToken
         self.clientAppId = clientAppId
-        
+        super.init() // This must be the first line in the initializer
+
         // Save client data in storage
         StorageManager.shared.saveClientData(clientId: clientId, clientToken: clientToken, clientAppId: clientAppId)
-        
+        print("Come")
+
         // Check and handle first-time installation
         if !StorageManager.shared.getInstallFirstTime() {
+            print("Come")
             // Delay of 2 seconds on a background thread
-            DispatchQueue.global().asyncAfter(deadline: .now() + 2.0) {
+            DispatchQueue.global().asyncAfter(deadline: .now() + 2.0) { [weak self] in
+                guard let self = self else { return }
                 print("Executed after 2 seconds delay on a background thread")
                 self.firstInstall()
             }
         }
-        
-        // Generate token
-       // generateToken()
     }
 
-  
+
+    // Public method to initialize the singleton with required parameters
+    @objc public static func initializeShared(clientId: Int, clientToken: String, clientAppId: Int) {
+        print("Come")
+        shared = DriveMetaData(clientId: clientId, clientToken: clientToken, clientAppId: clientAppId)
+    }
+
 
     // Public method to set or configure the singleton instance's properties
-    public func configure(clientId: Int, clientToken: String, clientAppId: Int) {
+    @objc public func configure(clientId: Int, clientToken: String, clientAppId: Int) {
         self.clientId = clientId
         self.clientToken = clientToken
         self.clientAppId = clientAppId
+        print("ABCD")
         
         StorageManager.shared.saveClientData(clientId: clientId, clientToken: clientToken, clientAppId: clientAppId)
     }
-    public  func generateToken()
+    @objc public  func generateToken()
     {
         if #available(iOS 14.3, *) {
             if let token = try? AAAttribution.attributionToken() {
@@ -65,7 +77,7 @@ public class DriveMetaData {
             print("Attribution token generation is not available on this device.")
         }
     }
-    public  func requestrequestIDFA() {
+    @objc public  func requestrequestIDFA() {
         // Check if the device supports AppTrackingTransparency (iOS 14+)
         if #available(iOS 14, *) {
             // Request permission to track
@@ -128,7 +140,7 @@ public class DriveMetaData {
         }
     }
     
-    func sendAttributionTokenToServer(_ token: String) {
+    @objc func sendAttributionTokenToServer(_ token: String) {
         
         let retrievedData = StorageManager.shared.getClientData()
         let appDetails = RequestData.MetaData.AppDetails(
@@ -171,7 +183,7 @@ public class DriveMetaData {
     
 
     
-    func firstInstall()
+     func firstInstall()
     {
        
         let retrievedData = StorageManager.shared.getClientData()
@@ -227,12 +239,12 @@ public class DriveMetaData {
 
       
     }
-    public func handleDeepLink(url : URL)
+    @objc  public func handleDeepLink(url : URL)
     {
         print("DeepLink uRL",url)
     }
     // Function to fetch background data
-   public func getBackgroundData(uri: URL?, callback: @escaping DeepLinkCallback) {
+    @objc public func getBackgroundData(uri: URL?, callback: @escaping DeepLinkCallback) {
         let clientId = UserDefaults.standard.integer(forKey: "KEY_CLIENT_ID")
         let token = UserDefaults.standard.string(forKey: "KEY_CLIENT_TOKEN") ?? ""
 
@@ -258,14 +270,13 @@ public class DriveMetaData {
             print("DMD: path variable is empty: \(error)")
         }
     }
-
     // Function to fetch deep link data
-     func fetchDeepLinkData( pathVariable: String, clientId: Int, token: String, callback: @escaping DeepLinkCallback) {
-        
+    @objc public func fetchDeepLinkData(pathVariable: String, clientId: Int, token: String, callback: @escaping DeepLinkCallback) {
         DispatchQueue.global().async {
-            let urlData = "https://p-api.drivemetadata.com/deeplink-tracker="+pathVariable
+            let urlData = "https://p-api.drivemetadata.com/deeplink-tracker=" + pathVariable
             guard let url = URL(string: urlData) else {
-                callback(.failure(NSError(domain: "Invalid URL", code: 0, userInfo: nil)))
+                let error = NSError(domain: "Invalid URL", code: 0, userInfo: nil)
+                callback(nil, error)
                 return
             }
 
@@ -274,29 +285,29 @@ public class DriveMetaData {
             request.setValue("application/json", forHTTPHeaderField: "Accept")
 
             if clientId != 0 {
-            request.setValue(String(clientId), forHTTPHeaderField: "client-id")
-           }
+                request.setValue(String(clientId), forHTTPHeaderField: "client-id")
+            }
             request.setValue(token, forHTTPHeaderField: "token")
 
             let task = URLSession.shared.dataTask(with: request) { data, response, error in
-                if let error = error {
-                    callback(.failure(error))
+                if let error = error as NSError? {
+                    callback(nil, error)
                     return
                 }
 
                 guard let data = data, let responseString = String(data: data, encoding: .utf8) else {
-                    callback(.failure(NSError(domain: "No data received", code: 0, userInfo: nil)))
+                    let error = NSError(domain: "No data received", code: 0, userInfo: nil)
+                    callback(nil, error)
                     return
                 }
 
-              //  storeDeepLinkData(context: context, pathVariable: pathVariable, data: responseString)
-                callback(.success(responseString))
+                callback(responseString, nil)
             }
 
             task.resume()
         }
     }
-    public func sendTags(data: [String: Any]) {
+    @objc  public func sendTags(data: [String: Any]) {
         guard
             let firstName = data["firstName"] as? String,
             let lastName = data["lastName"] as? String,
