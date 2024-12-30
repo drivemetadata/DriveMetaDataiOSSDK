@@ -19,7 +19,7 @@ import Foundation
       #if DEBUG
           let baseURL = "https://sdk-dev.drivemetadata.com/data-collector"
       #else
-         let baseURL = "https://sdk-prod.drivemetadata.com/data-collector"
+         let baseURL = "https://sdk.drivemetadata.com/data-collector"
       #endif
 
     guard let url = URL(string: baseURL + endPoint) else {
