@@ -26,7 +26,7 @@ import Foundation
           return "Invalid URL"
          }
 
-     
+       print(baseURL)
      var request = URLRequest(url: url)
      request.httpMethod = "POST"
      request.setValue("application/json", forHTTPHeaderField: "Content-Type")

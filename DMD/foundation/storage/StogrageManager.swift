@@ -76,51 +76,13 @@ import CoreLocation
         return deviceInternalId
         
     }
-    func getNetworkDetails() -> RequestData.MetaData.Network {
-           let bluetoothEnabled = false // Bluetooth is not accessible in iOS without user interaction
-           let carrier = getCarrierName()
-           let cellularEnabled = isCellularEnabled()
-           let wifiEnabled = isWiFiEnabled()
-           
-           return RequestData.MetaData.Network(
-               bluetooth: bluetoothEnabled,
-               carrier: carrier,
-               cellular: cellularEnabled,
-               wifi: wifiEnabled
-           )
-       }
+   
        
-       private func getCarrierName() -> String {
-           let networkInfo = CTTelephonyNetworkInfo()
-           if let carrier = networkInfo.serviceSubscriberCellularProviders?.first?.value {
-               return carrier.carrierName ?? "Unknown"
-           }
-           return "Unknown"
-       }
+      
        
-       private func isCellularEnabled() -> Bool {
-           let networkInfo = CTTelephonyNetworkInfo()
-           if #available(iOS 12.0, *) {
-               return networkInfo.serviceCurrentRadioAccessTechnology != nil
-           } else {
-               return networkInfo.currentRadioAccessTechnology != nil
-           }
-       }
+      
        
-       private func isWiFiEnabled() -> Bool {
-           let monitor = NWPathMonitor()
-           let queue = DispatchQueue(label: "NetworkMonitor")
-           var wifiEnabled = false
-           
-           monitor.pathUpdateHandler = { path in
-               if path.usesInterfaceType(.wifi) {
-                   wifiEnabled = path.status == .satisfied
-               }
-           }
-           
-           monitor.start(queue: queue)
-           return wifiEnabled
-       }
+      
     func getDeviceDetails() -> RequestData.MetaData.Device {
            let deviceInternalId = UIDevice.current.identifierForVendor?.uuidString ?? "N/A"
         let adTrackingEnabled = UserDefaults.standard.object(forKey: "adstatus") as? Bool ?? false
@@ -136,7 +98,7 @@ import CoreLocation
            
            return RequestData.MetaData.Device(
             device_internal_id: deviceInternalId,
-            google_advertising_id: UserDefaults.standard.object(forKey: "idfa") as? String ?? "",
+            ios_advertising_id: UserDefaults.standard.object(forKey: "idfa") as? String ?? "",
             ad_tracking_enabled: adTrackingEnabled,
             make: make,
             model: model,

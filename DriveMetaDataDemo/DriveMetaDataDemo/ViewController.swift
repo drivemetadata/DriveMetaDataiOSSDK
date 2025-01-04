@@ -24,8 +24,8 @@ class ViewController: UIViewController {
             "eventType": "userLogin"
         ]
 
-        DriveMetaData.shared?.sendTags(data: data)
-        print("ABC")
+       let response = DriveMetaData.shared?.sendTags(data: data)
+        print(response)
        
         
         
@@ -36,8 +36,32 @@ class ViewController: UIViewController {
        }
     override func viewDidLoad() {
         super.viewDidLoad()
+        // Get the current locale
+        let currentLocale = Locale.current
 
-       
+        // Get the identifier of the locale (e.g., "en_US", "fr_FR")
+        print("Locale Identifier: \(currentLocale.identifier)")
+
+        // Get the language code (e.g., "en" for English, "fr" for French)
+        if let languageCode = currentLocale.languageCode {
+            print("Language Code: \(languageCode)")
+        }
+
+        // Get the region code (e.g., "US" for United States, "FR" for France)
+        if let regionCode = currentLocale.regionCode {
+            print("Region Code: \(regionCode)")
+        }
+
+        // Get the currency code (e.g., "USD" for US Dollar, "EUR" for Euro)
+        if let currencyCode = currentLocale.currencyCode {
+            print("Currency Code: \(currencyCode)")
+        }
+
+        // Get the currency symbol (e.g., "$" for USD, "€" for Euro)
+        if let currencySymbol = currentLocale.currencySymbol {
+            print("Currency Symbol: \(currencySymbol)")
+        }
+
     }
 
 

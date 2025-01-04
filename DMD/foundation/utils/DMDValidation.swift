@@ -15,24 +15,7 @@ import Foundation
             let last_name : String
         }
     
-        struct AttributionData: Codable {
-            let click_id: String
-            let install_referrer: String
-            let sdk_version: String
-            let referrer_click_timestamp_seconds: Int
-            let install_begin_timestamp_seconds: Int
-            let referrer_click_timestamp_server_seconds: Int
-            let install_begin_timestamp_server_seconds: Int
-            let install_version: String
-        }
-        
-        struct UTMParameter: Codable {
-            let utm_campaign: String
-            let utm_term: String
-            let utm_source: String
-            let utm_medium: String
-            let utm_content: String
-        }
+       
         
         struct Device: Codable {
             struct Screen: Codable {
@@ -42,7 +25,7 @@ import Foundation
             }
             
             let device_internal_id: String
-            let google_advertising_id: String
+            let ios_advertising_id: String
             let ad_tracking_enabled: Bool
             let make: String
             let model: String
@@ -60,25 +43,16 @@ import Foundation
         }
         
       
-        struct Network: Codable {
-            let bluetooth: Bool
-            let carrier: String
-            let cellular: Bool
-            let wifi: Bool
-        }
         struct adData: Codable
         {
             let token : String
         }
         
         let appDetails: AppDetails?
-        let attributionData: AttributionData?
-        let utmParameter: UTMParameter?
         let device: Device?
         let ip: String?
         let library: Library?
         let locale: String?
-        let network: Network?
         let adData : adData?
         let ua: String // mandatory
         let requestId: String  // mandatory

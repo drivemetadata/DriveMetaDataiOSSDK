@@ -78,13 +78,10 @@ public typealias DeepLinkCallback = (_ success: String?, _ error: NSError?) -> V
       let jsonData = RequestData(
           metaData: RequestData.MetaData(
               appDetails: nil,
-              attributionData: nil,
-              utmParameter: nil,
               device: nil,
               ip: Utils.getIPAddress(),
               library: nil,
-              locale: "en-US",
-              network: nil,
+              locale: Locale.current.identifier,
               adData: nil,
               ua: StorageManager.shared.getCurrentDate(),
               requestId: StorageManager.shared.getCurrentDate(),
@@ -92,7 +89,7 @@ public typealias DeepLinkCallback = (_ success: String?, _ error: NSError?) -> V
               requestSentAt: StorageManager.shared.getCurrentDate(),
               timestamp: StorageManager.shared.getTimeStamp() ?? "N/A",
               eventType: eventType,
-              requestFrom: "3",
+              requestFrom: "1",
               token: retrievedData.clientToken ?? "N/A",
               clientId: retrievedData.clientId ?? 0,
               userDetails: userDetails
@@ -198,13 +195,10 @@ public typealias DeepLinkCallback = (_ success: String?, _ error: NSError?) -> V
         let jsonData = RequestData(
             metaData: RequestData.MetaData(
                 appDetails: appDetails,
-                attributionData: nil,
-                utmParameter: nil,
                 device: StorageManager.shared.getDeviceDetails(),
                 ip: Utils.getIPAddress(),
                 library: StorageManager.shared.getLibraryDetails(),
-                locale: "en-US",
-                network: StorageManager.shared.getNetworkDetails(),
+                locale: Locale.current.identifier,
                 adData: RequestData.MetaData.adData(token: "\(token)"),
                 ua: "",
                 requestId: StorageManager.shared.getCurrentDate(),
@@ -243,28 +237,12 @@ public typealias DeepLinkCallback = (_ success: String?, _ error: NSError?) -> V
         let jsonData = RequestData(
             metaData: RequestData.MetaData(
                 appDetails: appDetails,
-                attributionData: RequestData.MetaData.AttributionData(
-                click_id: "",
-                install_referrer: "",
-                sdk_version: retrievedData.sdkVersion ?? "0.00.00",
-                referrer_click_timestamp_seconds: 0,
-                install_begin_timestamp_seconds: 0,
-                referrer_click_timestamp_server_seconds: 0,
-                install_begin_timestamp_server_seconds: 0,
-                install_version: ""
-                ),
-                utmParameter: RequestData.MetaData.UTMParameter(
-                    utm_campaign: "",
-                    utm_term: "",
-                    utm_source: "",
-                    utm_medium: "",
-                    utm_content: ""
-                ),
+               
+               
                 device: StorageManager.shared.getDeviceDetails(),
                 ip: Utils.getIPAddress(),
                 library: StorageManager.shared.getLibraryDetails(),
-                locale: "en-US",
-                network: StorageManager.shared.getNetworkDetails(),
+                locale: Locale.current.identifier,
                 adData: nil,
                 ua: "",
                 requestId: StorageManager.shared.getCurrentDate(),
@@ -328,39 +306,42 @@ public typealias DeepLinkCallback = (_ success: String?, _ error: NSError?) -> V
         print("DeepLink uRL",url)
     }
     // Function to fetch background data
-    @objc public func getBackgroundData(uri: URL?, callback: @escaping DeepLinkCallback) {
-        let clientId = UserDefaults.standard.integer(forKey: "KEY_CLIENT_ID")
-        let token = UserDefaults.standard.string(forKey: "KEY_CLIENT_TOKEN") ?? ""
-
+    @objc public func getBackgroundData(uri: URL?, callback: @escaping (String?, Error?) -> Void) {
         guard let uri = uri else {
-            print("URI variable is empty")
+            callback(nil, NSError(domain: "Invalid URI", code: 1, userInfo: [NSLocalizedDescriptionKey: "URI is nil"]))
             return
         }
 
-        do {
-            if let path = uri.path.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed), !path.isEmpty {
-                let pathVariable = path.replacingOccurrences(of: "/", with: "").trimmingCharacters(in: .whitespaces)
-                if let identifier = uri.absoluteString.components(separatedBy: "=").last{
-                    
-                    if !identifier.isEmpty {
-                        
-                        fetchDeepLinkData(pathVariable: identifier, clientId: clientId, token: token, callback: callback)
-                    } else {
-                        print("DMD: path variable is empty")
-                    }
-                }
-            }
-        } catch {
-            print("DMD: path variable is empty: \(error)")
+        let clientId = UserDefaults.standard.integer(forKey: "KEY_CLIENT_ID")
+        let token = UserDefaults.standard.string(forKey: "KEY_CLIENT_TOKEN") ?? ""
+
+        // Safely encode the path component of the URI
+        guard let encodedPath = uri.path.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed),
+              !encodedPath.isEmpty else {
+            callback(nil, NSError(domain: "Invalid Path", code: 2, userInfo: [NSLocalizedDescriptionKey: "Path encoding failed or is empty"]))
+            return
         }
+
+        let pathVariable = encodedPath.replacingOccurrences(of: "/", with: "").trimmingCharacters(in: .whitespaces)
+
+        guard let identifier = uri.absoluteString.components(separatedBy: "=").last, !identifier.isEmpty else {
+            callback(nil, NSError(domain: "Invalid Identifier", code: 3, userInfo: [NSLocalizedDescriptionKey: "Could not extract identifier from URL"]))
+            return
+        }
+
+        fetchDeepLinkData(pathVariable: identifier, clientId: clientId, token: token, callback: callback)
     }
+
     // Function to fetch deep link data
-    @objc public func fetchDeepLinkData(pathVariable: String, clientId: Int, token: String, callback: @escaping DeepLinkCallback) {
-        DispatchQueue.global().async {
-            let urlData = "https://p-api.drivemetadata.com/deeplink-tracker=" + pathVariable
-            guard let url = URL(string: urlData) else {
-                let error = NSError(domain: "Invalid URL", code: 0, userInfo: nil)
-                callback(nil, error)
+     func fetchDeepLinkData(pathVariable: String, clientId: Int, token: String, callback: @escaping (String?, Error?) -> Void) {
+        // Ensure that the fetch happens on a background thread to prevent blocking UI
+        DispatchQueue.global(qos: .background).async {
+            let urlString = "https://p-api.drivemetadata.com/deeplink-tracker=\(pathVariable)"
+            guard let url = URL(string: urlString) else {
+                let error = NSError(domain: "Invalid URL", code: 4, userInfo: [NSLocalizedDescriptionKey: "Failed to create URL from the string"])
+                DispatchQueue.main.async {
+                    callback(nil, error)
+                }
                 return
             }
 
@@ -368,30 +349,37 @@ public typealias DeepLinkCallback = (_ success: String?, _ error: NSError?) -> V
             request.httpMethod = "GET"
             request.setValue("application/json", forHTTPHeaderField: "Accept")
 
+            // Include client ID and token in headers if they are valid
             if clientId != 0 {
                 request.setValue(String(clientId), forHTTPHeaderField: "client-id")
             }
             request.setValue(token, forHTTPHeaderField: "token")
 
             let task = URLSession.shared.dataTask(with: request) { data, response, error in
-                if let error = error as NSError? {
-                    callback(nil, error)
+                if let error = error {
+                    DispatchQueue.main.async {
+                        callback(nil, error)
+                    }
                     return
                 }
 
                 guard let data = data, let responseString = String(data: data, encoding: .utf8) else {
-                    let error = NSError(domain: "No data received", code: 0, userInfo: nil)
-                    callback(nil, error)
+                    let error = NSError(domain: "No Data", code: 5, userInfo: [NSLocalizedDescriptionKey: "No data received from the server"])
+                    DispatchQueue.main.async {
+                        callback(nil, error)
+                    }
                     return
                 }
 
-                callback(responseString, nil)
+                DispatchQueue.main.async {
+                    callback(responseString, nil)
+                }
             }
 
             task.resume()
         }
     }
-   
+
    
    
   

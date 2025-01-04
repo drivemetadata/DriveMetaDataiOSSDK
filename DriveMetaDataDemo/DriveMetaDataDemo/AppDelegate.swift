@@ -51,7 +51,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     // handle deeplink Data
     func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
         print("DeepLinkURL:", url)
-       // DriveMetaData.shared.getBackgroundData(uri: url, callback: )
+       
         
         return true
     }
