@@ -11,12 +11,13 @@ import Foundation
         }
         struct UserDetails : Codable
         {
-            let first_name : String
-            let last_name : String
+            let first_name : String?
+            let last_name : String?
+            let middile_name : String?
+            let mobile_number : String?
+            
         }
     
-       
-        
         struct Device: Codable {
             struct Screen: Codable {
                 let width: Int
@@ -42,12 +43,10 @@ import Foundation
             let version: String
         }
         
-      
         struct adData: Codable
         {
             let token : String
         }
-        
         let appDetails: AppDetails?
         let device: Device?
         let ip: String?

@@ -12,8 +12,6 @@ import StoreKit
 import AdServices
 import AppTrackingTransparency
 
-public typealias DeepLinkCallback = (_ success: String?, _ error: NSError?) -> Void
-
 
 // Define your callback type
 @objc public class DriveMetaData: NSObject {
@@ -62,44 +60,58 @@ public typealias DeepLinkCallback = (_ success: String?, _ error: NSError?) -> V
         
         StorageManager.shared.saveClientData(clientId: clientId, clientToken: clientToken, clientAppId: clientAppId)
     }
-  
-  @objc public func sendTags(data: [String: Any]) -> String{
-    guard
-      let firstName = data["firstName"] as? String,
-      let lastName = data["lastName"] as? String,
-      let eventType = data["eventType"] as? String
-    else {
-      print("Error: Missing required fields")
-      return "Error"
-    }
-      let retrievedData = StorageManager.shared.getClientData()
-      let userDetails = RequestData.MetaData.UserDetails(first_name: firstName, last_name: lastName)
+   
+    @objc public func sendTags(userDetails: [String: Any], eventType: String) -> String {
+        // Step 1: Retrieve the stored data from StorageManager
+        let retrievedData = StorageManager.shared.getClientData()
 
-      let jsonData = RequestData(
-          metaData: RequestData.MetaData(
-              appDetails: nil,
-              device: nil,
-              ip: Utils.getIPAddress(),
-              library: nil,
-              locale: Locale.current.identifier,
-              adData: nil,
-              ua: StorageManager.shared.getCurrentDate(),
-              requestId: StorageManager.shared.getCurrentDate(),
-              requestReceivedAt: StorageManager.shared.getCurrentDate(),
-              requestSentAt: StorageManager.shared.getCurrentDate(),
-              timestamp: StorageManager.shared.getTimeStamp() ?? "N/A",
-              eventType: eventType,
-              requestFrom: "1",
-              token: retrievedData.clientToken ?? "N/A",
-              clientId: retrievedData.clientId ?? 0,
-              userDetails: userDetails
-          )
-      )
-      
-      return RestApiManager.sendRequest(jsonData: jsonData, endPoint: "")
-  }
-  
-  
+        // Step 2: Try to convert the userDetails dictionary to a UserDetails object, making fields optional
+        let userDetailsObject: RequestData.MetaData.UserDetails? = {
+            // Extract values from the dictionary, making each field optional
+            let firstName = userDetails["first_name"] as? String
+            let lastName = userDetails["last_name"] as? String
+            let middleName = userDetails["middle_name"] as? String
+            let mobileNumber = userDetails["mobile_number"] as? String
+            
+            // Return a UserDetails object with the fields (some of them can be nil)
+            return RequestData.MetaData.UserDetails(first_name: firstName,
+                                                    last_name: lastName,
+                                                    middile_name: middleName,
+                                                    mobile_number: mobileNumber)
+        }()
+        
+        // If the userDetailsObject is nil (if essential data is missing), return an error message
+        guard let userDetailsObject = userDetailsObject else {
+            print("Error: Missing essential user details")
+            return "Error: Missing essential user details"
+        }
+
+        // Step 3: Build the RequestData with the userDetailsObject
+        let jsonData = RequestData(
+            metaData: RequestData.MetaData(
+                appDetails: nil,
+                device: nil,
+                ip: Utils.getIPAddress(),
+                library: nil,
+                locale: Locale.current.identifier,
+                adData: nil,
+                ua: StorageManager.shared.getCurrentDate(),
+                requestId: StorageManager.shared.getCurrentDate(),
+                requestReceivedAt: StorageManager.shared.getCurrentDate(),
+                requestSentAt: StorageManager.shared.getCurrentDate(),
+                timestamp: StorageManager.shared.getTimeStamp() ?? "N/A",
+                eventType: eventType,
+                requestFrom: "1",
+                token: retrievedData.clientToken ?? "N/A", // Fallback to "N/A" if nil
+                clientId: retrievedData.clientId ?? 0,    // Fallback to 0 if nil
+                userDetails: userDetailsObject            // Pass the UserDetails object
+            )
+        )
+        
+        // Step 4: Send the request and return the response
+        return RestApiManager.sendRequest(jsonData: jsonData, endPoint: "")
+    }
+
   
   
     @objc public  func generateToken()
@@ -112,7 +124,7 @@ public typealias DeepLinkCallback = (_ success: String?, _ error: NSError?) -> V
             print("Attribution token generation is not available on this device.")
         }
     }
-  @objc public func requestrequestIDFA() -> String {
+  @objc public func requestIDFA() -> String {
       var result = ""
 
       // Check if the device supports AppTrackingTransparency (iOS 14+)
@@ -312,9 +324,8 @@ public typealias DeepLinkCallback = (_ success: String?, _ error: NSError?) -> V
             return
         }
 
-        let clientId = UserDefaults.standard.integer(forKey: "KEY_CLIENT_ID")
-        let token = UserDefaults.standard.string(forKey: "KEY_CLIENT_TOKEN") ?? ""
-
+        let clientId = StorageManager.shared.getClientData().clientId ?? 0
+        let token = StorageManager.shared.getClientData().clientToken ?? ""
         // Safely encode the path component of the URI
         guard let encodedPath = uri.path.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed),
               !encodedPath.isEmpty else {
@@ -329,11 +340,12 @@ public typealias DeepLinkCallback = (_ success: String?, _ error: NSError?) -> V
             return
         }
 
-        fetchDeepLinkData(pathVariable: identifier, clientId: clientId, token: token, callback: callback)
+        fetchDeepLinkData(pathVariable: pathVariable, clientId: clientId, token: token, callback: callback)
     }
 
     // Function to fetch deep link data
      func fetchDeepLinkData(pathVariable: String, clientId: Int, token: String, callback: @escaping (String?, Error?) -> Void) {
+         
         // Ensure that the fetch happens on a background thread to prevent blocking UI
         DispatchQueue.global(qos: .background).async {
             let urlString = "https://p-api.drivemetadata.com/deeplink-tracker=\(pathVariable)"
@@ -344,6 +356,7 @@ public typealias DeepLinkCallback = (_ success: String?, _ error: NSError?) -> V
                 }
                 return
             }
+            print(urlString)
 
             var request = URLRequest(url: url)
             request.httpMethod = "GET"
@@ -354,7 +367,6 @@ public typealias DeepLinkCallback = (_ success: String?, _ error: NSError?) -> V
                 request.setValue(String(clientId), forHTTPHeaderField: "client-id")
             }
             request.setValue(token, forHTTPHeaderField: "token")
-
             let task = URLSession.shared.dataTask(with: request) { data, response, error in
                 if let error = error {
                     DispatchQueue.main.async {

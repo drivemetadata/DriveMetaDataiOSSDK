@@ -19,14 +19,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Override point for customization after application launch.
        
       
-        DriveMetaData.initializeShared(clientId: 1635, clientToken: "4d17d90c78154c9a5569c073b67d8a5a22b2fabfc5c9415b6e7f709d68762054", clientAppId: 2659)
+        DriveMetaData.initializeShared(clientId: 1635, clientToken: "4d17d90c78154c9a5569c073b67d8a5a22b2fabfc5c9415b6e7f709d68762054", clientAppId: 2782)
 
         
-              SKAdNetwork.registerAppForAdNetworkAttribution()
-              SKAdNetwork.updateConversionValue(1) // Set initial conversion value
+             // SKAdNetwork.registerAppForAdNetworkAttribution()
+             // SKAdNetwork.updateConversionValue(1) // Set initial conversion value
             
         DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
-            DriveMetaData.shared?.requestrequestIDFA()
+            DriveMetaData.shared?.requestIDFA()
            }
         
               
