@@ -76,40 +76,34 @@ import CoreLocation
         return deviceInternalId
         
     }
-   
-       
-      
-       
-      
-       
-      
-    func getDeviceDetails() -> RequestData.MetaData.Device {
-           let deviceInternalId = UIDevice.current.identifierForVendor?.uuidString ?? "N/A"
-        let adTrackingEnabled = UserDefaults.standard.object(forKey: "adstatus") as? Bool ?? false
+     
+     func getDeviceDetails() -> [String:Any]{
+         let adTrackingEnabled = UserDefaults.standard.object(forKey: "adstatus") as? Bool ?? false
+         let width = Int(UIScreen.main.bounds.width)
+         let height = Int(UIScreen.main.bounds.height)
+         let screenDpi = Int(UIScreen.main.scale)
 
-           let make = "Apple"
-           let model = UIDevice.current.model
-           let platform = UIDevice.current.systemName
-           let os_platform_version = UIDevice.current.systemVersion
-           let name = UIDevice.current.name
-           let deviceType = UIDevice.current.userInterfaceIdiom == .pad ? "Tablet" : "Mobile"
-           let isMobile = UIDevice.current.userInterfaceIdiom == .phone
-           let screen = getScreenDetails()
-           
-           return RequestData.MetaData.Device(
-            device_internal_id: deviceInternalId,
-            ios_advertising_id: UserDefaults.standard.object(forKey: "idfa") as? String ?? "",
-            ad_tracking_enabled: adTrackingEnabled,
-            make: make,
-            model: model,
-            platform: platform,
-            os_platform_version: os_platform_version,
-            name: name,
-            device_type: deviceType,
-            is_mobile: isMobile,
-            screen: screen
-           )
+         var deviceDetails: [String: Any] = [
+             "device_internal_id": UIDevice.current.identifierForVendor?.uuidString ?? "N/A",
+             "ios_advertising_id": UserDefaults.standard.object(forKey: "idfa") as? String ?? "",
+             "ad_tracking_enabled": adTrackingEnabled,
+             "make": "Apple",
+             "model": UIDevice.current.model,
+             "platform":UIDevice.current.systemName,
+             "name":UIDevice.current.name,
+             "device_type":UIDevice.current.userInterfaceIdiom == .pad ? "Tablet" : "Mobile",
+             "is_mobile":UIDevice.current.userInterfaceIdiom == .phone,
+             "screen":[
+                "width": width,
+                "height":height,
+                "screen_dpi":screenDpi
+             ]
+             
+         ]
+         return deviceDetails
+ 
        }
+     
     private func getScreenDetails() -> RequestData.MetaData.Device.Screen {
             let width = Int(UIScreen.main.bounds.width)
             let height = Int(UIScreen.main.bounds.height)
@@ -122,15 +116,39 @@ import CoreLocation
             )
         }
     
-    func getLibraryDetails() -> RequestData.MetaData.Library
+     func getLibraryDetails() -> [String:Any]
+     
     {
+    
+        
         let sdkName = "DriveMetaDataiOSSDK"
         let sdkVersion = "1.0.1"
-        return RequestData.MetaData.Library(
-        name: sdkName,
-        version: sdkVersion
-        )
+        var library: [String: Any] = [
+            
+            "name":sdkName,
+            "version":sdkVersion,
+            
+        ]
+        return library
+        
+       
     }
+     
+     func getAppDetails() -> [String:Any]
+     {
+         let retrievedData = StorageManager.shared.getClientData()
+
+         var appDetails: [String: Any] = [
+             "app_id": retrievedData.clientAppId ?? 0,
+             "bundle": retrievedData.bundleIdentifier ?? "N/A",
+             "name": retrievedData.appName ?? "N/A",
+             "version": retrievedData.appVersion ?? "N/A",
+             "build": retrievedData.appBuild ?? "N/A"
+         ]
+         return appDetails
+     }
+     
+     
   
   func getTimeStamp() -> String?
     {

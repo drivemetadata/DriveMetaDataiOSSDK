@@ -61,56 +61,52 @@ import AppTrackingTransparency
         StorageManager.shared.saveClientData(clientId: clientId, clientToken: clientToken, clientAppId: clientAppId)
     }
    
-    @objc public func sendTags(userDetails: [String: Any], eventType: String) -> String {
-        // Step 1: Retrieve the stored data from StorageManager
+    @objc public func sendTags(tags: [String: Any], eventType: String, completion: @escaping (String) -> Void) {
+        // Step 1: Retrieve stored data from StorageManager
         let retrievedData = StorageManager.shared.getClientData()
 
-        // Step 2: Try to convert the userDetails dictionary to a UserDetails object, making fields optional
-        let userDetailsObject: RequestData.MetaData.UserDetails? = {
-            // Extract values from the dictionary, making each field optional
-            let firstName = userDetails["first_name"] as? String
-            let lastName = userDetails["last_name"] as? String
-            let middleName = userDetails["middle_name"] as? String
-            let mobileNumber = userDetails["mobile_number"] as? String
-            
-            // Return a UserDetails object with the fields (some of them can be nil)
-            return RequestData.MetaData.UserDetails(first_name: firstName,
-                                                    last_name: lastName,
-                                                    middile_name: middleName,
-                                                    mobile_number: mobileNumber)
-        }()
-        
-        // If the userDetailsObject is nil (if essential data is missing), return an error message
-        guard let userDetailsObject = userDetailsObject else {
-            print("Error: Missing essential user details")
-            return "Error: Missing essential user details"
-        }
+        var metadata: [String: Any] = [
+            DMDConstants.DMD_UA: "",
+            DMDConstants.DMD_REQUEST_ID: UUID().uuidString,
+            DMDConstants.DMD_REQUEST_RECEIVED: StorageManager.shared.getCurrentDate() ?? "",
+            DMDConstants.DMD_REQUEST_SENT: StorageManager.shared.getCurrentDate() ?? "",
+            DMDConstants.DMD_TIMESTAMP: StorageManager.shared.getCurrentDate() ?? "",
+            DMDConstants.DMD_EVENT_TYPE: eventType,
+            DMDConstants.DMD_REQUEST_FORM: "1",
+            DMDConstants.DMD_TOKEN: retrievedData.clientToken ?? "",
+            DMDConstants.DMD_CLIENT_ID: retrievedData.clientId ?? 0,
+            DMDConstants.DMD_LOCALE: Locale.current.identifier,
+            DMDConstants.DMD_IP: Utils.getIPAddress() ?? "0.0.0.0"
+        ]
 
-        // Step 3: Build the RequestData with the userDetailsObject
-        let jsonData = RequestData(
-            metaData: RequestData.MetaData(
-                appDetails: nil,
-                device: nil,
-                ip: Utils.getIPAddress(),
-                library: nil,
-                locale: Locale.current.identifier,
-                adData: nil,
-                ua: StorageManager.shared.getCurrentDate(),
-                requestId: StorageManager.shared.getCurrentDate(),
-                requestReceivedAt: StorageManager.shared.getCurrentDate(),
-                requestSentAt: StorageManager.shared.getCurrentDate(),
-                timestamp: StorageManager.shared.getTimeStamp() ?? "N/A",
-                eventType: eventType,
-                requestFrom: "1",
-                token: retrievedData.clientToken ?? "N/A", // Fallback to "N/A" if nil
-                clientId: retrievedData.clientId ?? 0,    // Fallback to 0 if nil
-                userDetails: userDetailsObject            // Pass the UserDetails object
-            )
-        )
-        
-        // Step 4: Send the request and return the response
-        return RestApiManager.sendRequest(jsonData: jsonData, endPoint: "")
+        // Merge tags safely
+        metadata.merge(tags) { (_, new) in new }
+
+        let mainObject: [String: Any] = [
+            DMDConstants.DMD_META: metadata
+        ]
+
+        do {
+            // Step 2: Ensure JSON Serialization is crash-free
+            let jsonData = try JSONSerialization.data(withJSONObject: mainObject, options: [])
+
+            // Step 3: Send API request asynchronously
+            RestApiManager.shared.sendRequest(jsonData: mainObject, endPoint: "") { result in
+                DispatchQueue.main.async {
+                    switch result {
+                    case .success(let responseString):
+                        completion(responseString)  // Pass response via completion handler
+                    case .failure(let error):
+                        completion(error.localizedDescription)  // Return error description
+                    }
+                }
+            }
+        } catch {
+            completion(error.localizedDescription)  // Handle JSON conversion error
+        }
     }
+
+
 
   
   
@@ -126,6 +122,7 @@ import AppTrackingTransparency
     }
   @objc public func requestIDFA() -> String {
       var result = ""
+      
 
       // Check if the device supports AppTrackingTransparency (iOS 14+)
       if #available(iOS 14, *) {
@@ -195,119 +192,86 @@ import AppTrackingTransparency
     
     @objc func sendAttributionTokenToServer(_ token: String) {
         
-        let retrievedData = StorageManager.shared.getClientData()
-        let appDetails = RequestData.MetaData.AppDetails(
-            app_id: retrievedData.clientAppId ?? 0,
-            bundle: retrievedData.bundleIdentifier ?? "N/A",
-            name: retrievedData.appName ?? "N/A",
-            version: retrievedData.appVersion ?? "N/A",
-            build: retrievedData.appBuild ?? "N/A"
-        )
-
-        let jsonData = RequestData(
-            metaData: RequestData.MetaData(
-                appDetails: appDetails,
-                device: StorageManager.shared.getDeviceDetails(),
-                ip: Utils.getIPAddress(),
-                library: StorageManager.shared.getLibraryDetails(),
-                locale: Locale.current.identifier,
-                adData: RequestData.MetaData.adData(token: "\(token)"),
-                ua: "",
-                requestId: StorageManager.shared.getCurrentDate(),
-                requestReceivedAt: StorageManager.shared.getCurrentDate(),
-                requestSentAt: StorageManager.shared.getCurrentDate(),
-                timestamp: StorageManager.shared.getTimeStamp() ?? "N/A",
-                eventType: "ios-ad-token",
-                requestFrom: "1",
-                token: retrievedData.clientToken ?? "N/A",
-                clientId: retrievedData.clientId ?? 0,
-                userDetails: nil
-            )
-        )
-        
-
-      let response =  RestApiManager.sendRequest(jsonData: jsonData,endPoint : "/ios/token")
-      print("Response",response)
-
-
-    }
-    
-
-    
-     func firstInstall()
-    {
        
-        let retrievedData = StorageManager.shared.getClientData()
-        let appDetails = RequestData.MetaData.AppDetails(
-            app_id: retrievedData.clientAppId ?? 0,
-            bundle: retrievedData.bundleIdentifier ?? "N/A",
-            name: retrievedData.appName ?? "N/A",
-            version: retrievedData.appVersion ?? "N/A",
-            build: retrievedData.appBuild ?? "N/A"
-        )
+       
 
-        let jsonData = RequestData(
-            metaData: RequestData.MetaData(
-                appDetails: appDetails,
-               
-               
-                device: StorageManager.shared.getDeviceDetails(),
-                ip: Utils.getIPAddress(),
-                library: StorageManager.shared.getLibraryDetails(),
-                locale: Locale.current.identifier,
-                adData: nil,
-                ua: "",
-                requestId: StorageManager.shared.getCurrentDate(),
-                requestReceivedAt: StorageManager.shared.getCurrentDate(),
-                requestSentAt: StorageManager.shared.getCurrentDate(),
-                timestamp: StorageManager.shared.getTimeStamp() ?? "N/A",
-                eventType: "install",
-                requestFrom: "1",
-                token: retrievedData.clientToken ?? "N/A",
-                clientId: retrievedData.clientId ?? 0,
-                userDetails: nil
-            )
-        )
+     // let response =  RestApiManager.sendRequest(jsonData: jsonData,endPoint : "/ios/token")
+     // print("Response",response)
 
-      let response =  RestApiManager.sendRequest(jsonData: jsonData, endPoint: "")
-      print(response)
 
-      
     }
+    
+
+    
+    func firstInstall() {
+        let retrievedData = StorageManager.shared.getClientData()
+        
+        var metadata: [String: Any] = [
+            DMDConstants.DMD_UA: "",
+            DMDConstants.DMD_REQUEST_ID: UUID().uuidString,  // Generate unique requestId dynamically
+            DMDConstants.DMD_REQUEST_RECEIVED: StorageManager.shared.getCurrentDate() ?? "",
+            DMDConstants.DMD_REQUEST_SENT: StorageManager.shared.getCurrentDate() ?? "",
+            DMDConstants.DMD_TIMESTAMP: StorageManager.shared.getCurrentDate() ?? "",
+            DMDConstants.DMD_EVENT_TYPE: "install",
+            DMDConstants.DMD_REQUEST_FORM: "1",
+            DMDConstants.DMD_TOKEN: retrievedData.clientToken ?? "",
+            DMDConstants.DMD_CLIENT_ID: retrievedData.clientId ?? 0,
+            DMDConstants.DMD_LOCALE: Locale.current.identifier,
+            DMDConstants.DMD_IP: Utils.getIPAddress() ?? "0.0.0.0"
+        ]
+
+        // Add additional metadata safely
+        metadata[DMDConstants.DMD_APP_DETAILS] = StorageManager.shared.getAppDetails() ?? [:]
+        metadata[DMDConstants.DMD_DEVICE_DETAILS] = StorageManager.shared.getDeviceDetails() ?? [:]
+        metadata[DMDConstants.DMD_LIBRARY_DETAILS] = StorageManager.shared.getLibraryDetails() ?? [:]
+
+        // Construct the final payload
+        let mainObject: [String: Any] = [DMDConstants.DMD_META: metadata]
+
+        do {
+            // Convert dictionary to JSON safely
+            let jsonData = try JSONSerialization.data(withJSONObject: mainObject, options: [])
+            
+            // Send API request
+            RestApiManager.shared.sendRequest(jsonData: mainObject, endPoint: "") { result in
+                DispatchQueue.main.async {
+                    switch result {
+                    case .success(let responseString):
+                        print("✅ API Response: \(responseString)")
+                    case .failure(let error):
+                        print("❌ API Error: \(error.localizedDescription)")
+                    }
+                }
+            }
+        } catch {
+            print("❌ JSON Serialization Error: \(error.localizedDescription)")
+        }
+    }
+
   
   
   // gettting the devcie details
   @objc public func deviceDetails() -> String {
       
-  let deviceDetails =  StorageManager.shared.getDeviceDetails()
-      
-      // Assuming you want to serialize appDetails as a JSON string
-      if let jsonData = try? JSONEncoder().encode(deviceDetails),
+      let deviceDetails =  StorageManager.shared.getDeviceDetails()
+      if let jsonData = try? JSONSerialization.data(withJSONObject: deviceDetails, options: []),
          let jsonString = String(data: jsonData, encoding: .utf8) {
-          return jsonString
+           return jsonString
       }
       
-      return "{}" // Return empty JSON if encoding fails
+      return "" // Return empty JSON if encoding fails
   }
   
   
   
   // getting the app details
   @objc public func appDetails() -> String {
-      let retrievedData = StorageManager.shared.getClientData()
-      
-      let appDetails = RequestData.MetaData.AppDetails(
-          app_id: retrievedData.clientAppId ?? 0,
-          bundle: retrievedData.bundleIdentifier ?? "N/A",
-          name: retrievedData.appName ?? "N/A",
-          version: retrievedData.appVersion ?? "N/A",
-          build: retrievedData.appBuild ?? "N/A"
-      )
+      let appData = StorageManager.shared.getAppDetails()
       
       // Assuming you want to serialize appDetails as a JSON string
-      if let jsonData = try? JSONEncoder().encode(appDetails),
+      if let jsonData = try? JSONSerialization.data(withJSONObject: appData, options: []),
          let jsonString = String(data: jsonData, encoding: .utf8) {
-          return jsonString
+           return "\(jsonString)"
       }
       
       return "{}" // Return empty JSON if encoding fails

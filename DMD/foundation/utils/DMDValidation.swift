@@ -9,12 +9,21 @@ import Foundation
             let version: String
             let build: String
         }
+       
         struct UserDetails : Codable
         {
             let first_name : String?
             let last_name : String?
-            let middile_name : String?
-            let mobile_number : String?
+            let mobile : String?
+            let gender : String?
+            let age : String?
+            let dob : String?
+            let country : String?
+            let zip: String?
+            let city : String?
+            let state : String?
+            let address : String?
+            
             
         }
     

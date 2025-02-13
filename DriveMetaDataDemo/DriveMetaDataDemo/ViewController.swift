@@ -18,20 +18,23 @@ class ViewController: UIViewController {
         
       //  DriveMetaData.updateConversionValue(for: "in_app_purchase")
         let userDetails: [String: Any] = [
+            "userDetails":[
                "first_name": "Amit",
                "last_name":"Gupta",
-               "mobile_number":"7905717240",
-               "middile_name":"kumar",
-               "address":""
+               "mobile":"7905717240",
+               "address":"dsdsdsd"
+               ]
            ]
            
-           let userObject: [String: Any] = [
-               "userDetails": userDetails
-           ]
-        
+          
+        DriveMetaData.shared?.sendTags(tags: userDetails, eventType: "delete") { response in
+            print("Received response: \(response)")
+        }
 
-        let response = DriveMetaData.shared?.sendTags(userDetails: userObject,eventType: "update")
-        print(response)
+      
+        print("Device Details", DriveMetaData.shared?.deviceDetails())
+        print("App Details", DriveMetaData.shared?.appDetails())
+
        
         
         
