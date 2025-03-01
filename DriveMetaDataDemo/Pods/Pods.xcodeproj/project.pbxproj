@@ -16,6 +16,8 @@
 		A36DBCD52C26A5FA007EE31F /* StogrageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A36DBCD42C26A5FA007EE31F /* StogrageManager.swift */; };
 		A388D0E82BB9AF7A009DF5C5 /* DMDValidation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A388D0E72BB9AF7A009DF5C5 /* DMDValidation.swift */; };
 		A388D0EA2BB9AF89009DF5C5 /* DMDUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = A388D0E92BB9AF89009DF5C5 /* DMDUtils.swift */; };
+		A3DDA78E2D57984800FF6B58 /* MetaDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3DDA78D2D57984100FF6B58 /* MetaDataManager.swift */; };
+		A3DDA7902D57B5B000FF6B58 /* AppConstant.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3DDA78F2D57B5AA00FF6B58 /* AppConstant.swift */; };
 		CB5C76021413BBCB1B6E99136FE976DC /* DriveMetaDataiOSSDK-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = ED3F85648A70B4E224349771B04B6D06 /* DriveMetaDataiOSSDK-dummy.m */; };
 /* End PBXBuildFile section */
 
@@ -44,6 +46,8 @@
 		A36DBCD42C26A5FA007EE31F /* StogrageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StogrageManager.swift; sourceTree = "<group>"; };
 		A388D0E72BB9AF7A009DF5C5 /* DMDValidation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DMDValidation.swift; sourceTree = "<group>"; };
 		A388D0E92BB9AF89009DF5C5 /* DMDUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DMDUtils.swift; sourceTree = "<group>"; };
+		A3DDA78D2D57984100FF6B58 /* MetaDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetaDataManager.swift; sourceTree = "<group>"; };
+		A3DDA78F2D57B5AA00FF6B58 /* AppConstant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConstant.swift; sourceTree = "<group>"; };
 		A8A4957D7FD6320CFC73B77972F33BA7 /* DriveMetaDataiOSSDK.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = DriveMetaDataiOSSDK.release.xcconfig; sourceTree = "<group>"; };
 		B0D27BDD37016AAAD94F2B6E09318DA0 /* DriveMetaDataiOSSDK-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "DriveMetaDataiOSSDK-prefix.pch"; sourceTree = "<group>"; };
 		B41255439F1D39D0AB23639CC8C78237 /* DriveMetaDataiOSSDK.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = DriveMetaDataiOSSDK.modulemap; sourceTree = "<group>"; };
@@ -229,6 +233,8 @@
 		EFCA91D9419AADBDFB4249F833E0DD28 /* DriveMetaDataiOSSDK */ = {
 			isa = PBXGroup;
 			children = (
+				A3DDA78F2D57B5AA00FF6B58 /* AppConstant.swift */,
+				A3DDA78D2D57984100FF6B58 /* MetaDataManager.swift */,
 				A3CA14B22C2D05C100323A2D /* dispatcher */,
 				A3CA14AC2C2D056D00323A2D /* foundation */,
 				720967A84196CFA9773F41C2EF9491D3 /* DMD.h */,
@@ -371,9 +377,11 @@
 				A36DBCD52C26A5FA007EE31F /* StogrageManager.swift in Sources */,
 				A388D0EA2BB9AF89009DF5C5 /* DMDUtils.swift in Sources */,
 				A36DBCD22C269C24007EE31F /* RestApiManager.swift in Sources */,
+				A3DDA78E2D57984800FF6B58 /* MetaDataManager.swift in Sources */,
 				A388D0E82BB9AF7A009DF5C5 /* DMDValidation.swift in Sources */,
 				86D3CD39DDB4687C7156B27F92862A10 /* DriveMetaData.swift in Sources */,
 				CB5C76021413BBCB1B6E99136FE976DC /* DriveMetaDataiOSSDK-dummy.m in Sources */,
+				A3DDA7902D57B5B000FF6B58 /* AppConstant.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
