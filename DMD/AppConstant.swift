@@ -27,6 +27,8 @@ class DMDConstants {
     static let DMD_APP_DETAILS = "appDetails"
     static let DMD_DEVICE_DETAILS = "device"
     static let DMD_LIBRARY_DETAILS = "library"
+    static let DMD_REQUEST_FORM_VALUE = "2"
+    static let DMD_REQUEST_INSTALL_NAME = "install"
     
     
 }

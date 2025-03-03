@@ -13,6 +13,7 @@ import AdServices
 import AppTrackingTransparency
 
 
+
 // Define your callback type
 @objc public class DriveMetaData: NSObject {
     private var clientId: Int
@@ -34,9 +35,8 @@ import AppTrackingTransparency
 
         // Save client data in storage
         StorageManager.shared.saveClientData(clientId: clientId, clientToken: clientToken, clientAppId: clientAppId)
-
         // Check and handle first-time installation
-        if !StorageManager.shared.getInstallFirstTime() {
+        if !StorageManager.shared.isFirstTimeInstall() {
             // Delay of 2 seconds on a background thread
             DispatchQueue.global().asyncAfter(deadline: .now() + 2.0) { [weak self] in
                 guard let self = self else { return }
@@ -68,11 +68,11 @@ import AppTrackingTransparency
         var metadata: [String: Any] = [
             DMDConstants.DMD_UA: "",
             DMDConstants.DMD_REQUEST_ID: UUID().uuidString,
-            DMDConstants.DMD_REQUEST_RECEIVED: StorageManager.shared.getCurrentDate() ?? "",
-            DMDConstants.DMD_REQUEST_SENT: StorageManager.shared.getCurrentDate() ?? "",
-            DMDConstants.DMD_TIMESTAMP: StorageManager.shared.getCurrentDate() ?? "",
+            DMDConstants.DMD_REQUEST_RECEIVED: DateTimeManager.shared.getCurrentDate() ,
+            DMDConstants.DMD_REQUEST_SENT: DateTimeManager.shared.getCurrentDate() ,
+            DMDConstants.DMD_TIMESTAMP: DateTimeManager.shared.getCurrentDate(),
             DMDConstants.DMD_EVENT_TYPE: eventType,
-            DMDConstants.DMD_REQUEST_FORM: "1",
+            DMDConstants.DMD_REQUEST_FORM: DMDConstants.DMD_REQUEST_FORM_VALUE,
             DMDConstants.DMD_TOKEN: retrievedData.clientToken ?? "",
             DMDConstants.DMD_CLIENT_ID: retrievedData.clientId ?? 0,
             DMDConstants.DMD_LOCALE: Locale.current.identifier,
@@ -204,16 +204,28 @@ import AppTrackingTransparency
 
     
     func firstInstall() {
+        
+        // Fetch Device Details
+        let deviceDetails = DeviceInfoManager.shared.getDeviceDetails()
+        print(deviceDetails)
+        
+        DeviceInfoManager.shared.requestAdTrackingPermission { idfa, isTrackingEnabled in
+            print("IDFA: \(idfa ?? "Not Available")")
+            print("Ad Tracking Enabled: \(isTrackingEnabled)")
+        }
+        
+        
+        
         let retrievedData = StorageManager.shared.getClientData()
         
         var metadata: [String: Any] = [
             DMDConstants.DMD_UA: "",
             DMDConstants.DMD_REQUEST_ID: UUID().uuidString,  // Generate unique requestId dynamically
-            DMDConstants.DMD_REQUEST_RECEIVED: StorageManager.shared.getCurrentDate() ?? "",
-            DMDConstants.DMD_REQUEST_SENT: StorageManager.shared.getCurrentDate() ?? "",
-            DMDConstants.DMD_TIMESTAMP: StorageManager.shared.getCurrentDate() ?? "",
-            DMDConstants.DMD_EVENT_TYPE: "install",
-            DMDConstants.DMD_REQUEST_FORM: "1",
+            DMDConstants.DMD_REQUEST_RECEIVED: DateTimeManager.shared.getCurrentDate(),
+            DMDConstants.DMD_REQUEST_SENT: DateTimeManager.shared.getCurrentDate(),
+            DMDConstants.DMD_TIMESTAMP: DateTimeManager.shared.getCurrentDate(),
+            DMDConstants.DMD_EVENT_TYPE: DMDConstants.DMD_REQUEST_INSTALL_NAME,
+            DMDConstants.DMD_REQUEST_FORM: DMDConstants.DMD_REQUEST_FORM_VALUE,
             DMDConstants.DMD_TOKEN: retrievedData.clientToken ?? "",
             DMDConstants.DMD_CLIENT_ID: retrievedData.clientId ?? 0,
             DMDConstants.DMD_LOCALE: Locale.current.identifier,
@@ -221,9 +233,9 @@ import AppTrackingTransparency
         ]
 
         // Add additional metadata safely
-        metadata[DMDConstants.DMD_APP_DETAILS] = StorageManager.shared.getAppDetails() ?? [:]
-        metadata[DMDConstants.DMD_DEVICE_DETAILS] = StorageManager.shared.getDeviceDetails() ?? [:]
-        metadata[DMDConstants.DMD_LIBRARY_DETAILS] = StorageManager.shared.getLibraryDetails() ?? [:]
+        metadata[DMDConstants.DMD_APP_DETAILS] = AppInfoManager.shared.getAppDetails()
+        metadata[DMDConstants.DMD_DEVICE_DETAILS] = DeviceInfoManager.shared.getDeviceDetails()
+        metadata[DMDConstants.DMD_LIBRARY_DETAILS] = AppInfoManager.shared.getLibraryDetails()
 
         // Construct the final payload
         let mainObject: [String: Any] = [DMDConstants.DMD_META: metadata]
@@ -237,14 +249,15 @@ import AppTrackingTransparency
                 DispatchQueue.main.async {
                     switch result {
                     case .success(let responseString):
-                        print("✅ API Response: \(responseString)")
+                        StorageManager.shared.setFirstTimeInstall(true)
+                        print(" API Response: \(responseString)")
                     case .failure(let error):
-                        print("❌ API Error: \(error.localizedDescription)")
+                        print(" API Error: \(error.localizedDescription)")
                     }
                 }
             }
         } catch {
-            print("❌ JSON Serialization Error: \(error.localizedDescription)")
+            print(" JSON Serialization Error: \(error.localizedDescription)")
         }
     }
 
@@ -253,7 +266,7 @@ import AppTrackingTransparency
   // gettting the devcie details
   @objc public func deviceDetails() -> String {
       
-      let deviceDetails =  StorageManager.shared.getDeviceDetails()
+      let deviceDetails = DeviceInfoManager.shared.getDeviceDetails()
       if let jsonData = try? JSONSerialization.data(withJSONObject: deviceDetails, options: []),
          let jsonString = String(data: jsonData, encoding: .utf8) {
            return jsonString
@@ -266,7 +279,7 @@ import AppTrackingTransparency
   
   // getting the app details
   @objc public func appDetails() -> String {
-      let appData = StorageManager.shared.getAppDetails()
+      let appData = AppInfoManager.shared.getAppDetails()
       
       // Assuming you want to serialize appDetails as a JSON string
       if let jsonData = try? JSONSerialization.data(withJSONObject: appData, options: []),
