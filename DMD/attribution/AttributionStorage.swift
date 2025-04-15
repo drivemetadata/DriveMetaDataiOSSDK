@@ -115,24 +115,24 @@ public struct DMDAttributionData: Codable {
     // MARK: - Computed Properties
 
     /// Returns a dictionary representation of the struct, excluding empty values.
-    public var dictionary: [String: String] {
-        let mirror = Mirror(reflecting: self)
-        return mirror.children.compactMapValues { ($0 as? String)?.isEmpty == false ? $0 as? String : nil }
-    }
+//    public var dictionary: [String: String] {
+//        let mirror = Mirror(reflecting: self)
+//        return mirror.children.compactMapValues { ($0 as? String)?.isEmpty == false ? $0 as? String : nil }
+//    }
 
     /// Checks if the struct contains no valid attribution data.
-    public var isEmpty: Bool {
-        return dictionary.isEmpty
-    }
-
-    /// Returns the count of non-nil properties.
-    public var count: Int {
-        return dictionary.count
-    }
-
-    /// Subscript for dictionary-like access.
-    public subscript(_ key: String) -> String? {
-        return dictionary[key]
-    }
+//    public var isEmpty: Bool {
+//        return dictionary.isEmpty
+//    }
+//
+//    /// Returns the count of non-nil properties.
+//    public var count: Int {
+//        return dictionary.count
+//    }
+//
+//    /// Subscript for dictionary-like access.
+//    public subscript(_ key: String) -> String? {
+//        return dictionary[key]
+//    }
 }
 #endif

@@ -1,3 +1,5 @@
+
+
 //
 //  AppInfoManager.swift
 //  Pods
@@ -28,8 +30,7 @@ class AppInfoManager {
     /// Retrieves library details
     func getLibraryDetails() -> [String: Any] {
         return [
-            "name": "DriveMetaDataiOSSDK",
-            "version": "1.0.1"
+            "sdk_version": "1.0.1"
         ]
     }
 }

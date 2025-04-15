@@ -1,6 +1,6 @@
 {
   "name": "DriveMetaDataiOSSDK",
-  "version": "0.0.1",
+  "version": "1.0.2",
   "summary": "DriveMetaDataiOSSDK is a analytics tools",
   "license": {
     "type": "MIT",
@@ -16,9 +16,9 @@
   "swift_versions": "4.0",
   "source": {
     "git": "https://github.com/drivemetadata/DriveMetaDataiOSSDK.git",
-    "tag": "0.0.1"
+    "tag": "1.0.2"
   },
-  "source_files": "DMD/**/*.{h,swift}",
+  "source_files": "DMD/**/*.{swift,h,m}",
   "exclude_files": "DMD/**/*.plist",
   "pod_target_xcconfig": {
     "APPLICATION_EXTENSION_API_ONLY": "No"

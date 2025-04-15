@@ -2,6 +2,13 @@
 //  DateTimeManager.swift
 //  Pods
 //
+//  Created by DriveMetaData on 13/03/25.
+//
+
+//
+//  DateTimeManager.swift
+//  Pods
+//
 //  Created by DriveMetaData on 03/03/25.
 //
 
@@ -23,6 +30,7 @@ class DateTimeManager {
     func getCurrentDate() -> String {
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        formatter.timeZone = TimeZone(abbreviation: "UTC") // Convert to UTC
         return formatter.string(from: Date())
     }
 }

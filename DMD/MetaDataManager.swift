@@ -31,7 +31,6 @@ class MetadataManager {
 
 // Function to Send Events
 func sendEvents(jsonData: [String: Any], eventName: String) {
-    print("Start")
     
     // Retrieve and update metadata
     MetadataManager.shared.updateMetadata(with: jsonData)

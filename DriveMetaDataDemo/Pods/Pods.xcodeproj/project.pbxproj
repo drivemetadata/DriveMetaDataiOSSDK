@@ -7,50 +7,16 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		3210D143F437A92D25174005D0B3B577 /* DriveMetaDataiOSSDK-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = C5D9B35F82BD4B7F8CAEBBE39184512B /* DriveMetaDataiOSSDK-umbrella.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		38C8C7DB710A61FE17BED03C5941DCE1 /* Pods-DriveMetaDataDemo-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = F19C869A6FBC929BEFE81E15B9A3EC77 /* Pods-DriveMetaDataDemo-umbrella.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		77692AB13C514F4B0D1B32EA49069556 /* DMD.h in Headers */ = {isa = PBXBuildFile; fileRef = 720967A84196CFA9773F41C2EF9491D3 /* DMD.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		86D3CD39DDB4687C7156B27F92862A10 /* DriveMetaData.swift in Sources */ = {isa = PBXBuildFile; fileRef = E945A01F4956439CAFE353FD6CF69AC4 /* DriveMetaData.swift */; };
-		8D35BD8ABC660B93DCA7AEB2CBDC21B6 /* Pods-DriveMetaDataDemo-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 5D5298F2C44A5689D2E5BE515FBDE2A4 /* Pods-DriveMetaDataDemo-dummy.m */; };
-		A36DBCD22C269C24007EE31F /* RestApiManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A36DBCD12C269C24007EE31F /* RestApiManager.swift */; };
-		A36DBCD52C26A5FA007EE31F /* StogrageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A36DBCD42C26A5FA007EE31F /* StogrageManager.swift */; };
-		A388D0E82BB9AF7A009DF5C5 /* DMDValidation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A388D0E72BB9AF7A009DF5C5 /* DMDValidation.swift */; };
-		A388D0EA2BB9AF89009DF5C5 /* DMDUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = A388D0E92BB9AF89009DF5C5 /* DMDUtils.swift */; };
-		A3CCD9DB2D73034400A97ED5 /* AttributionStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3CCD9DA2D73031C00A97ED5 /* AttributionStorage.swift */; };
-		A3CCD9DD2D73034F00A97ED5 /* AttributionKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3CCD9DC2D73034C00A97ED5 /* AttributionKeys.swift */; };
-		A3CCD9DF2D73035A00A97ED5 /* AttributionUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3CCD9DE2D73035700A97ED5 /* AttributionUtils.swift */; };
-		A3CCD9E12D73036400A97ED5 /* AttributionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3CCD9E02D73036100A97ED5 /* AttributionManager.swift */; };
-		A3CCD9E32D73036E00A97ED5 /* AttributionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3CCD9E22D73036B00A97ED5 /* AttributionHandler.swift */; };
-		A3CCD9E52D73037800A97ED5 /* AttributionProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3CCD9E42D73037600A97ED5 /* AttributionProvider.swift */; };
-		A3CCD9E72D73038200A97ED5 /* AttributionFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3CCD9E62D73037F00A97ED5 /* AttributionFetcher.swift */; };
-		A3CCD9E92D73039B00A97ED5 /* AppleAdToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3CCD9E82D73038D00A97ED5 /* AppleAdToken.swift */; };
-		A3CCD9EB2D7303A900A97ED5 /* IDFAHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3CCD9EA2D7303A700A97ED5 /* IDFAHandler.swift */; };
-		A3CCD9ED2D7303B200A97ED5 /* SKAdNetworkHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3CCD9EC2D7303B000A97ED5 /* SKAdNetworkHandler.swift */; };
-		A3CCD9EF2D730A0000A97ED5 /* AttributionLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3CCD9EE2D7309F800A97ED5 /* AttributionLogger.swift */; };
-		A3CCD9F12D730A9200A97ED5 /* DMDLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3CCD9F02D730A8A00A97ED5 /* DMDLogger.swift */; };
-		A3CCD9F32D730AA100A97ED5 /* DMDLoggerConstant.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3CCD9F22D730A9900A97ED5 /* DMDLoggerConstant.swift */; };
-		A3CCD9F52D730AB200A97ED5 /* DMDLoggerExtesnion.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3CCD9F42D730AA800A97ED5 /* DMDLoggerExtesnion.swift */; };
-		A3CCD9F72D730AC200A97ED5 /* DMDLoggerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3CCD9F62D730ABB00A97ED5 /* DMDLoggerProtocol.swift */; };
-		A3CCD9FA2D730AF700A97ED5 /* DMDConstant.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3CCD9F92D730AF100A97ED5 /* DMDConstant.swift */; };
-		A3CCD9FF2D730B4400A97ED5 /* DMDProtocal.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3CCD9FE2D730B3F00A97ED5 /* DMDProtocal.swift */; };
-		A3CCDA022D730B5900A97ED5 /* DMDExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3CCDA012D730B5500A97ED5 /* DMDExtension.swift */; };
-		A3CCDA052D730B7A00A97ED5 /* DMDLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3CCDA042D730B7700A97ED5 /* DMDLogger.swift */; };
-		A3CCDA072D730BB200A97ED5 /* DMDDateTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3CCDA062D730BAC00A97ED5 /* DMDDateTime.swift */; };
-		A3DDA78E2D57984800FF6B58 /* MetaDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3DDA78D2D57984100FF6B58 /* MetaDataManager.swift */; };
-		A3DDA7902D57B5B000FF6B58 /* AppConstant.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3DDA78F2D57B5AA00FF6B58 /* AppConstant.swift */; };
-		A3F047752D760B3900ABB8F6 /* AttributionStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3F047742D760B3600ABB8F6 /* AttributionStorage.swift */; };
-		A3F047782D760B5E00ABB8F6 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3F047772D760B5C00ABB8F6 /* Config.swift */; };
-		A3F0477D2D760BDA00ABB8F6 /* AttributionAdDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3F0477C2D760BD100ABB8F6 /* AttributionAdDetails.swift */; };
-		A3F0477F2D760BEC00ABB8F6 /* RestApiManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3F0477E2D760BE900ABB8F6 /* RestApiManager.swift */; };
-		A3F047822D760C2E00ABB8F6 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3F047812D760C2400ABB8F6 /* NetworkManager.swift */; };
-		A3F047842D7610F100ABB8F6 /* DeviceInfoManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3F047832D7610EA00ABB8F6 /* DeviceInfoManager.swift */; };
-		A3F047862D76112700ABB8F6 /* AppInfoManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3F047852D76112400ABB8F6 /* AppInfoManager.swift */; };
-		A3F047882D76114C00ABB8F6 /* DateTimeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3F047872D76113E00ABB8F6 /* DateTimeManager.swift */; };
-		CB5C76021413BBCB1B6E99136FE976DC /* DriveMetaDataiOSSDK-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = ED3F85648A70B4E224349771B04B6D06 /* DriveMetaDataiOSSDK-dummy.m */; };
+		3F0C76A790C151EBA13816910590BB68 /* DriveMetaDataiOSSDK-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = C5D9B35F82BD4B7F8CAEBBE39184512B /* DriveMetaDataiOSSDK-umbrella.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		55B50C27D87D2E788F16B7897E75C9BB /* DriveMetaDataiOSSDK-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = ED3F85648A70B4E224349771B04B6D06 /* DriveMetaDataiOSSDK-dummy.m */; };
+		90E518744F1E990612EB778FFB376038 /* Pods-DriveMetaDataDemo-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 5D5298F2C44A5689D2E5BE515FBDE2A4 /* Pods-DriveMetaDataDemo-dummy.m */; };
+		D87813EFA892FB9F834DD89141D363A1 /* DMD.h in Headers */ = {isa = PBXBuildFile; fileRef = 720967A84196CFA9773F41C2EF9491D3 /* DMD.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		F17F41645CACE76017E37F11ED85B25A /* DriveMetaData.swift in Sources */ = {isa = PBXBuildFile; fileRef = E945A01F4956439CAFE353FD6CF69AC4 /* DriveMetaData.swift */; };
+		FD65B814FFD0F70947D65B68D4DBCC47 /* Pods-DriveMetaDataDemo-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = F19C869A6FBC929BEFE81E15B9A3EC77 /* Pods-DriveMetaDataDemo-umbrella.h */; settings = {ATTRIBUTES = (Project, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		D9C9F59436E226CA8297A37C4D9BB07A /* PBXContainerItemProxy */ = {
+		649667B0A397A569B3656156E1F48ED8 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = BFDFE7DC352907FC980B868725387E98 /* Project object */;
 			proxyType = 1;
@@ -62,48 +28,14 @@
 /* Begin PBXFileReference section */
 		015D2FE912DCA0C72DCB33DC39EF0470 /* DriveMetaDataiOSSDK.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = DriveMetaDataiOSSDK.debug.xcconfig; sourceTree = "<group>"; };
 		1E3D3956C5AB1891118814F9D72B0E6F /* Pods-DriveMetaDataDemo-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-DriveMetaDataDemo-acknowledgements.markdown"; sourceTree = "<group>"; };
-		2AB0118CE89686269D667782D541D341 /* DriveMetaDataiOSSDK.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; path = DriveMetaDataiOSSDK.podspec; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		2AB0118CE89686269D667782D541D341 /* DriveMetaDataiOSSDK.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; path = DriveMetaDataiOSSDK.podspec; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		2C13BA2CF1D74E191996254AF25A1A08 /* Pods-DriveMetaDataDemo-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-DriveMetaDataDemo-acknowledgements.plist"; sourceTree = "<group>"; };
-		314A82E77D0156551A5999FD7B31A544 /* libDriveMetaDataiOSSDK.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libDriveMetaDataiOSSDK.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		314A82E77D0156551A5999FD7B31A544 /* DriveMetaDataiOSSDK */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; name = DriveMetaDataiOSSDK; path = libDriveMetaDataiOSSDK.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		54096AC7E206B760581FD63A7EAEBC8D /* Pods-DriveMetaDataDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-DriveMetaDataDemo.debug.xcconfig"; sourceTree = "<group>"; };
 		5D5298F2C44A5689D2E5BE515FBDE2A4 /* Pods-DriveMetaDataDemo-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-DriveMetaDataDemo-dummy.m"; sourceTree = "<group>"; };
-		6A4EB111E47BDEC550113F0A9D2F136C /* libPods-DriveMetaDataDemo.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-DriveMetaDataDemo.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		6A4EB111E47BDEC550113F0A9D2F136C /* Pods-DriveMetaDataDemo */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; name = "Pods-DriveMetaDataDemo"; path = "libPods-DriveMetaDataDemo.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		720967A84196CFA9773F41C2EF9491D3 /* DMD.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = DMD.h; path = DMD/DMD.h; sourceTree = "<group>"; };
-		9D940727FF8FB9C785EB98E56350EF41 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
-		A36DBCD12C269C24007EE31F /* RestApiManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestApiManager.swift; sourceTree = "<group>"; };
-		A36DBCD42C26A5FA007EE31F /* StogrageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StogrageManager.swift; sourceTree = "<group>"; };
-		A388D0E72BB9AF7A009DF5C5 /* DMDValidation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DMDValidation.swift; sourceTree = "<group>"; };
-		A388D0E92BB9AF89009DF5C5 /* DMDUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DMDUtils.swift; sourceTree = "<group>"; };
-		A3CCD9DA2D73031C00A97ED5 /* AttributionStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttributionStorage.swift; sourceTree = "<group>"; };
-		A3CCD9DC2D73034C00A97ED5 /* AttributionKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttributionKeys.swift; sourceTree = "<group>"; };
-		A3CCD9DE2D73035700A97ED5 /* AttributionUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttributionUtils.swift; sourceTree = "<group>"; };
-		A3CCD9E02D73036100A97ED5 /* AttributionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttributionManager.swift; sourceTree = "<group>"; };
-		A3CCD9E22D73036B00A97ED5 /* AttributionHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttributionHandler.swift; sourceTree = "<group>"; };
-		A3CCD9E42D73037600A97ED5 /* AttributionProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttributionProvider.swift; sourceTree = "<group>"; };
-		A3CCD9E62D73037F00A97ED5 /* AttributionFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttributionFetcher.swift; sourceTree = "<group>"; };
-		A3CCD9E82D73038D00A97ED5 /* AppleAdToken.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleAdToken.swift; sourceTree = "<group>"; };
-		A3CCD9EA2D7303A700A97ED5 /* IDFAHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IDFAHandler.swift; sourceTree = "<group>"; };
-		A3CCD9EC2D7303B000A97ED5 /* SKAdNetworkHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SKAdNetworkHandler.swift; sourceTree = "<group>"; };
-		A3CCD9EE2D7309F800A97ED5 /* AttributionLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttributionLogger.swift; sourceTree = "<group>"; };
-		A3CCD9F02D730A8A00A97ED5 /* DMDLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DMDLogger.swift; sourceTree = "<group>"; };
-		A3CCD9F22D730A9900A97ED5 /* DMDLoggerConstant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DMDLoggerConstant.swift; sourceTree = "<group>"; };
-		A3CCD9F42D730AA800A97ED5 /* DMDLoggerExtesnion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DMDLoggerExtesnion.swift; sourceTree = "<group>"; };
-		A3CCD9F62D730ABB00A97ED5 /* DMDLoggerProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DMDLoggerProtocol.swift; sourceTree = "<group>"; };
-		A3CCD9F92D730AF100A97ED5 /* DMDConstant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DMDConstant.swift; sourceTree = "<group>"; };
-		A3CCD9FE2D730B3F00A97ED5 /* DMDProtocal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DMDProtocal.swift; sourceTree = "<group>"; };
-		A3CCDA012D730B5500A97ED5 /* DMDExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DMDExtension.swift; sourceTree = "<group>"; };
-		A3CCDA042D730B7700A97ED5 /* DMDLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DMDLogger.swift; sourceTree = "<group>"; };
-		A3CCDA062D730BAC00A97ED5 /* DMDDateTime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DMDDateTime.swift; sourceTree = "<group>"; };
-		A3DDA78D2D57984100FF6B58 /* MetaDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = MetaDataManager.swift; path = ../../MetaDataManager.swift; sourceTree = "<group>"; };
-		A3DDA78F2D57B5AA00FF6B58 /* AppConstant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppConstant.swift; path = ../../AppConstant.swift; sourceTree = "<group>"; };
-		A3F047742D760B3600ABB8F6 /* AttributionStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttributionStorage.swift; sourceTree = "<group>"; };
-		A3F047772D760B5C00ABB8F6 /* Config.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
-		A3F0477C2D760BD100ABB8F6 /* AttributionAdDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttributionAdDetails.swift; sourceTree = "<group>"; };
-		A3F0477E2D760BE900ABB8F6 /* RestApiManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestApiManager.swift; sourceTree = "<group>"; };
-		A3F047812D760C2400ABB8F6 /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
-		A3F047832D7610EA00ABB8F6 /* DeviceInfoManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceInfoManager.swift; sourceTree = "<group>"; };
-		A3F047852D76112400ABB8F6 /* AppInfoManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppInfoManager.swift; sourceTree = "<group>"; };
-		A3F047872D76113E00ABB8F6 /* DateTimeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateTimeManager.swift; sourceTree = "<group>"; };
+		9D940727FF8FB9C785EB98E56350EF41 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		A8A4957D7FD6320CFC73B77972F33BA7 /* DriveMetaDataiOSSDK.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = DriveMetaDataiOSSDK.release.xcconfig; sourceTree = "<group>"; };
 		B0D27BDD37016AAAD94F2B6E09318DA0 /* DriveMetaDataiOSSDK-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "DriveMetaDataiOSSDK-prefix.pch"; sourceTree = "<group>"; };
 		B41255439F1D39D0AB23639CC8C78237 /* DriveMetaDataiOSSDK.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = DriveMetaDataiOSSDK.modulemap; sourceTree = "<group>"; };
@@ -116,14 +48,14 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		52EE2E0FFE5FE74AE343EDC102D90F46 /* Frameworks */ = {
+		A4CB14599BEA652ACAE291D7E595EC9C /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		A1515484E10B718F6359D4EBC46B18E6 /* Frameworks */ = {
+		EBD42B61B794412361893BF2FA4C3794 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -161,190 +93,6 @@
 			);
 			name = "Support Files";
 			path = "../DriveMetaDataDemo/Pods/Target Support Files/DriveMetaDataiOSSDK";
-			sourceTree = "<group>";
-		};
-		A36DBCD02C269C08007EE31F /* handleAPI */ = {
-			isa = PBXGroup;
-			children = (
-				A36DBCD12C269C24007EE31F /* RestApiManager.swift */,
-			);
-			path = handleAPI;
-			sourceTree = "<group>";
-		};
-		A36DBCD32C26A5E9007EE31F /* storage */ = {
-			isa = PBXGroup;
-			children = (
-				A3F047732D760B2700ABB8F6 /* dmdstorage */,
-				A36DBCD42C26A5FA007EE31F /* StogrageManager.swift */,
-				A3DDA78D2D57984100FF6B58 /* MetaDataManager.swift */,
-			);
-			path = storage;
-			sourceTree = "<group>";
-		};
-		A3CA14AC2C2D056D00323A2D /* foundation */ = {
-			isa = PBXGroup;
-			children = (
-				A3CA14AD2C2D057700323A2D /* appdata */,
-				A3CA14AE2C2D058200323A2D /* devicedata */,
-				A3F0477B2D760BBF00ABB8F6 /* Constant */,
-				A3F047762D760B4B00ABB8F6 /* config */,
-				A36DBCD32C26A5E9007EE31F /* storage */,
-				A3CA14B12C2D05AE00323A2D /* utils */,
-				A3CA14AF2C2D058C00323A2D /* logger */,
-			);
-			path = foundation;
-			sourceTree = "<group>";
-		};
-		A3CA14AD2C2D057700323A2D /* appdata */ = {
-			isa = PBXGroup;
-			children = (
-				A3F047872D76113E00ABB8F6 /* DateTimeManager.swift */,
-				A3F047852D76112400ABB8F6 /* AppInfoManager.swift */,
-			);
-			path = appdata;
-			sourceTree = "<group>";
-		};
-		A3CA14AE2C2D058200323A2D /* devicedata */ = {
-			isa = PBXGroup;
-			children = (
-				A3F047832D7610EA00ABB8F6 /* DeviceInfoManager.swift */,
-			);
-			path = devicedata;
-			sourceTree = "<group>";
-		};
-		A3CA14AF2C2D058C00323A2D /* logger */ = {
-			isa = PBXGroup;
-			children = (
-				A3CCD9F62D730ABB00A97ED5 /* DMDLoggerProtocol.swift */,
-				A3CCD9F42D730AA800A97ED5 /* DMDLoggerExtesnion.swift */,
-				A3CCD9F22D730A9900A97ED5 /* DMDLoggerConstant.swift */,
-				A3CCD9F02D730A8A00A97ED5 /* DMDLogger.swift */,
-			);
-			path = logger;
-			sourceTree = "<group>";
-		};
-		A3CA14B12C2D05AE00323A2D /* utils */ = {
-			isa = PBXGroup;
-			children = (
-				A3CCDA062D730BAC00A97ED5 /* DMDDateTime.swift */,
-				A3CCDA032D730B6D00A97ED5 /* logger */,
-				A3CCDA002D730B4C00A97ED5 /* extension */,
-				A3CCD9FD2D730B3100A97ED5 /* protocal */,
-				A3CCD9F82D730AE600A97ED5 /* constant */,
-				A388D0E92BB9AF89009DF5C5 /* DMDUtils.swift */,
-				A388D0E72BB9AF7A009DF5C5 /* DMDValidation.swift */,
-			);
-			path = utils;
-			sourceTree = "<group>";
-		};
-		A3CA14B22C2D05C100323A2D /* dispatcher */ = {
-			isa = PBXGroup;
-			children = (
-				A3F047802D760C0E00ABB8F6 /* networkmanager */,
-				A3CA14B32C2D05D200323A2D /* dmdcollector */,
-				A36DBCD02C269C08007EE31F /* handleAPI */,
-			);
-			path = dispatcher;
-			sourceTree = "<group>";
-		};
-		A3CA14B32C2D05D200323A2D /* dmdcollector */ = {
-			isa = PBXGroup;
-			children = (
-				A3D4F20C2BF30D91000BDFA1 /* attribution */,
-			);
-			path = dmdcollector;
-			sourceTree = "<group>";
-		};
-		A3CCD9D92D7302E700A97ED5 /* attribution */ = {
-			isa = PBXGroup;
-			children = (
-				A3CCD9EE2D7309F800A97ED5 /* AttributionLogger.swift */,
-				A3CCD9EC2D7303B000A97ED5 /* SKAdNetworkHandler.swift */,
-				A3CCD9EA2D7303A700A97ED5 /* IDFAHandler.swift */,
-				A3CCD9E82D73038D00A97ED5 /* AppleAdToken.swift */,
-				A3CCD9E62D73037F00A97ED5 /* AttributionFetcher.swift */,
-				A3CCD9E42D73037600A97ED5 /* AttributionProvider.swift */,
-				A3CCD9E22D73036B00A97ED5 /* AttributionHandler.swift */,
-				A3CCD9E02D73036100A97ED5 /* AttributionManager.swift */,
-				A3CCD9DE2D73035700A97ED5 /* AttributionUtils.swift */,
-				A3CCD9DC2D73034C00A97ED5 /* AttributionKeys.swift */,
-				A3CCD9DA2D73031C00A97ED5 /* AttributionStorage.swift */,
-			);
-			path = attribution;
-			sourceTree = "<group>";
-		};
-		A3CCD9F82D730AE600A97ED5 /* constant */ = {
-			isa = PBXGroup;
-			children = (
-				A3CCD9F92D730AF100A97ED5 /* DMDConstant.swift */,
-			);
-			name = constant;
-			path = ../constant;
-			sourceTree = "<group>";
-		};
-		A3CCD9FD2D730B3100A97ED5 /* protocal */ = {
-			isa = PBXGroup;
-			children = (
-				A3CCD9FE2D730B3F00A97ED5 /* DMDProtocal.swift */,
-			);
-			path = protocal;
-			sourceTree = "<group>";
-		};
-		A3CCDA002D730B4C00A97ED5 /* extension */ = {
-			isa = PBXGroup;
-			children = (
-				A3CCDA012D730B5500A97ED5 /* DMDExtension.swift */,
-			);
-			path = extension;
-			sourceTree = "<group>";
-		};
-		A3CCDA032D730B6D00A97ED5 /* logger */ = {
-			isa = PBXGroup;
-			children = (
-				A3CCDA042D730B7700A97ED5 /* DMDLogger.swift */,
-			);
-			path = logger;
-			sourceTree = "<group>";
-		};
-		A3D4F20C2BF30D91000BDFA1 /* attribution */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = attribution;
-			sourceTree = "<group>";
-		};
-		A3F047732D760B2700ABB8F6 /* dmdstorage */ = {
-			isa = PBXGroup;
-			children = (
-				A3F047742D760B3600ABB8F6 /* AttributionStorage.swift */,
-			);
-			path = dmdstorage;
-			sourceTree = "<group>";
-		};
-		A3F047762D760B4B00ABB8F6 /* config */ = {
-			isa = PBXGroup;
-			children = (
-				A3F047772D760B5C00ABB8F6 /* Config.swift */,
-			);
-			path = config;
-			sourceTree = "<group>";
-		};
-		A3F0477B2D760BBF00ABB8F6 /* Constant */ = {
-			isa = PBXGroup;
-			children = (
-				A3F0477E2D760BE900ABB8F6 /* RestApiManager.swift */,
-				A3F0477C2D760BD100ABB8F6 /* AttributionAdDetails.swift */,
-				A3DDA78F2D57B5AA00FF6B58 /* AppConstant.swift */,
-			);
-			path = Constant;
-			sourceTree = "<group>";
-		};
-		A3F047802D760C0E00ABB8F6 /* networkmanager */ = {
-			isa = PBXGroup;
-			children = (
-				A3F047812D760C2400ABB8F6 /* NetworkManager.swift */,
-			);
-			path = networkmanager;
 			sourceTree = "<group>";
 		};
 		C95EDC81BBB75A0CC6C4A05AC5473172 /* Pods-DriveMetaDataDemo */ = {
@@ -391,9 +139,6 @@
 		EFCA91D9419AADBDFB4249F833E0DD28 /* DriveMetaDataiOSSDK */ = {
 			isa = PBXGroup;
 			children = (
-				A3CCD9D92D7302E700A97ED5 /* attribution */,
-				A3CA14B22C2D05C100323A2D /* dispatcher */,
-				A3CA14AC2C2D056D00323A2D /* foundation */,
 				720967A84196CFA9773F41C2EF9491D3 /* DMD.h */,
 				E945A01F4956439CAFE353FD6CF69AC4 /* DriveMetaData.swift */,
 				6A2CDF66F27A81B98EBF62645E325741 /* Pod */,
@@ -406,8 +151,8 @@
 		F9288704AFF01535F412697102342900 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				314A82E77D0156551A5999FD7B31A544 /* libDriveMetaDataiOSSDK.a */,
-				6A4EB111E47BDEC550113F0A9D2F136C /* libPods-DriveMetaDataDemo.a */,
+				314A82E77D0156551A5999FD7B31A544 /* DriveMetaDataiOSSDK */,
+				6A4EB111E47BDEC550113F0A9D2F136C /* Pods-DriveMetaDataDemo */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -415,20 +160,20 @@
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
-		9F5148D7A46EBEED2107B5EFE1450B41 /* Headers */ = {
+		C073050E4291250ECFE4072530541D05 /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				38C8C7DB710A61FE17BED03C5941DCE1 /* Pods-DriveMetaDataDemo-umbrella.h in Headers */,
+				D87813EFA892FB9F834DD89141D363A1 /* DMD.h in Headers */,
+				3F0C76A790C151EBA13816910590BB68 /* DriveMetaDataiOSSDK-umbrella.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		F71D9B5EA5F625AB14860C21DDFD1894 /* Headers */ = {
+		CAAE8E95B06BAC18CFBE083438E7E145 /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				77692AB13C514F4B0D1B32EA49069556 /* DMD.h in Headers */,
-				3210D143F437A92D25174005D0B3B577 /* DriveMetaDataiOSSDK-umbrella.h in Headers */,
+				FD65B814FFD0F70947D65B68D4DBCC47 /* Pods-DriveMetaDataDemo-umbrella.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -437,30 +182,30 @@
 /* Begin PBXNativeTarget section */
 		48981955DFD0FD66E9235DFA2B2B5C5C /* Pods-DriveMetaDataDemo */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = FF439FE97CCF835370F2B2E63484E440 /* Build configuration list for PBXNativeTarget "Pods-DriveMetaDataDemo" */;
+			buildConfigurationList = AA348934BAEEF2A4876FA4D882F1F60A /* Build configuration list for PBXNativeTarget "Pods-DriveMetaDataDemo" */;
 			buildPhases = (
-				9F5148D7A46EBEED2107B5EFE1450B41 /* Headers */,
-				8AA4599BD1A44D05A2511A38F3AA41DF /* Sources */,
-				A1515484E10B718F6359D4EBC46B18E6 /* Frameworks */,
+				CAAE8E95B06BAC18CFBE083438E7E145 /* Headers */,
+				67CE274C38BC542860F57EC9D7036CB3 /* Sources */,
+				EBD42B61B794412361893BF2FA4C3794 /* Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				969D8116D9157B23733DAC472EEBBDC7 /* PBXTargetDependency */,
+				68B3A062BAF33D65A0FD3F487D35E6F5 /* PBXTargetDependency */,
 			);
 			name = "Pods-DriveMetaDataDemo";
 			productName = "Pods-DriveMetaDataDemo";
-			productReference = 6A4EB111E47BDEC550113F0A9D2F136C /* libPods-DriveMetaDataDemo.a */;
+			productReference = 6A4EB111E47BDEC550113F0A9D2F136C /* Pods-DriveMetaDataDemo */;
 			productType = "com.apple.product-type.library.static";
 		};
 		E8D88ADF61C2385BA19C6F03A0F91E3C /* DriveMetaDataiOSSDK */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = F5FD19B712F09F3262DCBD13DCA9CC31 /* Build configuration list for PBXNativeTarget "DriveMetaDataiOSSDK" */;
+			buildConfigurationList = 985BC467C76AF6741D092C7F590EBD07 /* Build configuration list for PBXNativeTarget "DriveMetaDataiOSSDK" */;
 			buildPhases = (
-				F71D9B5EA5F625AB14860C21DDFD1894 /* Headers */,
-				49067F505495CB47D842CCF8DC7BF168 /* Sources */,
-				52EE2E0FFE5FE74AE343EDC102D90F46 /* Frameworks */,
-				A41D8EA0F4D09367E28936F3E031DFD8 /* Copy generated compatibility header */,
+				C073050E4291250ECFE4072530541D05 /* Headers */,
+				CE74ACFB2ACA3EA0BF917EF2B60D9E24 /* Sources */,
+				A4CB14599BEA652ACAE291D7E595EC9C /* Frameworks */,
+				58AFA72557DC282E9174334341B4F75C /* Copy generated compatibility header */,
 			);
 			buildRules = (
 			);
@@ -468,7 +213,7 @@
 			);
 			name = DriveMetaDataiOSSDK;
 			productName = DriveMetaDataiOSSDK;
-			productReference = 314A82E77D0156551A5999FD7B31A544 /* libDriveMetaDataiOSSDK.a */;
+			productReference = 314A82E77D0156551A5999FD7B31A544 /* DriveMetaDataiOSSDK */;
 			productType = "com.apple.product-type.library.static";
 		};
 /* End PBXNativeTarget section */
@@ -477,8 +222,8 @@
 		BFDFE7DC352907FC980B868725387E98 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1500;
-				LastUpgradeCheck = 1500;
+				LastSwiftUpdateCheck = 1600;
+				LastUpgradeCheck = 1600;
 			};
 			buildConfigurationList = 4821239608C13582E20E6DA73FD5F1F9 /* Build configuration list for PBXProject "Pods" */;
 			compatibilityVersion = "Xcode 14.0";
@@ -489,6 +234,8 @@
 				en,
 			);
 			mainGroup = CF1408CF629C7361332E53B88F7BD30C;
+			minimizedProjectReferenceProxies = 0;
+			preferredProjectObjectVersion = 77;
 			productRefGroup = F9288704AFF01535F412697102342900 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -500,7 +247,7 @@
 /* End PBXProject section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		A41D8EA0F4D09367E28936F3E031DFD8 /* Copy generated compatibility header */ = {
+		58AFA72557DC282E9174334341B4F75C /* Copy generated compatibility header */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -527,69 +274,65 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		49067F505495CB47D842CCF8DC7BF168 /* Sources */ = {
+		67CE274C38BC542860F57EC9D7036CB3 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A36DBCD52C26A5FA007EE31F /* StogrageManager.swift in Sources */,
-				A3CCD9EF2D730A0000A97ED5 /* AttributionLogger.swift in Sources */,
-				A3F0477F2D760BEC00ABB8F6 /* RestApiManager.swift in Sources */,
-				A3F047842D7610F100ABB8F6 /* DeviceInfoManager.swift in Sources */,
-				A3CCDA052D730B7A00A97ED5 /* DMDLogger.swift in Sources */,
-				A388D0EA2BB9AF89009DF5C5 /* DMDUtils.swift in Sources */,
-				A3CCD9FA2D730AF700A97ED5 /* DMDConstant.swift in Sources */,
-				A3CCD9ED2D7303B200A97ED5 /* SKAdNetworkHandler.swift in Sources */,
-				A3CCD9E32D73036E00A97ED5 /* AttributionHandler.swift in Sources */,
-				A3CCD9F32D730AA100A97ED5 /* DMDLoggerConstant.swift in Sources */,
-				A3F0477D2D760BDA00ABB8F6 /* AttributionAdDetails.swift in Sources */,
-				A36DBCD22C269C24007EE31F /* RestApiManager.swift in Sources */,
-				A3CCD9DF2D73035A00A97ED5 /* AttributionUtils.swift in Sources */,
-				A3CCD9E92D73039B00A97ED5 /* AppleAdToken.swift in Sources */,
-				A3CCD9F52D730AB200A97ED5 /* DMDLoggerExtesnion.swift in Sources */,
-				A3CCDA022D730B5900A97ED5 /* DMDExtension.swift in Sources */,
-				A3F047882D76114C00ABB8F6 /* DateTimeManager.swift in Sources */,
-				A3F047822D760C2E00ABB8F6 /* NetworkManager.swift in Sources */,
-				A3DDA78E2D57984800FF6B58 /* MetaDataManager.swift in Sources */,
-				A3F047862D76112700ABB8F6 /* AppInfoManager.swift in Sources */,
-				A3CCD9E72D73038200A97ED5 /* AttributionFetcher.swift in Sources */,
-				A388D0E82BB9AF7A009DF5C5 /* DMDValidation.swift in Sources */,
-				A3CCD9F12D730A9200A97ED5 /* DMDLogger.swift in Sources */,
-				A3F047782D760B5E00ABB8F6 /* Config.swift in Sources */,
-				A3CCD9DD2D73034F00A97ED5 /* AttributionKeys.swift in Sources */,
-				A3CCDA072D730BB200A97ED5 /* DMDDateTime.swift in Sources */,
-				A3F047752D760B3900ABB8F6 /* AttributionStorage.swift in Sources */,
-				A3CCD9E52D73037800A97ED5 /* AttributionProvider.swift in Sources */,
-				86D3CD39DDB4687C7156B27F92862A10 /* DriveMetaData.swift in Sources */,
-				A3CCD9EB2D7303A900A97ED5 /* IDFAHandler.swift in Sources */,
-				CB5C76021413BBCB1B6E99136FE976DC /* DriveMetaDataiOSSDK-dummy.m in Sources */,
-				A3CCD9DB2D73034400A97ED5 /* AttributionStorage.swift in Sources */,
-				A3CCD9F72D730AC200A97ED5 /* DMDLoggerProtocol.swift in Sources */,
-				A3CCD9FF2D730B4400A97ED5 /* DMDProtocal.swift in Sources */,
-				A3DDA7902D57B5B000FF6B58 /* AppConstant.swift in Sources */,
-				A3CCD9E12D73036400A97ED5 /* AttributionManager.swift in Sources */,
+				90E518744F1E990612EB778FFB376038 /* Pods-DriveMetaDataDemo-dummy.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		8AA4599BD1A44D05A2511A38F3AA41DF /* Sources */ = {
+		CE74ACFB2ACA3EA0BF917EF2B60D9E24 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8D35BD8ABC660B93DCA7AEB2CBDC21B6 /* Pods-DriveMetaDataDemo-dummy.m in Sources */,
+				F17F41645CACE76017E37F11ED85B25A /* DriveMetaData.swift in Sources */,
+				55B50C27D87D2E788F16B7897E75C9BB /* DriveMetaDataiOSSDK-dummy.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		969D8116D9157B23733DAC472EEBBDC7 /* PBXTargetDependency */ = {
+		68B3A062BAF33D65A0FD3F487D35E6F5 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = DriveMetaDataiOSSDK;
 			target = E8D88ADF61C2385BA19C6F03A0F91E3C /* DriveMetaDataiOSSDK */;
-			targetProxy = D9C9F59436E226CA8297A37C4D9BB07A /* PBXContainerItemProxy */;
+			targetProxy = 649667B0A397A569B3656156E1F48ED8 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
+		09EA3CA48363A5DAB08F905119C78397 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = A8A4957D7FD6320CFC73B77972F33BA7 /* DriveMetaDataiOSSDK.release.xcconfig */;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				ENABLE_MODULE_VERIFIER = NO;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				GCC_PREFIX_HEADER = "Target Support Files/DriveMetaDataiOSSDK/DriveMetaDataiOSSDK-prefix.pch";
+				GENERATE_INFOPLIST_FILE = NO;
+				IPHONEOS_DEPLOYMENT_TARGET = 12;
+				MODULEMAP_FILE = Headers/Public/DriveMetaDataiOSSDK/DriveMetaDataiOSSDK.modulemap;
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PRIVATE_HEADERS_FOLDER_PATH = "";
+				PRODUCT_MODULE_NAME = DriveMetaDataiOSSDK;
+				PRODUCT_NAME = DriveMetaDataiOSSDK;
+				PUBLIC_HEADERS_FOLDER_PATH = "";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				SWIFT_INSTALL_OBJC_HEADER = YES;
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
 		2B9E26EAE2CD392AD762421F663075A1 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -656,6 +399,30 @@
 			};
 			name = Debug;
 		};
+		62471066DA38A8CAAA6D14F044B63E4C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 54096AC7E206B760581FD63A7EAEBC8D /* Pods-DriveMetaDataDemo.debug.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				ENABLE_MODULE_VERIFIER = NO;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				MACH_O_TYPE = staticlib;
+				MODULEMAP_FILE = "Target Support Files/Pods-DriveMetaDataDemo/Pods-DriveMetaDataDemo.modulemap";
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
 		63FAF33E1C55B71A5F5A8B3CC8749F99 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -718,7 +485,36 @@
 			};
 			name = Release;
 		};
-		73E1453D9F626624B55EFAE3A0261708 /* Release */ = {
+		A952A51BFF6AA9F7C5EF89C019EC8F51 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 015D2FE912DCA0C72DCB33DC39EF0470 /* DriveMetaDataiOSSDK.debug.xcconfig */;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				ENABLE_MODULE_VERIFIER = NO;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				GCC_PREFIX_HEADER = "Target Support Files/DriveMetaDataiOSSDK/DriveMetaDataiOSSDK-prefix.pch";
+				GENERATE_INFOPLIST_FILE = NO;
+				IPHONEOS_DEPLOYMENT_TARGET = 12;
+				MODULEMAP_FILE = Headers/Public/DriveMetaDataiOSSDK/DriveMetaDataiOSSDK.modulemap;
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PRIVATE_HEADERS_FOLDER_PATH = "";
+				PRODUCT_MODULE_NAME = DriveMetaDataiOSSDK;
+				PRODUCT_NAME = DriveMetaDataiOSSDK;
+				PUBLIC_HEADERS_FOLDER_PATH = "";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				SWIFT_INSTALL_OBJC_HEADER = YES;
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		E328087DA43227D6A5C99BD90458F38E /* Release */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = B8E91446B11F209CA6465518F0529202 /* Pods-DriveMetaDataDemo.release.xcconfig */;
 			buildSettings = {
@@ -727,6 +523,8 @@
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				ENABLE_MODULE_VERIFIER = NO;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MACH_O_TYPE = staticlib;
 				MODULEMAP_FILE = "Target Support Files/Pods-DriveMetaDataDemo/Pods-DriveMetaDataDemo.modulemap";
@@ -740,79 +538,6 @@
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
-		};
-		E43286F5C360F87E13D5411D6B991030 /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = A8A4957D7FD6320CFC73B77972F33BA7 /* DriveMetaDataiOSSDK.release.xcconfig */;
-			buildSettings = {
-				CLANG_ENABLE_OBJC_WEAK = NO;
-				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
-				GCC_PREFIX_HEADER = "Target Support Files/DriveMetaDataiOSSDK/DriveMetaDataiOSSDK-prefix.pch";
-				IPHONEOS_DEPLOYMENT_TARGET = 12;
-				MODULEMAP_FILE = Headers/Public/DriveMetaDataiOSSDK/DriveMetaDataiOSSDK.modulemap;
-				OTHER_LDFLAGS = "";
-				OTHER_LIBTOOLFLAGS = "";
-				PRIVATE_HEADERS_FOLDER_PATH = "";
-				PRODUCT_MODULE_NAME = DriveMetaDataiOSSDK;
-				PRODUCT_NAME = DriveMetaDataiOSSDK;
-				PUBLIC_HEADERS_FOLDER_PATH = "";
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
-				SWIFT_VERSION = 4.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VALIDATE_PRODUCT = YES;
-			};
-			name = Release;
-		};
-		E91247CE5F18C9EB9C8F3690525CF2A8 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 54096AC7E206B760581FD63A7EAEBC8D /* Pods-DriveMetaDataDemo.debug.xcconfig */;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
-				CLANG_ENABLE_OBJC_WEAK = NO;
-				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
-				MACH_O_TYPE = staticlib;
-				MODULEMAP_FILE = "Target Support Files/Pods-DriveMetaDataDemo/Pods-DriveMetaDataDemo.modulemap";
-				OTHER_LDFLAGS = "";
-				OTHER_LIBTOOLFLAGS = "";
-				PODS_ROOT = "$(SRCROOT)";
-				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Debug;
-		};
-		F08B9FE4B69C59D0CB964E00DCDA828A /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 015D2FE912DCA0C72DCB33DC39EF0470 /* DriveMetaDataiOSSDK.debug.xcconfig */;
-			buildSettings = {
-				CLANG_ENABLE_OBJC_WEAK = NO;
-				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
-				GCC_PREFIX_HEADER = "Target Support Files/DriveMetaDataiOSSDK/DriveMetaDataiOSSDK-prefix.pch";
-				IPHONEOS_DEPLOYMENT_TARGET = 12;
-				MODULEMAP_FILE = Headers/Public/DriveMetaDataiOSSDK/DriveMetaDataiOSSDK.modulemap;
-				OTHER_LDFLAGS = "";
-				OTHER_LIBTOOLFLAGS = "";
-				PRIVATE_HEADERS_FOLDER_PATH = "";
-				PRODUCT_MODULE_NAME = DriveMetaDataiOSSDK;
-				PRODUCT_NAME = DriveMetaDataiOSSDK;
-				PUBLIC_HEADERS_FOLDER_PATH = "";
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
-				SWIFT_VERSION = 4.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Debug;
 		};
 /* End XCBuildConfiguration section */
 
@@ -826,20 +551,20 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		F5FD19B712F09F3262DCBD13DCA9CC31 /* Build configuration list for PBXNativeTarget "DriveMetaDataiOSSDK" */ = {
+		985BC467C76AF6741D092C7F590EBD07 /* Build configuration list for PBXNativeTarget "DriveMetaDataiOSSDK" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				F08B9FE4B69C59D0CB964E00DCDA828A /* Debug */,
-				E43286F5C360F87E13D5411D6B991030 /* Release */,
+				A952A51BFF6AA9F7C5EF89C019EC8F51 /* Debug */,
+				09EA3CA48363A5DAB08F905119C78397 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		FF439FE97CCF835370F2B2E63484E440 /* Build configuration list for PBXNativeTarget "Pods-DriveMetaDataDemo" */ = {
+		AA348934BAEEF2A4876FA4D882F1F60A /* Build configuration list for PBXNativeTarget "Pods-DriveMetaDataDemo" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				E91247CE5F18C9EB9C8F3690525CF2A8 /* Debug */,
-				73E1453D9F626624B55EFAE3A0261708 /* Release */,
+				62471066DA38A8CAAA6D14F044B63E4C /* Debug */,
+				E328087DA43227D6A5C99BD90458F38E /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

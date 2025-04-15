@@ -19,36 +19,44 @@ import AppTrackingTransparency
     private var clientId: Int
     private var clientToken: String
     private var clientAppId: Int
+    private var workspaceId : Int
 
     // Singleton instance
     @objc public static var shared: DriveMetaData?
 
     // Private initializer to restrict instantiation
-    private init(clientId: Int, clientToken: String, clientAppId: Int) {
+    private init(clientId: Int, clientToken: String, clientAppId: Int,workspaceId: Int) {
         // Call the superclass initializer first
 
         // Now it's safe to access self
         self.clientId = clientId
         self.clientToken = clientToken
         self.clientAppId = clientAppId
+        self.workspaceId = workspaceId
         super.init() // This must be the first line in the initializer
 
         // Save client data in storage
-        StorageManager.shared.saveClientData(clientId: clientId, clientToken: clientToken, clientAppId: clientAppId)
+        StorageManager.shared.saveClientData(clientId: clientId, clientToken: clientToken, clientAppId: clientAppId, workspaceId: workspaceId)
         // Check and handle first-time installation
         if !StorageManager.shared.isFirstTimeInstall() {
             // Delay of 2 seconds on a background thread
             DispatchQueue.global().asyncAfter(deadline: .now() + 2.0) { [weak self] in
                 guard let self = self else { return }
                 self.firstInstall()
+                DMDLogger.shared.log("SDK initialized", level: .info)
+               
             }
+            
         }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+            DriveMetaData.shared?.requestIDFA()
+           }
     }
 
 
     // Public method to initialize the singleton with required parameters
-    @objc public static func initializeShared(clientId: Int, clientToken: String, clientAppId: Int) {
-        shared = DriveMetaData(clientId: clientId, clientToken: clientToken, clientAppId: clientAppId)
+    @objc public static func initializeShared(clientId: Int, clientToken: String, clientAppId: Int,workspaceId: Int) {
+        shared = DriveMetaData(clientId: clientId, clientToken: clientToken, clientAppId: clientAppId,workspaceId:workspaceId)
     }
 
 
@@ -57,67 +65,52 @@ import AppTrackingTransparency
         self.clientId = clientId
         self.clientToken = clientToken
         self.clientAppId = clientAppId
-        
-        StorageManager.shared.saveClientData(clientId: clientId, clientToken: clientToken, clientAppId: clientAppId)
+        StorageManager.shared.saveClientData(clientId: clientId, clientToken: clientToken, clientAppId: clientAppId,workspaceId: workspaceId)
     }
+    
    
     @objc public func sendTags(tags: [String: Any], eventType: String, completion: @escaping (String) -> Void) {
-        // Step 1: Retrieve stored data from StorageManager
-        let retrievedData = StorageManager.shared.getClientData()
-
-        var metadata: [String: Any] = [
-            DMDConstants.DMD_UA: "",
-            DMDConstants.DMD_REQUEST_ID: UUID().uuidString,
-            DMDConstants.DMD_REQUEST_RECEIVED: DateTimeManager.shared.getCurrentDate() ,
-            DMDConstants.DMD_REQUEST_SENT: DateTimeManager.shared.getCurrentDate() ,
-            DMDConstants.DMD_TIMESTAMP: DateTimeManager.shared.getCurrentDate(),
-            DMDConstants.DMD_EVENT_TYPE: eventType,
-            DMDConstants.DMD_REQUEST_FORM: DMDConstants.DMD_REQUEST_FORM_VALUE,
-            DMDConstants.DMD_TOKEN: retrievedData.clientToken ?? "",
-            DMDConstants.DMD_CLIENT_ID: retrievedData.clientId ?? 0,
-            DMDConstants.DMD_LOCALE: Locale.current.identifier,
-            DMDConstants.DMD_IP: Utils.getIPAddress() ?? "0.0.0.0"
-        ]
-
-        // Merge tags safely
-        metadata.merge(tags) { (_, new) in new }
-
-        let mainObject: [String: Any] = [
-            DMDConstants.DMD_META: metadata
-        ]
-
-        do {
-            // Step 2: Ensure JSON Serialization is crash-free
-            let jsonData = try JSONSerialization.data(withJSONObject: mainObject, options: [])
-
-            // Step 3: Send API request asynchronously
-            RestApiManager.shared.sendRequest(jsonData: mainObject, endPoint: "") { result in
-                DispatchQueue.main.async {
-                    switch result {
-                    case .success(let responseString):
-                        completion(responseString)  // Pass response via completion handler
-                    case .failure(let error):
-                        completion(error.localizedDescription)  // Return error description
-                    }
-                }
+        if(tags.isEmpty || eventType.isEmpty){
+            ExceptionLogger.shared.sendException(message: "sendTags",stacktrace: "tags  \(tags)  or events type \( eventType) is empty")
             }
-        } catch {
-            completion(error.localizedDescription)  // Handle JSON conversion error
+        else{
+            MetadataBuilder.sendEvent(
+                eventType: eventType,
+                tags: tags,
+                includeExtraDetails: true,
+                onSuccess: { response in
+                    completion(response)
+                    
+                },
+                onFailure: { error in
+                    completion(error.debugDescription)
+                    ExceptionLogger.shared.sendException(message: "sendTags",stacktrace: error.debugDescription)
+                    
+                    
+                }
+            )
         }
+
     }
 
-
-
-  
-  
     @objc public  func generateToken()
     {
-        if #available(iOS 14.3, *) {
-            if let token = try? AAAttribution.attributionToken() {
-               // sendAttributionTokenToServer(token)
+        // self.updateConversionValuesData()
+        // self.updateConversionValue(conversionValue: "45")
+        let adClient = DMDHTTPAdClient()
+        adClient.requestAttributionDetails { tags, error in
+            if let error = error {
+                print("❌ Error: \(error.localizedDescription)")
+                ExceptionLogger.shared.sendException(message: "generateToken",stacktrace: " Error: \(error.localizedDescription)")
+                return
             }
-        } else {
-            print("Attribution token generation is not available on this device.")
+            if var tags = tags {
+                DriveMetaData.shared?.sendTags(tags: tags, eventType: "attribution") { response in
+                    print("✅ Received response: \(response)")
+                }
+                
+            }
+            
         }
     }
   @objc public func requestIDFA() -> String {
@@ -135,6 +128,7 @@ import AppTrackingTransparency
                       let idfa = ASIdentifierManager.shared().advertisingIdentifier.uuidString
                       print("IDFA: \(idfa)")
                       result = idfa
+                     // self.generateToken()
                       if !UserDefaults.standard.bool(forKey: "received") {
                           // Store the IDFA in UserDefaults
                           UserDefaults.standard.set(idfa, forKey: "idfa")
@@ -188,78 +182,68 @@ import AppTrackingTransparency
 
       return result
   }
+    @objc func updateConversionValue(conversionValue: String) {
+        // Convert to Int and validate range
+            guard let newValue = Int(conversionValue), (0...63).contains(newValue) else {
+                print("Invalid conversion value: must be between 0 and 63")
+                ExceptionLogger.shared.sendException(message: "requestAttributionDetails",stacktrace: "Invalid conversion value: must be between 0 and 63\(conversionValue)")
 
-    
-    @objc func sendAttributionTokenToServer(_ token: String) {
-        
-       
-       
+                return
+            }
 
-     // let response =  RestApiManager.sendRequest(jsonData: jsonData,endPoint : "/ios/token")
-     // print("Response",response)
+            // Retrieve stored value
+            let storedValue = UserDefaults.standard.integer(forKey: "stored_conversion_value")
 
+            // Check if newValue is greater than stored value
+            guard newValue > storedValue else {
+                print("New value (\(newValue)) is not greater than stored value (\(storedValue)). Skipping update.")
+                ExceptionLogger.shared.sendException(message: "updateConversionValue",stacktrace: "New value (\(newValue)) is not greater than stored value (\(storedValue)). Skipping update.")
+                return
+            }
 
+            // Save the new higher value
+            UserDefaults.standard.set(newValue, forKey: "stored_conversion_value")
+
+            // Send API request
+            ConversionAPIManager.shared.sendConversionRequest(includeValue: true, value: "\(newValue)") { _ in
+                self.getConversionVlaues()
+            }
     }
+
+    func getConversionVlaues() {
+        ConversionAPIManager.shared.sendConversionRequest(includeValue: false) { response in
+            print("Finished fetching conversion values")
+        }
+    }
+
+
+
+  
     
 
     
     func firstInstall() {
-        
-        // Fetch Device Details
-        let deviceDetails = DeviceInfoManager.shared.getDeviceDetails()
-        print(deviceDetails)
-        
-        DeviceInfoManager.shared.requestAdTrackingPermission { idfa, isTrackingEnabled in
-            print("IDFA: \(idfa ?? "Not Available")")
-            print("Ad Tracking Enabled: \(isTrackingEnabled)")
-        }
-        
-        
-        
-        let retrievedData = StorageManager.shared.getClientData()
-        
-        var metadata: [String: Any] = [
-            DMDConstants.DMD_UA: "",
-            DMDConstants.DMD_REQUEST_ID: UUID().uuidString,  // Generate unique requestId dynamically
-            DMDConstants.DMD_REQUEST_RECEIVED: DateTimeManager.shared.getCurrentDate(),
-            DMDConstants.DMD_REQUEST_SENT: DateTimeManager.shared.getCurrentDate(),
-            DMDConstants.DMD_TIMESTAMP: DateTimeManager.shared.getCurrentDate(),
-            DMDConstants.DMD_EVENT_TYPE: DMDConstants.DMD_REQUEST_INSTALL_NAME,
-            DMDConstants.DMD_REQUEST_FORM: DMDConstants.DMD_REQUEST_FORM_VALUE,
-            DMDConstants.DMD_TOKEN: retrievedData.clientToken ?? "",
-            DMDConstants.DMD_CLIENT_ID: retrievedData.clientId ?? 0,
-            DMDConstants.DMD_LOCALE: Locale.current.identifier,
-            DMDConstants.DMD_IP: Utils.getIPAddress() ?? "0.0.0.0"
-        ]
+            DeviceInfoManager.shared.requestAdTrackingPermission { idfa, isTrackingEnabled in
+                print("IDFA: \(idfa ?? "Not Available")")
+                print("Ad Tracking Enabled: \(isTrackingEnabled)")
 
-        // Add additional metadata safely
-        metadata[DMDConstants.DMD_APP_DETAILS] = AppInfoManager.shared.getAppDetails()
-        metadata[DMDConstants.DMD_DEVICE_DETAILS] = DeviceInfoManager.shared.getDeviceDetails()
-        metadata[DMDConstants.DMD_LIBRARY_DETAILS] = AppInfoManager.shared.getLibraryDetails()
-
-        // Construct the final payload
-        let mainObject: [String: Any] = [DMDConstants.DMD_META: metadata]
-
-        do {
-            // Convert dictionary to JSON safely
-            let jsonData = try JSONSerialization.data(withJSONObject: mainObject, options: [])
-            
-            // Send API request
-            RestApiManager.shared.sendRequest(jsonData: mainObject, endPoint: "") { result in
-                DispatchQueue.main.async {
-                    switch result {
-                    case .success(let responseString):
+                MetadataBuilder.sendEvent(
+                    eventType: DMDConstants.DMD_REQUEST_INSTALL_NAME,
+                    includeExtraDetails: true,
+                    onSuccess: { response in
                         StorageManager.shared.setFirstTimeInstall(true)
-                        print(" API Response: \(responseString)")
-                    case .failure(let error):
-                        print(" API Error: \(error.localizedDescription)")
+                        print("Install Event Success: \(response)")
+                    },
+                    onFailure: { error in
+                        print("Install Event Error: \(error)")
+                        ExceptionLogger.shared.sendException(message: "firstInstall",stacktrace: "Install Event Error: \(error)")
                     }
-                }
+                )
             }
-        } catch {
-            print(" JSON Serialization Error: \(error.localizedDescription)")
         }
-    }
+        
+        
+
 
   
   
@@ -348,6 +332,8 @@ import AppTrackingTransparency
                 if let error = error {
                     DispatchQueue.main.async {
                         callback(nil, error)
+                        ExceptionLogger.shared.sendException(message: "fetchDeepLinkData",stacktrace: "DeepLink Event Error: \(url)")
+
                     }
                     return
                 }
@@ -368,9 +354,19 @@ import AppTrackingTransparency
             task.resume()
         }
     }
-
-   
-   
-  
+}
+extension DMDAttributionDataa {
+    var asDictionary: [String: Any] {
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = .prettyPrinted
+        do {
+            let data = try encoder.encode(self)
+            let dict = try JSONSerialization.jsonObject(with: data, options: [])
+            return dict as? [String: Any] ?? [:]
+        } catch {
+            print("❗️Failed to convert DMDAttributionDataa to dictionary: \(error)")
+            return [:]
+        }
+    }
 }
 

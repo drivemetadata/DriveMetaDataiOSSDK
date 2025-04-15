@@ -14,20 +14,21 @@ class RestApiManager {
     static let shared = RestApiManager() // Singleton instance
     
     public func sendRequest(jsonData: [String: Any], endPoint: String, completion: @escaping (Result<String, Error>) -> Void) {
-        let baseURL = "https://sdk.drivemetadata.com/data-collector"
 
         
-//        // Determine base URL
-//#if DEBUG
-//        let baseURL = "https://sdk-dev.drivemetadata.com/data-collector"
-//#else
-//        let baseURL = "https://sdk.drivemetadata.com/data-collector"
-//#endif
-        
-        guard let url = URL(string: baseURL + endPoint) else {
+        let urlString: String
+
+        if endPoint == "exception" {
+            urlString = APIConfig.shared.exceptionURL
+        } else {
+            urlString = APIConfig.shared.baseUrl + endPoint
+        }
+        guard let url = URL(string: urlString) else {
             completion(.failure(NSError(domain: "Invalid URL", code: 400, userInfo: nil)))
             return
         }
+       
+        print(url)
         
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
@@ -40,7 +41,7 @@ class RestApiManager {
             request.httpBody = jsonDataEncoded
             
             if let jsonString = String(data: jsonDataEncoded, encoding: .utf8) {
-               // print("📄 Request Body: \(jsonString)")
+                print("📄 Request Body: \(jsonString)")
             }
             
         } catch {
@@ -83,8 +84,8 @@ class RestApiManager {
                     
                     
                     if let success = jsonObject["success"] as? Bool, success {
-                        if !StorageManager.shared.getInstallFirstTime() {
-                            StorageManager.shared.isInstallFirstTime(isFirstTime: true)
+                        if !StorageManager.shared.isFirstTimeInstall() {
+                            StorageManager.shared.setFirstTimeInstall(true)
                         }
                         completion(.success("✅ Success: \(jsonObject)"))
                     } else {

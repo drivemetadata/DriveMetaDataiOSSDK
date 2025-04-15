@@ -36,6 +36,6 @@ public protocol DMDAttributionProtocol {
 
     /// Updates conversion value in the SKAdNetwork for tracking campaign effectiveness.
     /// - Parameter request: DMDRequest containing tracking data.
-    func updateConversionValue(from request: DMDRequest)
+   // func updateConversionValue(from request: DMDRequest)
 }
 #endif
