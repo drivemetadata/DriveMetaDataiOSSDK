@@ -51,6 +51,8 @@ import AppTrackingTransparency
         DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
             DriveMetaData.shared?.requestIDFA()
            }
+        self.generateToken()
+
     }
 
 

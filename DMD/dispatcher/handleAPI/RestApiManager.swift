@@ -29,6 +29,7 @@ class RestApiManager {
         }
        
         print(url)
+        print(jsonData)
         
         var request = URLRequest(url: url)
         request.httpMethod = "POST"

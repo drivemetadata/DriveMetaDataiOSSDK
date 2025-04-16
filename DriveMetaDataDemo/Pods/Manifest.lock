@@ -1,5 +1,5 @@
 PODS:
-  - DriveMetaDataiOSSDK (1.0.2)
+  - DriveMetaDataiOSSDK (1.0.1)
 
 DEPENDENCIES:
   - DriveMetaDataiOSSDK (from `../DMD/`)
@@ -9,7 +9,7 @@ EXTERNAL SOURCES:
     :path: "../DMD/"
 
 SPEC CHECKSUMS:
-  DriveMetaDataiOSSDK: 2db69fd4d83da9c74d10b7a99d771a8f680d6cae
+  DriveMetaDataiOSSDK: 24735b079f935f812999a0f8602b7cd498558c68
 
 PODFILE CHECKSUM: fdf6f2f7e03a53bf2be4b1b7fd7c3d9abab62284
 

@@ -90,7 +90,7 @@ class MetadataBuilder {
 
         do {
             let jsonData = try JSONSerialization.data(withJSONObject: metadata, options: [])
-
+            
             RestApiManager.shared.sendRequest(jsonData: metadata, endPoint: endPoint) { result in
                 DispatchQueue.main.async {
                     switch result {

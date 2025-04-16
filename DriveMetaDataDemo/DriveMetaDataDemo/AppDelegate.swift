@@ -22,7 +22,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
       
-        DriveMetaData.initializeShared(clientId: 1635, clientToken: "4d17d90c78154c9a5569c073b67d8a5a22b2fabfc5c9415b6e7f709d68762054", clientAppId: 2782)
+        DriveMetaData.initializeShared(clientId: 1635, clientToken: "4d17d90c78154c9a5569c073b67d8a5a22b2fabfc5c9415b6e7f709d68762054", clientAppId: 2782, workspaceId: 1637)
         DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
             DriveMetaData.shared?.requestIDFA()
            }
@@ -30,7 +30,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
       //  let attributionToken = fetchAttributionToken()
       //  print(attributionToken)
         
-        requestAttributionDetails()
+       // requestAttributionDetails()
         
         return true
     }
