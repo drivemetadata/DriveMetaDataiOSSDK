@@ -189,13 +189,6 @@
 			path = config;
 			sourceTree = "<group>";
 		};
-		A3BEE80A2DAF52B30049854E /* Constant */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Constant;
-			sourceTree = "<group>";
-		};
 		A3BEE80C2DAF52B90049854E /* attribution */ = {
 			isa = PBXGroup;
 			children = (
@@ -400,7 +393,6 @@
 				A3BEE83F2DAF52C60049854E /* foundation */,
 				A3BEE81B2DAF52BE0049854E /* DMD */,
 				A3BEE8142DAF52B90049854E /* dispatcher */,
-				A3BEE80A2DAF52B30049854E /* Constant */,
 				A3BEE8072DAF52AE0049854E /* config */,
 				A3BEE7FA2DAF529D0049854E /* attribution */,
 				6A2CDF66F27A81B98EBF62645E325741 /* Pod */,

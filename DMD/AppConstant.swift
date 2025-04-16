@@ -10,7 +10,7 @@ import Foundation
 
 class DMDConstants {
     static let DMD_LOG = "DriveMetaData :"
-    static let DMD_S_VERSION = "1.0.1"
+    static let DMD_S_VERSION = "1.0.3"
     static let DMD_SDK_INIT = " SDK init Successfully "
     static let DMD_META = "metaData"
     static let DMD_IP = "ip"
