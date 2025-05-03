@@ -94,28 +94,24 @@ class DriveMetaSKANManager {
     func trackEvent(eventName: String, revenue: Double) {
         let timestamp = Date()
         let window = getCurrentWindow()
+        print(window)
+        let result = matchEventToMapping(name: eventName, revenue: revenue)
+        if let result = result {
+            print("🎯 fineValue: \(result.fineValue), coarseValue: \(result.coarseValue), lockWindow: \(result.lockWindow)")
+            let currentFine = UserDefaults.standard.integer(forKey: fineValueKey)
+            updateConversionValue(eventName:eventName,fine: result.fineValue, coarse: result.coarseValue, lock: true)
 
-//        // Accumulate revenue if the event is a purchase
-//        if eventName == "purchase" {
-//            revenueTotal += revenue
-//        }
-        // Accumulate revenue if the event is a purchase
-      
+            // Safely unwrap and compare if the new fine value is greater than current fine value
+            if result.fineValue > currentFine {
+                
+                updateConversionValue(eventName:eventName,fine: result.fineValue, coarse: result.coarseValue, lock: true)
+            }
 
-        // Match event to conversion config mapping
-        guard let newValues = matchEventToMapping(name: eventName, revenue: revenue) else { return }
-        
-
-        // Update conversion value only if it's higher than the previous one (monotonic enforcement)
-        let currentFine = UserDefaults.standard.integer(forKey: fineValueKey)
-        if let newFine = newValues.fine, newFine > currentFine {
-            
-            debugPrint("currentFine",currentFine)
-            updateConversionValue(fine: newFine, coarse: newValues.coarse, lock: newValues.lock)
+        } else {
+            print("❌ No matching conversion mapping found.")
         }
 
-        // Optionally notify backend about the event
-        sendEventToBackend(name: eventName,timestamp: timestamp, fineValue: newValues.fine ?? currentFine, coarseValue: newValues.coarse, window: window)
+       
     }
 
     /// Returns current conversion window (1 to 3), based on days since install
@@ -201,25 +197,27 @@ class DriveMetaSKANManager {
     }
 
     /// Matches the event (and optionally revenue) to a config mapping
-    private func matchEventToMapping(name: String, revenue: Double) -> (fine: Int?, coarse: String, lock: Bool)? {
-        
-        
+    private func matchEventToMapping(name: String, revenue: Double) -> ConversionMappingResult? {
+        // Retrieve stored conversion mappings
         if let savedValue = UserDefaults.standard.value(forKey: conversionMappingKey) as? [String: Any] {
+
+            // If revenue is 0.0, set it to nil
+            let revenueToPass: Double? = (revenue == 0.0) ? nil : revenue
             
-           
-            let result = getConversionMapping(from: savedValue, eventType: name, revenue: nil)
+            // Call the conversion mapping function with revenue set to nil if it was 0.0
+            let result = getConversionMapping(from: savedValue, eventType: name, revenue: revenueToPass)
+            
             if let result = result {
                 print("🎯 fineValue: \(result.fineValue), coarseValue: \(result.coarseValue), lockWindow: \(result.lockWindow)")
-                
+                return ConversionMappingResult(fineValue: result.fineValue, coarseValue: result.coarseValue, lockWindow: result.lockWindow)
             } else {
                 print("❌ No matching conversion mapping found.")
+                return nil
             }
         } else {
             print("⚠️ No stored mapping found for key: \(conversionMappingKey)")
+            return nil
         }
-
-
-        return nil
     }
     
     struct ConversionMappingResult {
@@ -240,11 +238,7 @@ class DriveMetaSKANManager {
 
         for mapping in mappings {
             guard let type = mapping["eventType"] as? String, type == eventType else { continue }
-            
-          
             if eventType == type, let revenue = revenue{
-                print("revenue",revenue)
-                print("type",type)
                 if let ranges = mapping["revenueRanges"] as? [[String: Any]] {
                     for range in ranges {
                         let minStr = range["min"] as? String ?? "\(range["min"] ?? "0")"
@@ -264,7 +258,6 @@ class DriveMetaSKANManager {
             }
 
             if revenue == nil {
-                print("Revenue",revenue)
                 let fineValue = (mapping["fineValue"] as? NSNumber)?.intValue ?? 0
                 let coarseValue = mapping["coarseValue"] as? String ?? ""
                 let lockWindow = (mapping["lockWindow"] as? NSNumber)?.boolValue ?? false
@@ -275,20 +268,91 @@ class DriveMetaSKANManager {
         return nil
     }
     /// Updates the SKAdNetwork conversion value (fine/coarse/lock)
-    private func updateConversionValue(fine: Int, coarse: String, lock: Bool) {
-       
-        if #available(iOS 16.1, *) {
-            let coarseEnum: SKAdNetwork.CoarseConversionValue = SKAdNetwork.CoarseConversionValue(rawValue: coarse.capitalized) ?? .low
-            SKAdNetwork.updatePostbackConversionValue(fine, coarseValue: coarseEnum, lockWindow: lock)
-        } else if #available(iOS 14.0, *) {
-            SKAdNetwork.updateConversionValue(fine)
+    private func updateConversionValue(eventName : String,fine: Int, coarse: String, lock: Bool) {
+        let now = Date()
+        let defaults = UserDefaults.standard
+        
+        // Retrieve install date from UserDefaults
+        guard let installDate = defaults.object(forKey: "lastConversionTimes") as? Date else {
+            print("Install date is missing.")
+            return
+        }
+        
+        
+        
+        // Calculate the number of days since installation
+        let daysSinceInstall = Calendar.current.dateComponents([.day], from: installDate, to: now).day ?? 0
+        
+        print(daysSinceInstall)
+
+        // Determine the window state based on days since installation
+        switch daysSinceInstall {
+        case 0...2: // Window 1: First 48 hours
+            // Update both fine and coarse value
+            if #available(iOS 16.1, *) {
+                let coarseEnum: SKAdNetwork.CoarseConversionValue = SKAdNetwork.CoarseConversionValue(rawValue: coarse.capitalized) ?? .low
+                //  SKAdNetwork.updatePostbackConversionValue(fine, coarseValue: coarseEnum, lockWindow: lock)
+                SKAdNetwork.updatePostbackConversionValue(fine, coarseValue: coarseEnum) { error in
+                    if let error = error {
+                        // Handle the error
+                        print("Error updating conversion value: \(error.localizedDescription)")
+                    } else {
+                        // Successfully updated the conversion value
+                        print("Successfully updated conversion value to \(fine) with coarse value: \(coarseEnum)")
+                    }
+                }
+            }
+            
+        case 3...7: // Window 2: 3-7 days
+            // Update only coarse value
+            if #available(iOS 16.1, *) {
+                let coarseEnum: SKAdNetwork.CoarseConversionValue = SKAdNetwork.CoarseConversionValue(rawValue: coarse.capitalized) ?? .low
+              //  SKAdNetwork.updatePostbackConversionValue(fine, coarseValue: coarseEnum, lockWindow: lock)
+                SKAdNetwork.updatePostbackConversionValue(fine, coarseValue: coarseEnum) { error in
+                      if let error = error {
+                          // Handle the error
+                          print("Error updating conversion value: \(error.localizedDescription)")
+                      } else {
+                          // Successfully updated the conversion value
+                          print("Successfully updated conversion value to \(fine) with coarse value: \(coarseEnum)")
+                      }
+                  }
+                
+                
+                
+                
+                
+                
+            } else if #available(iOS 14.0, *) {
+                SKAdNetwork.updateConversionValue(fine)
+            }
+            print("Window 2: 3-7 days - Updated coarse value only")
+            
+        case 8...35: // Window 3: 8-35 days
+            // Update only coarse value
+            if #available(iOS 16.1, *) {
+                let coarseEnum: SKAdNetwork.CoarseConversionValue = SKAdNetwork.CoarseConversionValue(rawValue: coarse.capitalized) ?? .low
+                SKAdNetwork.updatePostbackConversionValue(fine, coarseValue: coarseEnum, lockWindow: lock)
+            } else if #available(iOS 14.0, *) {
+                SKAdNetwork.updateConversionValue(fine)
+            }
+            print("Window 3: 8-35 days - Updated coarse value only")
+            
+        default:
+            // Beyond valid window
+            print("No valid window for conversion value update.")
+            return
         }
 
         // Persist updated values
-        let defaults = UserDefaults.standard
-        defaults.set(fine, forKey: fineValueKey)
-        defaults.set(coarse.lowercased(), forKey: coarseValueKey)
+        defaults.set(fine, forKey: fineValueKey) // Persist the fine value
+        defaults.set(now, forKey: "lastConversionTimes") // Store the timestamp of this conversion value update
+        defaults.set(lock, forKey: "lockStatus")
+        defaults.set(coarse.lowercased(), forKey: coarseValueKey) // Persist the coarse value
+        sendEventToBackend(name: eventName, timestamp: now, fineValue: fine , coarseValue: coarse, window: getCurrentWindow())
+
     }
+
 
     /// Sends the event payload to your backend
     private func sendEventToBackend(name: String, timestamp: Date, fineValue: Int, coarseValue: String, window: Int) {
@@ -297,6 +361,7 @@ class DriveMetaSKANManager {
             print("Invalid URL")
             return
         }
+        print(url)
 
         // Create a URLRequest
         var request = URLRequest(url: url)
