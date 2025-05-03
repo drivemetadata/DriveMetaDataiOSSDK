@@ -33,6 +33,10 @@ class DMDConstants {
     static let DMD_SESSION_ID = "sessionId"
     static let DMD_APPLE_ATTRIBUTION = "appleAdAttribution"
     static let DMD_APPLE_AD_TOKEN = "attribution_token"
+    static let CLIENT_ID = "client-id"
+    static let TOKEN = "token"
+    static let WORKSPACE_ID = "workspace-id"
+    static let APP_ID = "app-id"
     
     
 }

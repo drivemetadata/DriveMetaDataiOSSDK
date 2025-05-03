@@ -50,6 +50,7 @@ class ConversionAPIManager {
         if let workspaceId = retrievedData.workspaceId {
             request.setValue(String(workspaceId), forHTTPHeaderField: "workspace-id")
         }
+        print(request)
 
         // Perform request
         let task = URLSession.shared.dataTask(with: request) { data, response, error in

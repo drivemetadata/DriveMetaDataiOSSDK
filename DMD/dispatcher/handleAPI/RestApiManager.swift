@@ -19,7 +19,7 @@ class RestApiManager {
         let urlString: String
 
         if endPoint == "exception" {
-            urlString = APIConfig.shared.exceptionURL
+            urlString = APIConfig.shared.baseUrl+EndPointConfig.shared.apiException
         } else {
             urlString = APIConfig.shared.baseUrl + endPoint
         }
@@ -28,8 +28,8 @@ class RestApiManager {
             return
         }
        
-        print(url)
-        print(jsonData)
+       // print(url)
+       // print(jsonData)
         
         var request = URLRequest(url: url)
         request.httpMethod = "POST"

@@ -42,18 +42,21 @@ import AppTrackingTransparency
             // Delay of 2 seconds on a background thread
             DispatchQueue.global().asyncAfter(deadline: .now() + 2.0) { [weak self] in
                 guard let self = self else { return }
-                self.firstInstall()
-                DMDLogger.shared.log("SDK initialized", level: .info)
+               // self.firstInstall()
+                DriveMetaSKANManager.shared.initializeSDK()
+
                
             }
             
         }
+
         DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
             DriveMetaData.shared?.requestIDFA()
            }
         self.generateToken()
 
     }
+   
 
 
     // Public method to initialize the singleton with required parameters
@@ -73,24 +76,42 @@ import AppTrackingTransparency
    
     @objc public func sendTags(tags: [String: Any], eventType: String, completion: @escaping (String) -> Void) {
         if(tags.isEmpty || eventType.isEmpty){
+            debugPrint("EventType is mandatory ")
             ExceptionLogger.shared.sendException(message: "sendTags",stacktrace: "tags  \(tags)  or events type \( eventType) is empty")
             }
         else{
-            MetadataBuilder.sendEvent(
-                eventType: eventType,
-                tags: tags,
-                includeExtraDetails: true,
-                onSuccess: { response in
-                    completion(response)
-                    
-                },
-                onFailure: { error in
-                    completion(error.debugDescription)
-                    ExceptionLogger.shared.sendException(message: "sendTags",stacktrace: error.debugDescription)
-                    
-                    
-                }
-            )
+            DriveMetaSKANManager.shared.checkConversionApi()
+            
+            
+
+//            MetadataBuilder.sendEvent(
+//                eventType: eventType,
+//                tags: tags,
+//                includeExtraDetails: true,
+//                endPoint: EndPointConfig.shared.apiEvents,
+//                onSuccess: { response in
+//                    completion(response)
+//                    
+//                },
+//                onFailure: { error in
+//                    completion(error.debugDescription)
+//                    ExceptionLogger.shared.sendException(message: "sendTags",stacktrace: error.debugDescription)
+//                    
+//                    
+//                }
+//            )
+
+            
+            
+            
+            DispatchQueue.global().asyncAfter(deadline: .now() + 4.0) { [weak self] in
+                guard let self = self else { return }
+
+                DriveMetaSKANManager.shared.trackEvent(eventName: eventType,revenue: 0.0)
+
+            }
+            
+            
         }
 
     }
@@ -98,22 +119,22 @@ import AppTrackingTransparency
     @objc public  func generateToken()
     {
         // self.updateConversionValuesData()
-        // self.updateConversionValue(conversionValue: "45")
-        let adClient = DMDHTTPAdClient()
-        adClient.requestAttributionDetails { tags, error in
-            if let error = error {
-                print("❌ Error: \(error.localizedDescription)")
-                ExceptionLogger.shared.sendException(message: "generateToken",stacktrace: " Error: \(error.localizedDescription)")
-                return
-            }
-            if var tags = tags {
-                DriveMetaData.shared?.sendTags(tags: tags, eventType: "attribution") { response in
-                    print("✅ Received response: \(response)")
-                }
-                
-            }
-            
-        }
+        // self.updateConversionValue(conversionValue: "56")
+//        let adClient = DMDHTTPAdClient()
+//        adClient.requestAttributionDetails { tags, error in
+//            if let error = error {
+//                print("❌ Error: \(error.localizedDescription)")
+//                ExceptionLogger.shared.sendException(message: "generateToken",stacktrace: " Error: \(error.localizedDescription)")
+//                return
+//            }
+//            if var tags = tags {
+//                DriveMetaData.shared?.sendTags(tags: tags, eventType: "attribution") { response in
+//                    print("✅ Received response: \(response)")
+//                }
+//                
+//            }
+//            
+//        }
     }
   @objc public func requestIDFA() -> String {
       var result = ""
@@ -214,7 +235,7 @@ import AppTrackingTransparency
 
     func getConversionVlaues() {
         ConversionAPIManager.shared.sendConversionRequest(includeValue: false) { response in
-            print("Finished fetching conversion values")
+            print("Finished fetching conversion values\(response)")
         }
     }
 
@@ -232,6 +253,7 @@ import AppTrackingTransparency
                 MetadataBuilder.sendEvent(
                     eventType: DMDConstants.DMD_REQUEST_INSTALL_NAME,
                     includeExtraDetails: true,
+                    endPoint: EndPointConfig.shared.apiEvents,
                     onSuccess: { response in
                         StorageManager.shared.setFirstTimeInstall(true)
                         print("Install Event Success: \(response)")

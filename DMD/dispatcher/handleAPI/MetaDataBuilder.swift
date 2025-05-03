@@ -40,52 +40,25 @@ class MetadataBuilder {
 
         return [DMDConstants.DMD_META: metadata]
     }
-//    static func sendEvent(
-//        eventType: String,
-//        tags: [String: Any] = [:],
-//        includeExtraDetails: Bool = false,
-//        endPoint: String = "",
-//        onSuccess: ((String) -> Void)? = nil,
-//        onFailure: ((String) -> Void)? = nil
-//    ) {
-//        let metadata = buildBaseMetadata(
-//            eventType: eventType,
-//            tags: tags,
-//            includeExtraDetails: includeExtraDetails
-//        )
-//
-//        RestApiManager.shared.sendRequest(jsonData: metadata, endPoint: endPoint) { result in
-//            DispatchQueue.main.async {
-//                switch result {
-//                case .success(let (responseString, statusCode)):
-//                    if statusCode == 200 {
-//                        onSuccess?(responseString)
-//                    } else {
-//                        OfflineSyncManager.shared.cacheFailedEvent(data: metadata, eventType: eventType, endPoint: endPoint)
-//                        onFailure?("Server error with status code \(statusCode)")
-//                    }
-//                case .failure(let error):
-//                    OfflineSyncManager.shared.cacheFailedEvent(data: metadata, eventType: eventType, endPoint: endPoint)
-//                    onFailure?(error.localizedDescription)
-//                }
-//            }
-//        }
-//    }
-
-
+    
     static func sendEvent(
         eventType: String,
         tags: [String: Any] = [:],
         includeExtraDetails: Bool = false,
-        endPoint: String = "",
+        endPoint: String,
         onSuccess: ((String) -> Void)? = nil,
         onFailure: ((String) -> Void)? = nil
     ) {
         let metadata = buildBaseMetadata(
             eventType: eventType,
             tags: tags,
+            
             includeExtraDetails: includeExtraDetails
         )
+        
+        
+        debugPrint(endPoint)
+        print(tags)
         
 
         do {
