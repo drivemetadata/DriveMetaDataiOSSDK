@@ -10,18 +10,51 @@ import DriveMetaDataiOSSDK
 
 class ViewController: UIViewController {
 
+    @IBAction func addPurchase(_ sender: Any) {
+        let userDetails: [String: Any] = [
+            "eCommerce": [
+                "value":8.0,
+                "items": [
+                    [
+                        "id": "7798417490142",
+                        "sku": "TJ-MK-207-35-S",
+                        "name": "The Humble Beige Kota Doria Kali Overlay",
+                        "brand": "Tjoritreasures",
+                        "price": 999
+                    ]
+                ]
+            ]
+        ]
+
+        DriveMetaData.shared?.sendTags(tags: userDetails, eventType: "purchase") { response in
+            print("Purchase response: \(response)")
+        }
+    }
+    @IBAction func addToCart(_ sender: Any) {
+        
+        let userDetails: [String: Any] = [
+            "eCommerce": [
+                "value":999,
+                "items": [
+                    [
+                        "id": "7798417490142",
+                        "sku": "TJ-MK-207-35-S",
+                        "name": "The Humble Beige Kota Doria Kali Overlay",
+                        "brand": "Tjoritreasures",
+                        "price": 999
+                    ]
+                ]
+            ]
+        ]
+
+        DriveMetaData.shared?.sendTags(tags: userDetails, eventType: "add_to_cart") { response in
+            print("Add to Cart response: \(response)")
+        }
+        
+        
+        
+    }
     @IBAction func shareDetails(_ sender: Any) {
-        
-        
-      //  DriveMetaData.updateConversionValue(for: "in_app_purchase")
-//        let userDetails: [String: Any] = [
-//            "userDetails":[
-//               "first_name": "Amit",
-//               "last_name":"Gupta",
-//               "mobile":"7905717240",
-//               "address":"dsdsdsd"
-//               ]
-//           ]
         let userDetails: [String: Any] = [
             "eCommerce": [
                 "items": [
@@ -35,33 +68,10 @@ class ViewController: UIViewController {
                 ]
             ]
         ]
-        
-        
-        
-        
-        
-        
-        
-        
-        //////
-        ///
-        ///
-        ///
-           
-          
+
         DriveMetaData.shared?.sendTags(tags: userDetails, eventType: "product_viewed") { response in
-            print("Received response: \(response)")
+            print("Product View response: \(response)")
         }
-
-      
-       // print("Device Details", DriveMetaData.shared?.deviceDetails())
-       
-        
-       // print("App Details", DriveMetaData.shared?.appDetails())
-
-       
-        
-        
     }
     
     override func viewDidLoad() {

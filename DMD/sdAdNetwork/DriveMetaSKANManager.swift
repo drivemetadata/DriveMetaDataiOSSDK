@@ -9,29 +9,26 @@ import Foundation
 import StoreKit
 
 class DriveMetaSKANManager {
-
+    
     static let shared = DriveMetaSKANManager()
-
     // MARK: - Constants (UserDefaults Keys)
     private let installTimeKey = "skan_install_time"
     private let fineValueKey = "skan_fine_value"
     private let coarseValueKey = "skan_coarse_value"
     private let hasInitializedKey = "skan_initialized"
     private let conversionMappingKey = "skan_conversion_mapping"
-
     private var conversionMappings: [String: Any] = [:]
     private var revenueTotal: Double = 0.0
-
     private init() {}
-
+    
     // MARK: - Public Methods
-
+    
     /// Initializes the SDK and registers for SKAdNetwork attribution.
     /// Also fetches conversion mappings, limited to 1 API call per 24 hours and only for 35 days post-install.
     func initializeSDK() {
         let defaults = UserDefaults.standard
         let now = Date()
-
+        
         // First time setup: register for SKAdNetwork and store install time and default values
         if !defaults.bool(forKey: hasInitializedKey) {
             if #available(iOS 14.0, *) {
@@ -39,12 +36,12 @@ class DriveMetaSKANManager {
                 SKAdNetwork.updateConversionValue(0)
                 print("Successfully registered with SKAdNetwork with 0")
             }
-
+            
             defaults.set(now, forKey: installTimeKey)
             defaults.set(0, forKey: fineValueKey)
             defaults.set("low", forKey: coarseValueKey)
             defaults.set(true, forKey: hasInitializedKey)
-         
+            
         }
         
     }
@@ -54,8 +51,6 @@ class DriveMetaSKANManager {
     {
         let defaults = UserDefaults.standard
         let now = Date()
-     //   fetchConversionConfig()
-
         if shouldCallAPI(now: now, defaults: defaults) {
             fetchConversionConfig()
             defaults.set(now, forKey: "lastApiCallKey") // Store last API call time
@@ -67,7 +62,7 @@ class DriveMetaSKANManager {
     
     
     
-
+    
     /// Checks whether the conversion config API can be called (once every 24 hours, for up to 35 days after install)
     func shouldCallAPI(now: Date, defaults: UserDefaults) -> Bool {
         // Check if 35 days have passed since install
@@ -79,46 +74,40 @@ class DriveMetaSKANManager {
             // If no install date, set now to avoid nil issues
             defaults.set(now, forKey: installTimeKey)
         }
-
+        
         // Check if last API call was within 24 hours
         if let lastApiCall = defaults.object(forKey: "lastApiCallKey") as? Date {
             if Calendar.current.dateComponents([.hour], from: lastApiCall, to: now).hour ?? 0 < 24 {
                 return false
             }
         }
-
+        
         return true
     }
-
+    
     /// Tracks an in-app event with optional revenue, updates conversion value if eligible
     func trackEvent(eventName: String, revenue: Double) {
         let timestamp = Date()
         let window = getCurrentWindow()
-        print(window)
         let result = matchEventToMapping(name: eventName, revenue: revenue)
         if let result = result {
-            print("🎯 fineValue: \(result.fineValue), coarseValue: \(result.coarseValue), lockWindow: \(result.lockWindow)")
             let currentFine = UserDefaults.standard.integer(forKey: fineValueKey)
-            updateConversionValue(eventName:eventName,fine: result.fineValue, coarse: result.coarseValue, lock: true)
-
-            // Safely unwrap and compare if the new fine value is greater than current fine value
             if result.fineValue > currentFine {
-                
-                updateConversionValue(eventName:eventName,fine: result.fineValue, coarse: result.coarseValue, lock: true)
+                updateConversionValue(eventName:eventName,fine: result.fineValue, coarse: result.coarseValue, lock: true,window:window)
             }
-
+            
         } else {
             print("❌ No matching conversion mapping found.")
         }
-
-       
+        
+        
     }
-
+    
     /// Returns current conversion window (1 to 3), based on days since install
     func getCurrentWindow() -> Int {
         guard let installTime = UserDefaults.standard.object(forKey: installTimeKey) as? Date else { return 1 }
         let daysSinceInstall = Calendar.current.dateComponents([.day], from: installTime, to: Date()).day ?? 0
-
+        
         if daysSinceInstall <= 2 {
             return 1
         } else if daysSinceInstall <= 7 {
@@ -130,77 +119,34 @@ class DriveMetaSKANManager {
     }
     
     // if not saving the
-
+    
     // MARK: - Private Methods
-
+    
     /// Fetches the conversion mapping configuration from server
     private func fetchConversionConfig() {
-        
-
-        guard let url = URL(string: APIConfig.shared.baseURL+EndPointConfig.shared.conversionValueMappingApi) else { return }
-        var request = URLRequest(url: url)
-        request.httpMethod = "GET"
-        let retrievedData = StorageManager.shared.getClientData()
-        
-        
-        if let clientId = retrievedData.clientId,
-        let workspaceId = retrievedData.workspaceId,
-        let clientAppId = retrievedData.clientAppId,
-        let clientToken = retrievedData.clientToken {
-        request.addValue(String(clientId), forHTTPHeaderField: DMDConstants.CLIENT_ID)
-        request.addValue(String(workspaceId), forHTTPHeaderField: DMDConstants.WORKSPACE_ID)
-        request.addValue(String(clientAppId), forHTTPHeaderField: DMDConstants.APP_ID)
-        request.addValue(clientToken, forHTTPHeaderField: DMDConstants.TOKEN)
-        } else {
-        debugPrint("❌ Missing required header value(s) in retrievedData")
-        }
-        
-
-
-        let task = URLSession.shared.dataTask(with: request) { data, _, error in
-            guard let data = data, error == nil else {
-                self.loadCachedConfig()
-                return
-            }
-
-            do {
-                
-                if let json = try JSONSerialization.jsonObject(with: data) as? [String: Any] {
-                    self.conversionMappings = json
-                    print(self.conversionMappings)
-                    
-                    //store
-                    
-                    UserDefaults.standard.setValue(json, forKey: self.conversionMappingKey)
-                    
-                    
-                    //get
-                  
-                    
-                } else {
-                    self.loadCachedConfig()
-                }
-            } catch {
-                
-                print("JSON decoding error: \(error)")
-                self.loadCachedConfig()
+        RestApiManager.shared.fetchConversionConfig { result in
+            switch result {
+            case .success(let message):
+                print("Success: \(message)")
+            case .failure(let error):
+                print("Failed with error: \(error.localizedDescription)")
             }
         }
-        task.resume()
+        
     }
-
+    
     /// Loads conversion config from cache (UserDefaults) if API fails
     private func loadCachedConfig() {
         if let cached = UserDefaults.standard.dictionary(forKey: conversionMappingKey) {
             conversionMappings = cached
         }
     }
-
+    
     /// Matches the event (and optionally revenue) to a config mapping
     private func matchEventToMapping(name: String, revenue: Double) -> ConversionMappingResult? {
         // Retrieve stored conversion mappings
         if let savedValue = UserDefaults.standard.value(forKey: conversionMappingKey) as? [String: Any] {
-
+            
             // If revenue is 0.0, set it to nil
             let revenueToPass: Double? = (revenue == 0.0) ? nil : revenue
             
@@ -225,7 +171,7 @@ class DriveMetaSKANManager {
         let coarseValue: String
         let lockWindow: Bool
     }
-
+    
     func getConversionMapping(from json: [String: Any], eventType: String, revenue: Double?) -> ConversionMappingResult? {
         guard
             let data = json["data"] as? [String: Any],
@@ -233,9 +179,9 @@ class DriveMetaSKANManager {
         else {
             return nil
         }
-   
         
-
+        
+        
         for mapping in mappings {
             guard let type = mapping["eventType"] as? String, type == eventType else { continue }
             if eventType == type, let revenue = revenue{
@@ -246,7 +192,7 @@ class DriveMetaSKANManager {
                         let min = Double(minStr) ?? 0
                         let max = Double(maxStr) ?? 0
                         let isMaxZero = max == 0
-
+                        
                         if revenue >= min && (revenue <= max || isMaxZero) {
                             let fineValue = (range["fineValue"] as? NSNumber)?.intValue ?? 0
                             let coarseValue = range["coarseValue"] as? String ?? ""
@@ -256,7 +202,7 @@ class DriveMetaSKANManager {
                     }
                 }
             }
-
+            
             if revenue == nil {
                 let fineValue = (mapping["fineValue"] as? NSNumber)?.intValue ?? 0
                 let coarseValue = mapping["coarseValue"] as? String ?? ""
@@ -264,27 +210,23 @@ class DriveMetaSKANManager {
                 return ConversionMappingResult(fineValue: fineValue, coarseValue: coarseValue, lockWindow: lockWindow)
             }
         }
-
+        
         return nil
     }
     /// Updates the SKAdNetwork conversion value (fine/coarse/lock)
-    private func updateConversionValue(eventName : String,fine: Int, coarse: String, lock: Bool) {
+    private func updateConversionValue(eventName : String,fine: Int, coarse: String, lock: Bool,window : Int) {
         let now = Date()
         let defaults = UserDefaults.standard
         
         // Retrieve install date from UserDefaults
-        guard let installDate = defaults.object(forKey: "lastConversionTimes") as? Date else {
+        guard let installDate = defaults.object(forKey: installTimeKey) as? Date else {
             print("Install date is missing.")
             return
         }
-        
-        
-        
+        debugPrint("Update Conversion Values calling",eventName)
         // Calculate the number of days since installation
         let daysSinceInstall = Calendar.current.dateComponents([.day], from: installDate, to: now).day ?? 0
-        
-        print(daysSinceInstall)
-
+            
         // Determine the window state based on days since installation
         switch daysSinceInstall {
         case 0...2: // Window 1: First 48 hours
@@ -297,6 +239,16 @@ class DriveMetaSKANManager {
                         // Handle the error
                         print("Error updating conversion value: \(error.localizedDescription)")
                     } else {
+                        RestApiManager.shared.sendEventToBackend(name: eventName, timestamp: now, fineValue: fine, coarseValue: coarse, window: window) { result in
+                            switch result {
+                            case .success(let successMessage):
+                                print(successMessage)
+                                
+                                // Success, handle the response as needed
+                            case .failure(let error):
+                                print("Error sending event: \(error.localizedDescription)")  // Handle the error
+                            }
+                        }
                         // Successfully updated the conversion value
                         print("Successfully updated conversion value to \(fine) with coarse value: \(coarseEnum)")
                     }
@@ -307,21 +259,27 @@ class DriveMetaSKANManager {
             // Update only coarse value
             if #available(iOS 16.1, *) {
                 let coarseEnum: SKAdNetwork.CoarseConversionValue = SKAdNetwork.CoarseConversionValue(rawValue: coarse.capitalized) ?? .low
-              //  SKAdNetwork.updatePostbackConversionValue(fine, coarseValue: coarseEnum, lockWindow: lock)
+                //  SKAdNetwork.updatePostbackConversionValue(fine, coarseValue: coarseEnum, lockWindow: lock)
                 SKAdNetwork.updatePostbackConversionValue(fine, coarseValue: coarseEnum) { error in
-                      if let error = error {
-                          // Handle the error
-                          print("Error updating conversion value: \(error.localizedDescription)")
-                      } else {
-                          // Successfully updated the conversion value
-                          print("Successfully updated conversion value to \(fine) with coarse value: \(coarseEnum)")
-                      }
-                  }
-                
-                
-                
-                
-                
+                    if let error = error {
+                        // Handle the error
+                        print("Error updating conversion value: \(error.localizedDescription)")
+                    } else {
+                        
+                        RestApiManager.shared.sendEventToBackend(name: eventName, timestamp: now, fineValue: fine, coarseValue: coarse, window: window) { result in
+                            switch result {
+                            case .success(let successMessage):
+                                print(successMessage)
+                                
+                                // Success, handle the response as needed
+                            case .failure(let error):
+                                print("Error sending event: \(error.localizedDescription)")  // Handle the error
+                            }
+                        }
+                        // Successfully updated the conversion value
+                        print("Successfully updated conversion value to \(fine) with coarse value: \(coarseEnum)")
+                    }
+                }
                 
             } else if #available(iOS 14.0, *) {
                 SKAdNetwork.updateConversionValue(fine)
@@ -332,7 +290,30 @@ class DriveMetaSKANManager {
             // Update only coarse value
             if #available(iOS 16.1, *) {
                 let coarseEnum: SKAdNetwork.CoarseConversionValue = SKAdNetwork.CoarseConversionValue(rawValue: coarse.capitalized) ?? .low
-                SKAdNetwork.updatePostbackConversionValue(fine, coarseValue: coarseEnum, lockWindow: lock)
+                SKAdNetwork.updatePostbackConversionValue(fine, coarseValue: coarseEnum) { error in
+                    if let error = error {
+                        // Handle the error
+                        print("Error updating conversion value: \(error.localizedDescription)")
+                    } else {
+                        RestApiManager.shared.sendEventToBackend(name: eventName, timestamp: now, fineValue: fine, coarseValue: coarse, window: window) { result in
+                            switch result {
+                            case .success(let successMessage):
+                                print(successMessage)
+                                
+                                // Success, handle the response as needed
+                            case .failure(let error):
+                                print("Error sending event: \(error.localizedDescription)")  // Handle the error
+                            }
+                        }
+                        
+                        
+                        
+                        
+                        // Successfully updated the conversion value
+                        print("Successfully updated conversion value to \(fine) with coarse value: \(coarseEnum)")
+                    }
+                }
+                
             } else if #available(iOS 14.0, *) {
                 SKAdNetwork.updateConversionValue(fine)
             }
@@ -343,66 +324,18 @@ class DriveMetaSKANManager {
             print("No valid window for conversion value update.")
             return
         }
-
+        
         // Persist updated values
         defaults.set(fine, forKey: fineValueKey) // Persist the fine value
         defaults.set(now, forKey: "lastConversionTimes") // Store the timestamp of this conversion value update
         defaults.set(lock, forKey: "lockStatus")
+        defaults.set(now, forKey: installTimeKey)
         defaults.set(coarse.lowercased(), forKey: coarseValueKey) // Persist the coarse value
-        sendEventToBackend(name: eventName, timestamp: now, fineValue: fine , coarseValue: coarse, window: getCurrentWindow())
-
-    }
-
-
-    /// Sends the event payload to your backend
-    private func sendEventToBackend(name: String, timestamp: Date, fineValue: Int, coarseValue: String, window: Int) {
-
-        guard let url = URL(string: APIConfig.shared.baseURL+EndPointConfig.shared.updateConversionApi+DeviceInfoManager.shared.getAnonymousId()+"?value=\(fineValue)") else {
-            print("Invalid URL")
-            return
-        }
-        print(url)
-
-        // Create a URLRequest
-        var request = URLRequest(url: url)
-        request.httpMethod = "GET" // or "POST" if needed
-        let retrievedData = StorageManager.shared.getClientData()
-        if let clientId = retrievedData.clientId,
-        let workspaceId = retrievedData.workspaceId,
-        let clientAppId = retrievedData.clientAppId,
-        let clientToken = retrievedData.clientToken {
-        request.addValue(String(clientId), forHTTPHeaderField: DMDConstants.CLIENT_ID)
-        request.addValue(String(workspaceId), forHTTPHeaderField: DMDConstants.WORKSPACE_ID)
-        request.addValue(String(clientAppId), forHTTPHeaderField: DMDConstants.APP_ID)
-        request.addValue(clientToken, forHTTPHeaderField: DMDConstants.TOKEN)
-        } else {
-        debugPrint("❌ Missing required header value(s) in retrievedData")
-        }
-        // Perform the request
-        let task = URLSession.shared.dataTask(with: request) { data, response, error in
-            if let error = error {
-                print("Request error:", error)
-                return
-            }
-            
-            
-            
-            guard let httpResponse = response as? HTTPURLResponse else {
-                print("Invalid response")
-                return
-            }
-
-            print("Status code:", httpResponse.statusCode)
-
-            if let data = data {
-                if let jsonString = String(data: data, encoding: .utf8) {
-                    print("Response data:\n", jsonString)
-                }
-            }
-        }
-
-        task.resume()
+        
+    
+      
         
     }
+    
 }
 

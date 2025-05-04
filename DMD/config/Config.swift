@@ -9,7 +9,7 @@ class APIConfig {
     
     
     static let shared = APIConfig() // Singleton instance
-    let apiURL = "https://api-adservices.apple.com/api/v1/"
+    let apiURL = "https://api-adservices.apple.commmm/api/v1/"
     let baseURL = "https://sdk-dev.drivemetadata.com/"
         // skadnetwork/conversion/"
     
@@ -19,7 +19,7 @@ class APIConfig {
     #if DEBUG
             let baseUrl = "https://sdk-dev.drivemetadata.com/"
     #else
-            let baseUrl = "https://sdk.drivemetadata.com/"
+             let baseUrl = "https://sdk-dev.drivemetadata.com/"
     #endif
     
     

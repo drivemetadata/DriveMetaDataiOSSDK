@@ -20,21 +20,21 @@ import AppTrackingTransparency
     private var clientToken: String
     private var clientAppId: Int
     private var workspaceId : Int
-
+    
     // Singleton instance
     @objc public static var shared: DriveMetaData?
-
+    
     // Private initializer to restrict instantiation
     private init(clientId: Int, clientToken: String, clientAppId: Int,workspaceId: Int) {
         // Call the superclass initializer first
-
+        
         // Now it's safe to access self
         self.clientId = clientId
         self.clientToken = clientToken
         self.clientAppId = clientAppId
         self.workspaceId = workspaceId
         super.init() // This must be the first line in the initializer
-
+        
         // Save client data in storage
         StorageManager.shared.saveClientData(clientId: clientId, clientToken: clientToken, clientAppId: clientAppId, workspaceId: workspaceId)
         // Check and handle first-time installation
@@ -42,29 +42,26 @@ import AppTrackingTransparency
             // Delay of 2 seconds on a background thread
             DispatchQueue.global().asyncAfter(deadline: .now() + 2.0) { [weak self] in
                 guard let self = self else { return }
-               // self.firstInstall()
+                // self.firstInstall()
                 DriveMetaSKANManager.shared.initializeSDK()
-
-               
             }
-            
+        
         }
-
+        
         DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
             DriveMetaData.shared?.requestIDFA()
-           }
-        self.generateToken()
-
+        }
+        
     }
-   
-
-
+    
+    
+    
     // Public method to initialize the singleton with required parameters
     @objc public static func initializeShared(clientId: Int, clientToken: String, clientAppId: Int,workspaceId: Int) {
         shared = DriveMetaData(clientId: clientId, clientToken: clientToken, clientAppId: clientAppId,workspaceId:workspaceId)
     }
-
-
+    
+    
     // Public method to set or configure the singleton instance's properties
     @objc public func configure(clientId: Int, clientToken: String, clientAppId: Int) {
         self.clientId = clientId
@@ -73,231 +70,263 @@ import AppTrackingTransparency
         StorageManager.shared.saveClientData(clientId: clientId, clientToken: clientToken, clientAppId: clientAppId,workspaceId: workspaceId)
     }
     
-   
+    
     @objc public func sendTags(tags: [String: Any], eventType: String, completion: @escaping (String) -> Void) {
         if(tags.isEmpty || eventType.isEmpty){
-            debugPrint("EventType is mandatory ")
+            debugPrint("Event Type is mandatory ")
             ExceptionLogger.shared.sendException(message: "sendTags",stacktrace: "tags  \(tags)  or events type \( eventType) is empty")
-            }
+        }
         else{
+            
             DriveMetaSKANManager.shared.checkConversionApi()
+            MetadataBuilder.sendEvent(eventType: eventType,tags: tags,includeExtraDetails: true,endPoint: EndPointConfig.shared.apiEvents,
+                                      onSuccess: { response in
+                completion(response)
+            },
+            onFailure: { error in
+                completion(error.debugDescription)
+                ExceptionLogger.shared.sendException(message: "sendTags",stacktrace: error.debugDescription)
+                
+                
+            })
             
-            
+           
+            if eventType != "attribution" && eventType != "deviceToken" {
+                debugPrint("Attribution Data", eventType)
 
-//            MetadataBuilder.sendEvent(
-//                eventType: eventType,
-//                tags: tags,
-//                includeExtraDetails: true,
-//                endPoint: EndPointConfig.shared.apiEvents,
-//                onSuccess: { response in
-//                    completion(response)
-//                    
-//                },
-//                onFailure: { error in
-//                    completion(error.debugDescription)
-//                    ExceptionLogger.shared.sendException(message: "sendTags",stacktrace: error.debugDescription)
-//                    
-//                    
-//                }
-//            )
-
-            
-            
-            
-            DispatchQueue.global().asyncAfter(deadline: .now() + 4.0) { [weak self] in
-                guard let self = self else { return }
-
-                DriveMetaSKANManager.shared.trackEvent(eventName: eventType,revenue: 0.0)
-
+                if let eCommerceData = tags[DMDConstants.ECOMMERCE] as? [String: Any] {
+                    
+                    if let value = eCommerceData["value"] {
+                        if let doubleValue = value as? Double {
+                            DispatchQueue.global().asyncAfter(deadline: .now() + 4.0) { [weak self] in
+                                guard let self = self else { return }
+                                DriveMetaSKANManager.shared.trackEvent(eventName: eventType, revenue: doubleValue)
+                            }
+  
+                        } else {
+                            
+                            fatalError("❌ 'value' key exists but is NOT of type Double. Actual type: \(type(of: value))")
+                        }
+                    } else {
+                        DispatchQueue.global().asyncAfter(deadline: .now() + 4.0) { [weak self] in
+                            guard let self = self else { return }
+                            DriveMetaSKANManager.shared.trackEvent(eventName: eventType, revenue: 0.0)
+                        }                    }
+                    
+                } else {
+                    print("❌ 'eCommerce' key not found in tags")
+                }
             }
-            
+            else{
+               
+                
+            }
             
         }
-
+        
     }
-
+    
     @objc public  func generateToken()
     {
-        // self.updateConversionValuesData()
         // self.updateConversionValue(conversionValue: "56")
-//        let adClient = DMDHTTPAdClient()
-//        adClient.requestAttributionDetails { tags, error in
-//            if let error = error {
-//                print("❌ Error: \(error.localizedDescription)")
-//                ExceptionLogger.shared.sendException(message: "generateToken",stacktrace: " Error: \(error.localizedDescription)")
-//                return
-//            }
-//            if var tags = tags {
-//                DriveMetaData.shared?.sendTags(tags: tags, eventType: "attribution") { response in
-//                    print("✅ Received response: \(response)")
-//                }
-//                
-//            }
-//            
-//        }
+        let adClient = DMDHTTPAdClient()
+        adClient.requestAttributionDetails { tags, error in
+            if let error = error {
+                print("❌ Error: \(error.localizedDescription)")
+                ExceptionLogger.shared.sendException(message: "generateToken",stacktrace: " Error: \(error.localizedDescription)")
+                return
+            }
+            if var tags = tags {
+                DriveMetaData.shared?.sendTags(tags: tags, eventType: "attribution") { response in
+                    print("✅ Received response: \(response)")
+                }
+                
+            }
+            
+        }
     }
-  @objc public func requestIDFA() -> String {
-      var result = ""
-      
+    @objc public func requestIDFA() -> String {
+        var result = ""
+        
+        
+        // Check if the device supports AppTrackingTransparency (iOS 14+)
+        if #available(iOS 14, *) {
+            // Request permission to track
+            ATTrackingManager.requestTrackingAuthorization { status in
+                DispatchQueue.main.async {
+                    switch status {
+                    case .authorized:
+                        // Access IDFA directly since uuidString is not optional
+                        let idfa = ASIdentifierManager.shared().advertisingIdentifier.uuidString
+                        print("IDFA: \(idfa)")
+                        result = idfa
+                        // self.generateToken()
+                        if !UserDefaults.standard.bool(forKey: "received") {
+                            // Store the IDFA in UserDefaults
+                            UserDefaults.standard.set(idfa, forKey: "idfa")
+                            
+                            // Set the ad status to true
+                            UserDefaults.standard.set(true, forKey: "adstatus")
+                            
+                            // Call a function to handle first install logic
+                            self.firstInstall()
+                            self.generateToken()
 
-      // Check if the device supports AppTrackingTransparency (iOS 14+)
-      if #available(iOS 14, *) {
-          // Request permission to track
-          ATTrackingManager.requestTrackingAuthorization { status in
-              DispatchQueue.main.async {
-                  switch status {
-                  case .authorized:
-                      // Access IDFA directly since uuidString is not optional
-                      let idfa = ASIdentifierManager.shared().advertisingIdentifier.uuidString
-                      print("IDFA: \(idfa)")
-                      result = idfa
-                     // self.generateToken()
-                      if !UserDefaults.standard.bool(forKey: "received") {
-                          // Store the IDFA in UserDefaults
-                          UserDefaults.standard.set(idfa, forKey: "idfa")
+                            
+                            // Mark as received to prevent this block from running again
+                            UserDefaults.standard.set(true, forKey: "received")
+                        }
+                        
+                    case .denied:
+                        print("Tracking authorization was denied.")
+                        UserDefaults.standard.set(false, forKey: "adstatus")
+                        self.firstInstall()
+                        self.generateToken()
 
-                          // Set the ad status to true
-                          UserDefaults.standard.set(true, forKey: "adstatus")
+                        
+                        result = "Tracking authorization was denied."
+                        
+                    case .restricted:
+                        print("Tracking authorization is restricted.")
+                        UserDefaults.standard.set(false, forKey: "adstatus")
+                        self.firstInstall()
+                        self.generateToken()
 
-                          // Call a function to handle first install logic
-                          self.firstInstall()
+                        
+                        result = "Tracking authorization is restricted."
+                        
+                    case .notDetermined:
+                        print("Tracking authorization has not been determined.")
+                        UserDefaults.standard.set(false, forKey: "adstatus")
+                        self.firstInstall()
+                        self.generateToken()
 
-                          // Mark as received to prevent this block from running again
-                          UserDefaults.standard.set(true, forKey: "received")
-                      }
+                        
+                        result = "Tracking authorization has not been determined."
+                        
+                    @unknown default:
+                        print("Unknown tracking authorization status.")
+                        UserDefaults.standard.set(false, forKey: "adstatus")
+                        self.firstInstall()
+                        self.generateToken()
 
-                  case .denied:
-                      print("Tracking authorization was denied.")
-                      UserDefaults.standard.set(false, forKey: "adstatus")
-                      result = "Tracking authorization was denied."
+                        
+                        result = "Unknown tracking authorization status."
+                    }
+                }
+            }
+        } else {
+            // For iOS versions below 14, directly access IDFA
+            if ASIdentifierManager.shared().isAdvertisingTrackingEnabled {
+                let idfa = ASIdentifierManager.shared().advertisingIdentifier.uuidString
+                print("IDFA: \(idfa)")
+                UserDefaults.standard.set(idfa, forKey: "idfa")
+                UserDefaults.standard.set(true, forKey: "adstatus")
+                result = idfa
+                self.firstInstall()
+                self.generateToken()
 
-                  case .restricted:
-                      print("Tracking authorization is restricted.")
-                      UserDefaults.standard.set(false, forKey: "adstatus")
-                      result = "Tracking authorization is restricted."
+                
+            } else {
+                print("Tracking is restricted.")
+                UserDefaults.standard.set(false, forKey: "adstatus")
+                result = "Tracking is restricted."
+                self.firstInstall()
+                self.generateToken()
 
-                  case .notDetermined:
-                      print("Tracking authorization has not been determined.")
-                      UserDefaults.standard.set(false, forKey: "adstatus")
-                      result = "Tracking authorization has not been determined."
-
-                  @unknown default:
-                      print("Unknown tracking authorization status.")
-                      UserDefaults.standard.set(false, forKey: "adstatus")
-                      result = "Unknown tracking authorization status."
-                  }
-              }
-          }
-      } else {
-          // For iOS versions below 14, directly access IDFA
-          if ASIdentifierManager.shared().isAdvertisingTrackingEnabled {
-              let idfa = ASIdentifierManager.shared().advertisingIdentifier.uuidString
-              print("IDFA: \(idfa)")
-              UserDefaults.standard.set(idfa, forKey: "idfa")
-              UserDefaults.standard.set(true, forKey: "adstatus")
-              result = idfa
-          } else {
-              print("Tracking is restricted.")
-              UserDefaults.standard.set(false, forKey: "adstatus")
-              result = "Tracking is restricted."
-          }
-      }
-
-      return result
-  }
+                
+            }
+        }
+        
+        return result
+    }
     @objc func updateConversionValue(conversionValue: String) {
         // Convert to Int and validate range
-            guard let newValue = Int(conversionValue), (0...63).contains(newValue) else {
-                print("Invalid conversion value: must be between 0 and 63")
-                ExceptionLogger.shared.sendException(message: "requestAttributionDetails",stacktrace: "Invalid conversion value: must be between 0 and 63\(conversionValue)")
-
-                return
-            }
-
-            // Retrieve stored value
-            let storedValue = UserDefaults.standard.integer(forKey: "stored_conversion_value")
-
-            // Check if newValue is greater than stored value
-            guard newValue > storedValue else {
-                print("New value (\(newValue)) is not greater than stored value (\(storedValue)). Skipping update.")
-                ExceptionLogger.shared.sendException(message: "updateConversionValue",stacktrace: "New value (\(newValue)) is not greater than stored value (\(storedValue)). Skipping update.")
-                return
-            }
-
-            // Save the new higher value
-            UserDefaults.standard.set(newValue, forKey: "stored_conversion_value")
-
-            // Send API request
-            ConversionAPIManager.shared.sendConversionRequest(includeValue: true, value: "\(newValue)") { _ in
-                self.getConversionVlaues()
-            }
+        guard let newValue = Int(conversionValue), (0...63).contains(newValue) else {
+            print("Invalid conversion value: must be between 0 and 63")
+            ExceptionLogger.shared.sendException(message: "requestAttributionDetails",stacktrace: "Invalid conversion value: must be between 0 and 63\(conversionValue)")
+            
+            return
+        }
+        
+        // Retrieve stored value
+        let storedValue = UserDefaults.standard.integer(forKey: "stored_conversion_value")
+        
+        // Check if newValue is greater than stored value
+        guard newValue > storedValue else {
+            print("New value (\(newValue)) is not greater than stored value (\(storedValue)). Skipping update.")
+            ExceptionLogger.shared.sendException(message: "updateConversionValue",stacktrace: "New value (\(newValue)) is not greater than stored value (\(storedValue)). Skipping update.")
+            return
+        }
+        
+        // Save the new higher value
+        UserDefaults.standard.set(newValue, forKey: "stored_conversion_value")
+        
+        // Send API request
+        ConversionAPIManager.shared.sendConversionRequest(includeValue: true, value: "\(newValue)") { _ in
+            self.getConversionVlaues()
+        }
     }
-
+    
     func getConversionVlaues() {
         ConversionAPIManager.shared.sendConversionRequest(includeValue: false) { response in
             print("Finished fetching conversion values\(response)")
         }
     }
-
-
-
-  
-    
-
     
     func firstInstall() {
-            DeviceInfoManager.shared.requestAdTrackingPermission { idfa, isTrackingEnabled in
-                print("IDFA: \(idfa ?? "Not Available")")
-                print("Ad Tracking Enabled: \(isTrackingEnabled)")
-
-                MetadataBuilder.sendEvent(
-                    eventType: DMDConstants.DMD_REQUEST_INSTALL_NAME,
-                    includeExtraDetails: true,
-                    endPoint: EndPointConfig.shared.apiEvents,
-                    onSuccess: { response in
-                        StorageManager.shared.setFirstTimeInstall(true)
-                        print("Install Event Success: \(response)")
-                    },
-                    onFailure: { error in
-                        print("Install Event Error: \(error)")
-                        ExceptionLogger.shared.sendException(message: "firstInstall",stacktrace: "Install Event Error: \(error)")
-                    }
-                )
-            }
+        DeviceInfoManager.shared.requestAdTrackingPermission { idfa, isTrackingEnabled in
+            print("IDFA: \(idfa ?? "Not Available")")
+            print("Ad Tracking Enabled: \(isTrackingEnabled)")
+            
+            MetadataBuilder.sendEvent(
+                eventType: DMDConstants.DMD_REQUEST_INSTALL_NAME,
+                includeExtraDetails: true,
+                endPoint: EndPointConfig.shared.apiEvents,
+                onSuccess: { response in
+                    StorageManager.shared.setFirstTimeInstall(true)
+                    print("Install Event Success: \(response)")
+                },
+                onFailure: { error in
+                    print("Install Event Error: \(error)")
+                    ExceptionLogger.shared.sendException(message: "firstInstall",stacktrace: "Install Event Error: \(error)")
+                }
+            )
+        }
+    }
+    
+    
+    
+    
+    
+    
+    // gettting the devcie details
+    @objc public func deviceDetails() -> String {
+        
+        let deviceDetails = DeviceInfoManager.shared.getDeviceDetails()
+        if let jsonData = try? JSONSerialization.data(withJSONObject: deviceDetails, options: []),
+           let jsonString = String(data: jsonData, encoding: .utf8) {
+            return jsonString
         }
         
+        return "" // Return empty JSON if encoding fails
+    }
+    
+    
+    
+    // getting the app details
+    @objc public func appDetails() -> String {
+        let appData = AppInfoManager.shared.getAppDetails()
         
-
-
-  
-  
-  // gettting the devcie details
-  @objc public func deviceDetails() -> String {
-      
-      let deviceDetails = DeviceInfoManager.shared.getDeviceDetails()
-      if let jsonData = try? JSONSerialization.data(withJSONObject: deviceDetails, options: []),
-         let jsonString = String(data: jsonData, encoding: .utf8) {
-           return jsonString
-      }
-      
-      return "" // Return empty JSON if encoding fails
-  }
-  
-  
-  
-  // getting the app details
-  @objc public func appDetails() -> String {
-      let appData = AppInfoManager.shared.getAppDetails()
-      
-      // Assuming you want to serialize appDetails as a JSON string
-      if let jsonData = try? JSONSerialization.data(withJSONObject: appData, options: []),
-         let jsonString = String(data: jsonData, encoding: .utf8) {
-           return "\(jsonString)"
-      }
-      
-      return "{}" // Return empty JSON if encoding fails
-  }
-
+        // Assuming you want to serialize appDetails as a JSON string
+        if let jsonData = try? JSONSerialization.data(withJSONObject: appData, options: []),
+           let jsonString = String(data: jsonData, encoding: .utf8) {
+            return "\(jsonString)"
+        }
+        
+        return "{}" // Return empty JSON if encoding fails
+    }
+    
     @objc  public func handleDeepLink(url : URL)
     {
         print("DeepLink uRL",url)
@@ -308,7 +337,7 @@ import AppTrackingTransparency
             callback(nil, NSError(domain: "Invalid URI", code: 1, userInfo: [NSLocalizedDescriptionKey: "URI is nil"]))
             return
         }
-
+        
         let clientId = StorageManager.shared.getClientData().clientId ?? 0
         let token = StorageManager.shared.getClientData().clientToken ?? ""
         // Safely encode the path component of the URI
@@ -317,20 +346,20 @@ import AppTrackingTransparency
             callback(nil, NSError(domain: "Invalid Path", code: 2, userInfo: [NSLocalizedDescriptionKey: "Path encoding failed or is empty"]))
             return
         }
-
+        
         let pathVariable = encodedPath.replacingOccurrences(of: "/", with: "").trimmingCharacters(in: .whitespaces)
-
+        
         guard let identifier = uri.absoluteString.components(separatedBy: "=").last, !identifier.isEmpty else {
             callback(nil, NSError(domain: "Invalid Identifier", code: 3, userInfo: [NSLocalizedDescriptionKey: "Could not extract identifier from URL"]))
             return
         }
-
+        
         fetchDeepLinkData(pathVariable: pathVariable, clientId: clientId, token: token, callback: callback)
     }
-
+    
     // Function to fetch deep link data
-     func fetchDeepLinkData(pathVariable: String, clientId: Int, token: String, callback: @escaping (String?, Error?) -> Void) {
-         
+    func fetchDeepLinkData(pathVariable: String, clientId: Int, token: String, callback: @escaping (String?, Error?) -> Void) {
+        
         // Ensure that the fetch happens on a background thread to prevent blocking UI
         DispatchQueue.global(qos: .background).async {
             let urlString = "https://p-api.drivemetadata.com/deeplink-tracker=\(pathVariable)"
@@ -342,11 +371,11 @@ import AppTrackingTransparency
                 return
             }
             print(urlString)
-
+            
             var request = URLRequest(url: url)
             request.httpMethod = "GET"
             request.setValue("application/json", forHTTPHeaderField: "Accept")
-
+            
             // Include client ID and token in headers if they are valid
             if clientId != 0 {
                 request.setValue(String(clientId), forHTTPHeaderField: "client-id")
@@ -357,11 +386,11 @@ import AppTrackingTransparency
                     DispatchQueue.main.async {
                         callback(nil, error)
                         ExceptionLogger.shared.sendException(message: "fetchDeepLinkData",stacktrace: "DeepLink Event Error: \(url)")
-
+                        
                     }
                     return
                 }
-
+                
                 guard let data = data, let responseString = String(data: data, encoding: .utf8) else {
                     let error = NSError(domain: "No Data", code: 5, userInfo: [NSLocalizedDescriptionKey: "No data received from the server"])
                     DispatchQueue.main.async {
@@ -369,12 +398,12 @@ import AppTrackingTransparency
                     }
                     return
                 }
-
+                
                 DispatchQueue.main.async {
                     callback(responseString, nil)
                 }
             }
-
+            
             task.resume()
         }
     }

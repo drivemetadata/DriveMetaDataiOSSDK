@@ -48,11 +48,12 @@ class DeviceInfoManager {
         
         return [
             "device_internal_id": UIDevice.current.identifierForVendor?.uuidString ?? "N/A",
-            "ios_advertising_id": adTrackingDetails.idfa ?? "Tracking not allowed",
+            "ios_advertising_id": adTrackingDetails.idfa ?? "",
             "ad_tracking_enabled": adTrackingDetails.isTrackingEnabled,
             "make": "Apple",
-            "model": UIDevice.current.model,
+            "model": UIDevice.current.name,
             "platform": UIDevice.current.systemName,
+            "os_platform_version": UIDevice.current.systemVersion,
             "name": UIDevice.current.name,
             "device_type": UIDevice.current.userInterfaceIdiom == .pad ? "Tablet" : "Mobile",
             "is_mobile": UIDevice.current.userInterfaceIdiom == .phone,

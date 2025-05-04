@@ -37,6 +37,8 @@ class DMDConstants {
     static let TOKEN = "token"
     static let WORKSPACE_ID = "workspace-id"
     static let APP_ID = "app-id"
+    static let ECOMMERCE = "eCommerce"
+    static let ECOMMERCE_VALUE = "value"
     
     
 }
