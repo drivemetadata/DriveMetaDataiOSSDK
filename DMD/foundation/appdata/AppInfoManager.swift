@@ -30,7 +30,7 @@ class AppInfoManager {
     /// Retrieves library details
     func getLibraryDetails() -> [String: Any] {
         return [
-            "sdk_version": "1.0.2"
+            "sdk_version": "1.0.4"
         ]
     }
 }
